@@ -42,9 +42,25 @@ import static java.util.stream.Collectors.toList;
         gamePlayer.setGame(this);
         gamePlayers.add(gamePlayer);
     }
-//    @JsonIgnore
+
+    public Set<GamePlayer> getGamePlayers() {
+        return gamePlayers;
+    }
+
+    //    @JsonIgnore
     public List<Player> getPlayers() {
         return gamePlayers.stream().map(sub -> sub.getPlayer()).collect(Collectors.toList());
     }
 
+    public List<Long> getIDPlayers() {
+        return gamePlayers.stream().map(sub -> sub.getId()).collect(Collectors.toList());
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 }

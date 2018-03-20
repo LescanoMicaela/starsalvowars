@@ -39,6 +39,8 @@ public class SalvoApplication {
             Game game4 = new Game();
             Game game5 = new Game();
             Game game6 = new Game();
+            Game game7 = new Game();
+            Game game8 = new Game();
             Date gametime = game1.getCreationDate();
             Date gametime2 = Date.from(gametime.toInstant().plusSeconds(3600));
             Date gametime3 = Date.from(gametime.toInstant().plusSeconds(7200));
@@ -56,17 +58,22 @@ public class SalvoApplication {
             repositorygame.save(game4);
             repositorygame.save(game5);
             repositorygame.save(game6);
+            repositorygame.save(game7);
+            repositorygame.save(game8);
             GamePlayer GP1_1 = new GamePlayer(game1,bauer);
             GamePlayer GP1_2 = new GamePlayer(game1,obrian);
-            GamePlayer GP2_1 = new GamePlayer(game2,obrian);
-            GamePlayer GP2_2 = new GamePlayer(game2,almeida);
-            GamePlayer GP3_1 = new GamePlayer(game3,bauer);
-            GamePlayer GP3_2 = new GamePlayer(game3,obrian);
-            GamePlayer GP4_1 = new GamePlayer(game4,bauer);
-            GamePlayer GP4_2 = new GamePlayer(game4,obrian);
+            GamePlayer GP2_1 = new GamePlayer(game2,bauer);
+            GamePlayer GP2_2 = new GamePlayer(game2,obrian);
+            GamePlayer GP3_1 = new GamePlayer(game3,obrian);
+            GamePlayer GP3_2 = new GamePlayer(game3,almeida);
+            GamePlayer GP4_1 = new GamePlayer(game4,obrian);
+            GamePlayer GP4_2 = new GamePlayer(game4,bauer);
             GamePlayer GP5_1 = new GamePlayer(game5,almeida);
             GamePlayer GP5_2 = new GamePlayer(game5,bauer);
-            GamePlayer GP6_1 = new GamePlayer(game6, palmer);
+            GamePlayer GP6_1 = new GamePlayer(game6, kim);
+            GamePlayer GP7_1 = new GamePlayer(game7, almeida);
+            GamePlayer GP8_1 = new GamePlayer(game8, kim);
+            GamePlayer GP8_2 = new GamePlayer(game8, almeida);
             repositorygamePlayer.save(GP1_1);
             repositorygamePlayer.save(GP1_2);
             repositorygamePlayer.save(GP2_1);
@@ -78,6 +85,9 @@ public class SalvoApplication {
             repositorygamePlayer.save(GP5_1);
             repositorygamePlayer.save(GP5_2);
             repositorygamePlayer.save(GP6_1);
+            repositorygamePlayer.save(GP7_1);
+            repositorygamePlayer.save(GP8_1);
+            repositorygamePlayer.save(GP8_2);
 
 
 
