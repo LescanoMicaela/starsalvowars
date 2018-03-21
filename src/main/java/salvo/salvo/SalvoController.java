@@ -1,6 +1,7 @@
 package salvo.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,15 +17,12 @@ public class SalvoController {
 
     @Autowired
     private GameRepository repositorygame;
+    @Autowired
+    private GamePlayerRepository repositorygameplayer;
+    @Autowired
+    private ShipRepository shipRepository;
 
 
-//    public List<Long> getGamesId() {
-//
-//       return repositorygame.findAll()
-//                .stream()
-//                .map(Game::getId)
-//                .collect(Collectors.toList());
-//    }
 
     private Map<String, Object> makeGameDTO(Game game) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
@@ -59,6 +57,37 @@ public class SalvoController {
                 .map(game -> makeGameDTO(game))
                 .collect(toList());
     }
+
+
+
+
+    private Map<String, Object> makeGameDTO2(Game game) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        Set<GamePlayer> gamePlayers = game.getGamePlayers();
+        dto.put("id", game.getId());
+        dto.put("created", game.getCreationDate());
+
+        dto.put("gamePlayers", gamePlayers.stream()
+                .map(gamePlayer -> makegamePlayerDTO(gamePlayer))
+                .collect(toList()));
+        return dto;
+    }
+
+    @RequestMapping("/game_view/{nn}")
+    public Map<String, Object> viewGamePlayer(@PathVariable Long nn) {
+        Map <String, Object> dto = new LinkedHashMap<String, Object>();
+       GamePlayer gamePlayernn = repositorygameplayer.findOne(nn);
+       Game game = gamePlayernn.getGame();
+        dto.put("id", nn);
+        dto.put("game", makeGameDTO2(game));
+
+        return dto;
+
+
+
+
+    }
+
 
 
 }

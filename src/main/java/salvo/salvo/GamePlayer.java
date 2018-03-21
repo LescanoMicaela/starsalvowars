@@ -59,5 +59,11 @@ public class GamePlayer {
         ships.add(ship);
     }
 
+    public Date getDateCreated() {
+        return dateCreated;
+    }
 
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
 }
