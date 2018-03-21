@@ -99,9 +99,6 @@ public class SalvoApplication {
             List<String> location1_2_1 = Arrays.asList("B5", "C5", "D5");
             List<String> location1_2_2 = Arrays.asList("F1", "F2");
 
-
-
-
             Ship ship1 = new Ship("Destroyer",location1_1_1,GP1_1 );
             Ship ship2 = new Ship("Submarine",location1_1_2 , GP1_1);
             Ship ship3 = new Ship("Patrol Boat",location1_1_3, GP1_1 );
@@ -115,12 +112,91 @@ public class SalvoApplication {
             repositoryShip.save(ship4);
             repositoryShip.save(ship5);
 
+            List<String> location2_1_1 = Arrays.asList("B5", "C5", "D5");
+            List<String> location2_1_2 = Arrays.asList("C6", "C7");
+            List<String> location2_2_1 = Arrays.asList("A2", "A3", "A4");
+            List<String> location2_2_2 = Arrays.asList("G6", "H6");
 
-            GP1_1.addShip(ship1);
-            GP1_1.addShip(ship2);
-            GP1_1.addShip(ship3);
-            GP1_2.addShip(ship4);
-            GP1_2.addShip(ship5);
+            Ship ship6 = new Ship("Destroyer",location2_1_1, GP2_1);
+            Ship ship7 = new Ship("Patrol Boat",location2_1_2, GP2_1);
+
+            Ship ship8 = new Ship("Submarine",location2_2_1, GP2_2);
+            Ship ship9 = new Ship("Patrol Boat",location2_2_2, GP2_2);
+
+            repositoryShip.save(ship6);
+            repositoryShip.save(ship7);
+            repositoryShip.save(ship8);
+            repositoryShip.save(ship9);
+
+            List<String> location3_1_1 = Arrays.asList("B5", "C5", "D5");
+            List<String> location3_1_2 = Arrays.asList("C6", "C7");
+            List<String> location3_2_1 = Arrays.asList("A2", "A3", "A4");
+            List<String> location3_2_2 = Arrays.asList("G6", "H6");
+
+            Ship ship10 = new Ship("Destroyer",location3_1_1, GP3_1);
+            Ship ship11 = new Ship("Patrol Boat",location3_1_2, GP3_1);
+
+            Ship ship12 = new Ship("Submarine",location3_2_1, GP3_2);
+            Ship ship13 = new Ship("Patrol Boat",location3_2_2, GP3_2);
+
+            repositoryShip.save(ship10);
+            repositoryShip.save(ship11);
+            repositoryShip.save(ship12);
+            repositoryShip.save(ship13);
+
+            List<String> location4_1_1 = Arrays.asList("B5", "C5", "D5");
+            List<String> location4_1_2 = Arrays.asList("C6", "C7");
+            List<String> location4_2_1 = Arrays.asList("A2", "A3", "A4");
+            List<String> location4_2_2 = Arrays.asList("G6", "H6");
+
+            Ship ship14 = new Ship("Destroyer",location4_1_1, GP4_1);
+            Ship ship15 = new Ship("Patrol Boat",location4_1_2, GP4_1);
+
+            Ship ship16 = new Ship("Submarine",location4_2_1, GP4_2);
+            Ship ship17 = new Ship("Patrol Boat",location4_2_2, GP4_2);
+
+            repositoryShip.save(ship14);
+            repositoryShip.save(ship15);
+            repositoryShip.save(ship16);
+            repositoryShip.save(ship17);
+
+            List<String> location5_1_1 = Arrays.asList("B5", "C5", "D5");
+            List<String> location5_1_2 = Arrays.asList("C6", "C7");
+            List<String> location5_2_1 = Arrays.asList("A2", "A3", "A4");
+            List<String> location5_2_2 = Arrays.asList("G6", "H6");
+
+            Ship ship18 = new Ship("Destroyer",location5_1_1, GP5_1);
+            Ship ship19 = new Ship("Patrol Boat",location5_1_2, GP5_1);
+
+            Ship ship20 = new Ship("Submarine",location5_2_1, GP5_2);
+            Ship ship21 = new Ship("Patrol Boat",location5_2_2, GP5_2);
+
+            repositoryShip.save(ship18);
+            repositoryShip.save(ship19);
+            repositoryShip.save(ship20);
+            repositoryShip.save(ship21);
+
+            Ship ship22 = new Ship("Destroyer",location5_1_1, GP6_1);
+            Ship ship23 = new Ship("Patrol Boat",location5_1_2, GP6_1);
+
+
+            Ship ship24 = new Ship("Destroyer",location5_1_1, GP8_1);
+            Ship ship25 = new Ship("Patrol Boat",location5_1_2, GP8_1);
+
+            Ship ship26 = new Ship("Submarine",location5_2_1, GP8_2);
+            Ship ship27 = new Ship("Patrol Boat",location5_2_2, GP8_2);
+
+            repositoryShip.save(ship22);
+            repositoryShip.save(ship23);
+            repositoryShip.save(ship24);
+            repositoryShip.save(ship25);
+            repositoryShip.save(ship26);
+            repositoryShip.save(ship27);
+
+
+
+
+
 
 
 
