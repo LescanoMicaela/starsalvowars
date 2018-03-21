@@ -5,9 +5,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
@@ -20,7 +24,7 @@ public class SalvoApplication {
 
 
 	@Bean
-	public CommandLineRunner initData(PlayerRepository repositoryplayer, GameRepository repositorygame, GamePlayerRepository repositorygamePlayer) {
+	public CommandLineRunner initData(PlayerRepository repositoryplayer, GameRepository repositorygame, GamePlayerRepository repositorygamePlayer, ShipRepository repositoryShip) {
 		return (String... args) -> {
 
 		    Player bauer = new Player( "j.bauer@ctu.gov");
@@ -89,6 +93,34 @@ public class SalvoApplication {
             repositorygamePlayer.save(GP8_1);
             repositorygamePlayer.save(GP8_2);
 
+            List<String> location1_1_1 = Arrays.asList("H2", "H3", "H4");
+            List<String> location1_1_2 = Arrays.asList("E1", "F1", "G1");
+            List<String> location1_1_3 = Arrays.asList("B4", "B5");
+            List<String> location1_2_1 = Arrays.asList("B5", "C5", "D5");
+            List<String> location1_2_2 = Arrays.asList("F1", "F2");
+
+
+
+
+            Ship ship1 = new Ship("Destroyer",location1_1_1,GP1_1 );
+            Ship ship2 = new Ship("Submarine",location1_1_2 , GP1_1);
+            Ship ship3 = new Ship("Patrol Boat",location1_1_3, GP1_1 );
+
+            Ship ship4 = new Ship("Destroyer",location1_2_1, GP1_2 );
+            Ship ship5 = new Ship("Patrol Boat",location1_2_2, GP1_2 );
+
+            repositoryShip.save(ship1);
+            repositoryShip.save(ship2);
+            repositoryShip.save(ship3);
+            repositoryShip.save(ship4);
+            repositoryShip.save(ship5);
+
+
+            GP1_1.addShip(ship1);
+            GP1_1.addShip(ship2);
+            GP1_1.addShip(ship3);
+            GP1_2.addShip(ship4);
+            GP1_2.addShip(ship5);
 
 
 

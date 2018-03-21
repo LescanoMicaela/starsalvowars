@@ -2,7 +2,7 @@ package salvo.salvo;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.Date;
+import java.util.*;
 
 @Entity
 public class GamePlayer {
@@ -18,6 +18,9 @@ public class GamePlayer {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="game_id")
     private Game game;
+
+    @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
+    private List<Ship> ships = new ArrayList<>();
 
     public GamePlayer() { }
 
@@ -50,4 +53,11 @@ public class GamePlayer {
     public void setId(long id) {
         this.id = id;
     }
+
+    public void addShip(Ship ship) {
+        ship.setGamePlayer(this);
+        ships.add(ship);
+    }
+
+
 }
