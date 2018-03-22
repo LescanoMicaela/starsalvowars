@@ -48,6 +48,13 @@ public class SalvoController {
         dto.put("email", player.getUserNameName());
         return dto;
     }
+    private Map<String, Object> makeShipDTO(Ship ship) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("style", ship.getShipType());
+        dto.put("location", ship.getLocations());
+        return dto;
+    }
+
 
     @RequestMapping("/games")
     public List<Map> getGamesId() {
@@ -61,14 +68,20 @@ public class SalvoController {
 
 
 
-    private Map<String, Object> makeGameDTO2(Game game) {
+    private Map<String, Object> makeGameDTO2(Game game, GamePlayer gm) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         Set<GamePlayer> gamePlayers = game.getGamePlayers();
+        List<Ship> ships = gm.getShips();
+
         dto.put("id", game.getId());
         dto.put("created", game.getCreationDate());
 
         dto.put("gamePlayers", gamePlayers.stream()
                 .map(gamePlayer -> makegamePlayerDTO(gamePlayer))
+                .collect(toList()));
+
+        dto.put("ships", ships.stream()
+                .map(ship -> makeShipDTO(ship))
                 .collect(toList()));
         return dto;
     }
@@ -79,7 +92,8 @@ public class SalvoController {
        GamePlayer gamePlayernn = repositorygameplayer.findOne(nn);
        Game game = gamePlayernn.getGame();
         dto.put("id", nn);
-        dto.put("game", makeGameDTO2(game));
+        dto.put("game", makeGameDTO2(game, gamePlayernn));
+
 
         return dto;
 

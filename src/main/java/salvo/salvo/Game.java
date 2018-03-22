@@ -24,6 +24,8 @@ import static java.util.stream.Collectors.toList;
         Set<GamePlayer> gamePlayers;
 
 
+
+
     public Game( ) {
 
         this.CreationDate =  new Date();
@@ -43,9 +45,12 @@ import static java.util.stream.Collectors.toList;
         gamePlayers.add(gamePlayer);
     }
 
+
+
     public Set<GamePlayer> getGamePlayers() {
         return gamePlayers;
     }
+
 
     //    @JsonIgnore
     public List<Player> getPlayers() {

@@ -59,6 +59,10 @@ public class GamePlayer {
         ships.add(ship);
     }
 
+    public List<Ship> getShips() {
+        return ships;
+    }
+
     public Date getDateCreated() {
         return dateCreated;
     }
