@@ -89,7 +89,7 @@ $(document).ready(function () {
         for ( i=0; i< games.game.gamePlayers.length; i++){
             if ( games.game.gamePlayers[i].id == games.id) {
                var p1  = games.game.gamePlayers[i].player.email;
-            
+
             }
            if ( games.game.gamePlayers[i].id !== games.id){
 
@@ -97,10 +97,7 @@ $(document).ready(function () {
                    var p2 = games.game.gamePlayers[i].player.email;
                }
 
-
             }
-
-
 
         h1 = document.getElementById("player1Name");
 

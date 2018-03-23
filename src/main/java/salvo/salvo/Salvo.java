@@ -1,35 +1,37 @@
 package salvo.salvo;
 
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-public class Ship {
-
+public class Salvo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String ShipType;
+
+    private Integer turn;
 
     @ElementCollection
-    @Column(name="locations")
-    private List<String> locations = new ArrayList<>();
+    @Column(name="SalvoLocations")
+    private List<String> SalvoLocations = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name ="gamePlayer_id")
     private GamePlayer gamePlayer;
 
-    public Ship() {
+    public Salvo(){
+
     }
 
-    public Ship ( String shipType, List<String> locations, GamePlayer gamePlayer)
+    public Salvo ( Integer turn, GamePlayer gamePlayer, List<String> salvolocations)
     {
 
-        this.ShipType= shipType;
-        this.locations = locations;
+        this.turn= turn;
         this.gamePlayer = gamePlayer;
+        this.SalvoLocations = salvolocations;
     }
 
     public long getId() {
@@ -40,21 +42,20 @@ public class Ship {
         this.id = id;
     }
 
-    public String getShipType() {
-        return ShipType;
+    public Integer getTurn() {
+        return turn;
     }
 
-    public void setShipType(String shipType) {
-        ShipType = shipType;
+    public void setTurn(Integer turn) {
+        this.turn = turn;
     }
 
-
-    public List<String> getLocations() {
-        return locations;
+    public List<String> getSalvoLocations() {
+        return SalvoLocations;
     }
 
-    public void setLocations(List<String> locations) {
-        this.locations = locations;
+    public void setSalvoLocations(List<String> salvoLocations) {
+        SalvoLocations = salvoLocations;
     }
 
     public GamePlayer getGamePlayer() {
@@ -64,5 +65,4 @@ public class Ship {
     public void setGamePlayer(GamePlayer gamePlayer) {
         this.gamePlayer = gamePlayer;
     }
-
 }

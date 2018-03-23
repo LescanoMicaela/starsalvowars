@@ -1,5 +1,8 @@
 package salvo.salvo;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.*;
@@ -21,6 +24,10 @@ public class GamePlayer {
 
     @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
     private List<Ship> ships = new ArrayList<>();
+
+    @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
+    @Fetch(value= FetchMode.SUBSELECT)
+    private Set<Salvo> salvoes;
 
     public GamePlayer() { }
 
@@ -70,4 +77,8 @@ public class GamePlayer {
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
+
+//    public Set<Salvo> getSalvoes() {
+//        return salvoes;
+//    }
 }

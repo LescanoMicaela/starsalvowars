@@ -24,7 +24,7 @@ public class SalvoApplication {
 
 
 	@Bean
-	public CommandLineRunner initData(PlayerRepository repositoryplayer, GameRepository repositorygame, GamePlayerRepository repositorygamePlayer, ShipRepository repositoryShip) {
+	public CommandLineRunner initData(PlayerRepository repositoryplayer, GameRepository repositorygame, GamePlayerRepository repositorygamePlayer, ShipRepository repositoryShip, SalvoRepository repositorySalvo) {
 		return (String... args) -> {
 
 		    Player bauer = new Player( "j.bauer@ctu.gov");
@@ -193,6 +193,88 @@ public class SalvoApplication {
             repositoryShip.save(ship26);
             repositoryShip.save(ship27);
 
+            List<String> salvoLoc1_1_1 = Arrays.asList("B5", "C5", "F1");
+            List<String> salvoLoc1_1_2 = Arrays.asList("B4", "B5", "B6");
+            List<String> salvoLoc1_2_1 = Arrays.asList("F2", "D5");
+            List<String> salvoLoc1_2_2 = Arrays.asList("E1", "H3", "A2");
+
+            Salvo salvo1_1_1 = new Salvo(1, GP1_1, salvoLoc1_1_1);
+            Salvo salvo1_1_2 = new Salvo(1, GP1_2, salvoLoc1_1_2);
+            Salvo salvo1_2_1 = new Salvo(2, GP1_2, salvoLoc1_2_1);
+            Salvo salvo1_2_2 = new Salvo(2, GP1_2, salvoLoc1_2_2);
+
+
+            List<String> salvoLoc2_1_1 = Arrays.asList("A2", "A4", "G6");
+            List<String> salvoLoc2_1_2 = Arrays.asList("B5", "D5", "C7");
+            List<String> salvoLoc2_2_1 = Arrays.asList("A3", "H6");
+            List<String> salvoLoc2_2_2 = Arrays.asList("C5","C6");
+
+
+            Salvo salvo2_1_1 = new Salvo(1, GP2_1, salvoLoc2_1_1);
+            Salvo salvo2_1_2 = new Salvo(1, GP2_2, salvoLoc2_1_2);
+            Salvo salvo2_2_1 = new Salvo(2, GP2_2, salvoLoc2_2_1);
+            Salvo salvo2_2_2 = new Salvo(2, GP2_2, salvoLoc2_2_2);
+
+
+            List<String> salvoLoc3_1_1 = Arrays.asList("G6", "H6", "A4");
+            List<String> salvoLoc3_1_2 = Arrays.asList("H1", "H2", "H3");
+            List<String> salvoLoc3_2_1 = Arrays.asList("A2", "A3", "D8");
+            List<String> salvoLoc3_2_2 = Arrays.asList("E1", "F2", "G3");
+
+            Salvo salvo3_1_1 = new Salvo(1, GP3_1, salvoLoc3_1_1);
+            Salvo salvo3_1_2 = new Salvo(1, GP3_2, salvoLoc3_1_2);
+            Salvo salvo3_2_1 = new Salvo(2, GP3_2, salvoLoc3_2_1);
+            Salvo salvo3_2_2 = new Salvo(2, GP3_2, salvoLoc3_2_2);
+
+            List<String> salvoLoc4_1_1 = Arrays.asList("A3", "A4", "F7");
+            List<String> salvoLoc4_1_2 = Arrays.asList("B5", "C6", "H1");
+            List<String> salvoLoc4_2_1 = Arrays.asList("A2", "G6", "H6");
+            List<String> salvoLoc4_2_2 = Arrays.asList("C5", "C7", "D5");
+
+            Salvo salvo4_1_1 = new Salvo(1, GP4_1, salvoLoc3_1_1);
+            Salvo salvo4_1_2 = new Salvo(1, GP4_2, salvoLoc3_1_2);
+            Salvo salvo4_2_1 = new Salvo(2, GP4_1, salvoLoc3_2_1);
+            Salvo salvo4_2_2 = new Salvo(2, GP4_2, salvoLoc3_2_2);
+
+            List<String> salvoLoc5_1_1 = Arrays.asList("A1", "A2", "A3");
+            List<String> salvoLoc5_1_2 = Arrays.asList("B5", "B6", "C7");
+            List<String> salvoLoc5_2_1 = Arrays.asList("G6", "G7", "G8");
+            List<String> salvoLoc5_2_2 = Arrays.asList("C6", "D6", "E6");
+            List<String> salvoLoc5_3_2 = Arrays.asList("H1", "H8");
+
+
+            Salvo salvo5_1_1 = new Salvo(1, GP5_1, salvoLoc3_1_1);
+            Salvo salvo5_1_2 = new Salvo(1, GP5_2, salvoLoc3_1_2);
+            Salvo salvo5_2_1 = new Salvo(2, GP5_2, salvoLoc3_2_1);
+            Salvo salvo5_2_2 = new Salvo(2, GP5_2, salvoLoc3_2_2);
+            Salvo salvo5_3_2 = new Salvo(3, GP5_2, salvoLoc3_2_1);
+
+
+            repositorySalvo.save(salvo1_1_1);
+            repositorySalvo.save(salvo1_1_2);
+            repositorySalvo.save(salvo1_2_1);
+            repositorySalvo.save(salvo1_2_2);
+
+            repositorySalvo.save(salvo2_1_1);
+            repositorySalvo.save(salvo2_1_2);
+            repositorySalvo.save(salvo2_2_1);
+            repositorySalvo.save(salvo2_2_2);
+
+            repositorySalvo.save(salvo3_1_1);
+            repositorySalvo.save(salvo3_1_2);
+            repositorySalvo.save(salvo3_2_1);
+            repositorySalvo.save(salvo3_2_2);
+
+            repositorySalvo.save(salvo4_1_1);
+            repositorySalvo.save(salvo4_1_2);
+            repositorySalvo.save(salvo4_2_1);
+            repositorySalvo.save(salvo4_2_2);
+
+            repositorySalvo.save(salvo5_1_1);
+            repositorySalvo.save(salvo5_1_2);
+            repositorySalvo.save(salvo5_2_1);
+            repositorySalvo.save(salvo5_2_2);
+            repositorySalvo.save(salvo5_3_2);
 
 
 
