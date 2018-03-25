@@ -57,21 +57,20 @@ public class SalvoController {
         return dto;
     }
 
-//    private Map<String, Object> makeSalvoDTO(GamePlayer gamePlayer) {
-//        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-//        Set<Salvo> salvos = gamePlayer.getSalvoes();
-//        for (Salvo salvo : salvos) {
-//           Map<String, Object> salvoMap = new LinkedHashMap<>();
-//           salvoMap.put("turn", salvo.getTurn());
-//           salvoMap.put("location", salvo.getSalvoLocations());
-//            dto.put("salvo_info", salvoMap);
-//        }
-//            dto.put("player_id", gamePlayer.getPlayer().getId());
-////            dto.put("player", salvo.getGamePlayer().getPlayer().getId());
-////            dto.put("salvo-location", salvo.getSalvoLocations());
-//
-//        return dto;
-//    }
+    private List<Object> makeSalvoDTO(GamePlayer gamePlayer) {
+        List<Object> salvoList = new ArrayList<>();
+        Set<Salvo> salvos = gamePlayer.getSalvoes();
+        for (Salvo salvo : salvos) {
+           Map<String, Object> salvoMap = new LinkedHashMap<>();
+           salvoMap.put("turn", salvo.getTurn());
+            salvoMap.put("player_id", salvo.getGamePlayer().getId());
+            salvoMap.put("location", salvo.getSalvoLocations());
+            salvoList.add( salvoMap);
+        }
+
+
+        return salvoList;
+    }
 
 
     @RequestMapping("/games")
@@ -103,9 +102,9 @@ public class SalvoController {
                 .map(ship -> makeShipDTO(ship))
                 .collect(toList()));
 
-//        dto.put("salvoes", gamePlayers.stream()
-//                .map(gp -> makeSalvoDTO(gp))
-//                .collect(toList()));
+        dto.put("salvoes", gamePlayers.stream()
+                .map(gp -> makeSalvoDTO(gp))
+                .collect(toList()));
         return dto;
     }
 

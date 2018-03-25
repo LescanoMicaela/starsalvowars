@@ -10,7 +10,9 @@ $(document).ready(function () {
             games = data;
 //
             createGrids();
+            createGrids2();
             colorShip ();
+            colorSalvo();
             getPlayerNames();
         }
 //
@@ -75,7 +77,7 @@ $(document).ready(function () {
 
         for ( i=0; i<games.game.ships.length; i++) {
             for ( k= 0; k < games.game.ships[i].location.length; k++){
-                document.getElementById("U" + games.game.ships[i].location[k]).style.background="pink";
+                document.getElementById("U" + games.game.ships[i].location[k]).setAttribute("class", "ships");
 
             }
         }
@@ -112,10 +114,78 @@ $(document).ready(function () {
 
 
     }
-// }
+
+function createGrids2() {
+    var Alpha = ["A","B","C", "D", "E", "F", "G", "H", "I", "J"];
+    var Beta = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+    var tbh = document.getElementById("table-headers2");
+    var table = document.getElementById("table2");
+    var tbb = document.getElementById("table-rows2");
+    tr0 = document.createElement("td");
+    th0 = document.createElement("tr");
+    th0.append(tr0);
 
 
+    for (var y = 0; y < 10; y++) {
+
+        var td = document.createElement("td");
+        td.innerHTML = y + 1;
+        td.setAttribute("id" , y+1);
+
+        th0.appendChild(td);
+    }
+
+    tbh.appendChild(th0);
+
+    for (var J = 0; J < 10; J++) {
+        var tr = document.createElement("tr");
+        var td3 = document.createElement("td");
+        td3.innerHTML = String.fromCharCode(65 + J);
+        td3.setAttribute("id", String.fromCharCode(65 + J));
+        tr.setAttribute("id" , String.fromCharCode(65 + J));
+        tr.append(td3);
+        for (var m = 0; m < 10; m++) {
+
+            var td2 = document.createElement("td");
+            td2.id = "V"+Alpha[J]+Beta[m];
 
 
+            tr.append(td2);
+        }
+        tbb.append(tr);
+    }
+    table.append(tbh);
+    table.append(tbb);
+}
 
+
+function colorSalvo(){
+    for ( i=0; i<games.game.salvoes.length; i++) {
+        for ( k= 0; k < games.game.salvoes[i].length; k++){
+            for (y=0; y< games.game.salvoes[i][""+k].location.length; y++){
+                if (games.id == games.game.salvoes[i][""+k].player_id)
+                    // if (document.getElementById("U" + games.game.salvoes[i][""+k].location[y]).classList.contains("ships")){
+                    //     document.getElementById("U" + games.game.salvoes[i][""+k].location[y]).setAttribute("class", "hit");
+                    //     document.getElementById("U" + games.game.salvoes[i][""+k].location[y]).innerHTML = games.game.salvoes[i][""+k].turn
+                    // }
+                    // else{
+                        document.getElementById("V" + games.game.salvoes[i][""+k].location[y]).setAttribute("class", "salvo2");
+                    // }
+
+                else {
+                    if (document.getElementById("U" + games.game.salvoes[i][""+k].location[y]).classList.contains("ships")){
+                        document.getElementById("U" + games.game.salvoes[i][""+k].location[y]).setAttribute("class", "hit");
+                        document.getElementById("U" + games.game.salvoes[i][""+k].location[y]).innerHTML = games.game.salvoes[i][""+k].turn
+                    }
+                    else {
+
+                        document.getElementById("U" + games.game.salvoes[i]["" + k].location[y]).setAttribute("class", "salvo0");
+                    }
+                }
+            }
+        }
+    }
+
+
+}
 

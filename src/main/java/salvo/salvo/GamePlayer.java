@@ -78,7 +78,7 @@ public class GamePlayer {
         this.dateCreated = dateCreated;
     }
 
-//    public Set<Salvo> getSalvoes() {
-//        return salvoes;
-//    }
+    public Set<Salvo> getSalvoes() {
+        return salvoes;
+    }
 }

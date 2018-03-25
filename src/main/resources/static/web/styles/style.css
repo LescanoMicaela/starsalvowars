@@ -11,3 +11,23 @@ td {
 table {
     border-collapse: collapse;
 }
+
+.ships {
+    background-color: pink;
+}
+
+.salvo0 {
+    background-color: red;
+}
+.salvo2 {
+    background-color: green;
+}
+
+.hit {
+    background-color: orange;
+}
+
+/*.tables{*/
+    /*display: flex;*/
+    /*justify-content: space-around;*/
+/*}*/

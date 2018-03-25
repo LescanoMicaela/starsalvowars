@@ -200,7 +200,7 @@ public class SalvoApplication {
 
             Salvo salvo1_1_1 = new Salvo(1, GP1_1, salvoLoc1_1_1);
             Salvo salvo1_1_2 = new Salvo(1, GP1_2, salvoLoc1_1_2);
-            Salvo salvo1_2_1 = new Salvo(2, GP1_2, salvoLoc1_2_1);
+            Salvo salvo1_2_1 = new Salvo(2, GP1_1, salvoLoc1_2_1);
             Salvo salvo1_2_2 = new Salvo(2, GP1_2, salvoLoc1_2_2);
 
 
@@ -223,7 +223,7 @@ public class SalvoApplication {
 
             Salvo salvo3_1_1 = new Salvo(1, GP3_1, salvoLoc3_1_1);
             Salvo salvo3_1_2 = new Salvo(1, GP3_2, salvoLoc3_1_2);
-            Salvo salvo3_2_1 = new Salvo(2, GP3_2, salvoLoc3_2_1);
+            Salvo salvo3_2_1 = new Salvo(2, GP3_1, salvoLoc3_2_1);
             Salvo salvo3_2_2 = new Salvo(2, GP3_2, salvoLoc3_2_2);
 
             List<String> salvoLoc4_1_1 = Arrays.asList("A3", "A4", "F7");
@@ -245,7 +245,7 @@ public class SalvoApplication {
 
             Salvo salvo5_1_1 = new Salvo(1, GP5_1, salvoLoc3_1_1);
             Salvo salvo5_1_2 = new Salvo(1, GP5_2, salvoLoc3_1_2);
-            Salvo salvo5_2_1 = new Salvo(2, GP5_2, salvoLoc3_2_1);
+            Salvo salvo5_2_1 = new Salvo(2, GP5_1, salvoLoc3_2_1);
             Salvo salvo5_2_2 = new Salvo(2, GP5_2, salvoLoc3_2_2);
             Salvo salvo5_3_2 = new Salvo(3, GP5_2, salvoLoc3_2_1);
 
