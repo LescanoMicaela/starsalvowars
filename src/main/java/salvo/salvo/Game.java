@@ -1,6 +1,8 @@
 package salvo.salvo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -22,6 +24,10 @@ import static java.util.stream.Collectors.toList;
 
         @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
         Set<GamePlayer> gamePlayers;
+
+        @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
+        @Fetch(value= FetchMode.SUBSELECT)
+        Set<Score> scores;
 
 
 
@@ -49,6 +55,11 @@ import static java.util.stream.Collectors.toList;
 
     public Set<GamePlayer> getGamePlayers() {
         return gamePlayers;
+    }
+
+
+    public Set<Score> getScores(){
+        return scores;
     }
 
 

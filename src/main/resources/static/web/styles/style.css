@@ -17,17 +17,17 @@ table {
 }
 
 .salvo0 {
-    background-color: red;
+    background-color: orange;
 }
 .salvo2 {
     background-color: green;
 }
 
 .hit {
-    background-color: orange;
+    background-color: red;
 }
 
-/*.tables{*/
-    /*display: flex;*/
-    /*justify-content: space-around;*/
-/*}*/
+.tables{
+    display: flex;
+    justify-content: space-around;
+}

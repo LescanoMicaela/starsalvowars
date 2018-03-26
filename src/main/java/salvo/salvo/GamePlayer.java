@@ -1,5 +1,6 @@
 package salvo.salvo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -28,6 +29,8 @@ public class GamePlayer {
     @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
     @Fetch(value= FetchMode.SUBSELECT)
     private Set<Salvo> salvoes;
+
+
 
     public GamePlayer() { }
 
@@ -80,5 +83,11 @@ public class GamePlayer {
 
     public Set<Salvo> getSalvoes() {
         return salvoes;
+    }
+
+    @JsonIgnore
+    public Score getScore() {
+        return player.getScore(game);
+
     }
 }
