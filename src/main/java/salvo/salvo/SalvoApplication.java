@@ -35,8 +35,7 @@ public class SalvoApplication {
 			repositoryplayer.save(kim);
 			Player almeida = new Player("t.almeida@ctu.gov");
 			repositoryplayer.save(almeida);
-            Player palmer = new Player("d.palmer@whitehouse.gov");
-            repositoryplayer.save(palmer);
+
             Game game1 = new Game();
             Game game2 = new Game();
             Game game3 = new Game();
@@ -293,6 +292,12 @@ public class SalvoApplication {
             repositoryscore.save(score3_2);
             repositoryscore.save(score4_1);
             repositoryscore.save(score4_2);
+
+
+
+//            System.out.println(1);
+//            System.out.println(GP1_1.getScore());
+
 
 
 

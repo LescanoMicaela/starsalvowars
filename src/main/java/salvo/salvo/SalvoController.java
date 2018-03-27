@@ -25,6 +25,9 @@ public class SalvoController {
     private SalvoRepository salvoRepository;
     @Autowired
     private PlayerRepository repositoryPlayer;
+    @Autowired
+    private ScoreRepository repositoryscore;
+
 
 
 
@@ -41,10 +44,10 @@ public class SalvoController {
 
     private Map<String, Object> makegamePlayerDTO(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", gamePlayer.getId());
+        dto.put("player", makeplayerDTO(gamePlayer.getPlayer()));
         if(gamePlayer.getScore() !=null){
 
-            dto.put("id", gamePlayer.getId());
-            dto.put("player", makeplayerDTO(gamePlayer.getPlayer()));
             dto.put("score", gamePlayer.getScore().getScore());
         }
         else{
@@ -63,6 +66,12 @@ public class SalvoController {
 
         return dto;
     }
+
+
+
+
+
+
     private Map<String, Object> makeShipDTO(Ship ship) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("style", ship.getShipType());
@@ -88,23 +97,65 @@ public class SalvoController {
 
         return salvoList;
     }
-//
-//    private Map<String, Object> makeScoreDTO(Score score) {
-//        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-//        dto.put("score", score.getScore());
-//        return dto;
-//    }
 
 
-    @RequestMapping("/games")
-    public List<Map> getGamesId() {
+    private Map<String, Object> makeplayerScoreDTO(Player player) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", player.getId());
+        dto.put("email", player.getUserNameName());
 
-        return repositorygame.findAll()
-                .stream()
-                .map(game -> makeGameDTO(game))
-                .collect(toList());
+
+
+        return dto;
     }
 
+
+    private Map<String, Object> playerforLeader(GamePlayer gamePlayer){
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        if(gamePlayer.getScore() !=null){
+
+            dto.put("score", gamePlayer.getScore().getScore());
+        }
+        else{
+            dto.put("score", null);
+        }
+        return dto;
+    }
+
+
+
+    private Map<String, Object> makeLeaderBoardDTO(Player player){
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        Set<GamePlayer> gameplayers = player.getGamePlayers();
+
+        dto.put("id", player.getId());
+        dto.put("email", player.getUserNameName());
+        dto.put("scores", gameplayers.stream().map(x -> playerforLeader(x)).collect(toList()));
+        return dto;
+
+    }
+
+
+//
+    @RequestMapping("/games")
+    public Map<String,Object> getGamesId() {
+        Map<String, Object> gameNewdto = new LinkedHashMap<String, Object>();
+
+        gameNewdto.put("games", repositorygame.findAll().stream().map(game -> makeGameDTO(game)).collect(toList()));
+        gameNewdto.put("leaderboard", repositoryPlayer.findAll().stream().map(x -> makeLeaderBoardDTO(x)).collect(toList()));
+        return gameNewdto;
+    }
+
+//    @RequestMapping("/games")
+//    public List<Map> getGamesId() {
+//
+//        return repositorygame.findAll()
+//                .stream()
+//                .map(game -> makeGameDTO(game))
+//                .collect(toList());
+//    }
+//
+//
 
 
 
