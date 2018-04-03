@@ -1,16 +1,13 @@
 package salvo.salvo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 @Entity
 public class Player {
@@ -18,35 +15,36 @@ public class Player {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
-    private String UserName;
+    private String userName;
+    private String password;
 
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
-    Set<GamePlayer> gamePlayers;
+    private Set<GamePlayer> gamePlayers = new LinkedHashSet<>();
 
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
-    @Fetch(value= FetchMode.SUBSELECT)
-    Set<Score> scores;
+    //@Fetch(value= FetchMode.SUBSELECT)
+    private Set<Score> scores = new LinkedHashSet<>();
 
     public Player() { }
 
-    public Player( String email) {
-        this.UserName = email;
+    public Player( String email, String password) {
+        this.userName = email;
+        this.password = password;
 
     }
 
-
-    public String getUserNameName() {
-        return UserName;
+    public String getUserName() {
+        return userName;
     }
 
     public void setUserName(String userName) {
-        this.UserName = userName;
+        this.userName = userName;
     }
 
 
 
     public String toString() {
-        return  this.UserName;
+        return  this.userName;
     }
 
     public void addGamePlayer(GamePlayer gamePlayer) {
@@ -84,7 +82,11 @@ public class Player {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

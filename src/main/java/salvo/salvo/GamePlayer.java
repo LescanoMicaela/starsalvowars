@@ -24,11 +24,11 @@ public class GamePlayer {
     private Game game;
 
     @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
-    private List<Ship> ships = new ArrayList<>();
+    private Set<Ship> ships = new LinkedHashSet<>();
 
     @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
-    @Fetch(value= FetchMode.SUBSELECT)
-    private Set<Salvo> salvoes;
+    //@Fetch(value= FetchMode.SUBSELECT)
+    private Set<Salvo> salvoes = new LinkedHashSet<>();
 
 
 
@@ -60,16 +60,14 @@ public class GamePlayer {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+
 
     public void addShip(Ship ship) {
         ship.setGamePlayer(this);
         ships.add(ship);
     }
 
-    public List<Ship> getShips() {
+    public Set<Ship> getShips() {
         return ships;
     }
 

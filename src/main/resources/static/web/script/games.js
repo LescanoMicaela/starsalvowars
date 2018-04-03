@@ -1,6 +1,6 @@
 var games;
 $(document).ready(function () {
-    // var listGame = $("ol[data-id=listGames]");
+    var listGame = $("ol[data-id=listGames]");
     var tblbody = $("tbody[data-id=leaderBoardBody]");
 
     $.ajax({
@@ -10,30 +10,32 @@ $(document).ready(function () {
         success: function (data) {
 
             games = data;
-            // createLists();
+            createLists();
             createLeaderBoard();
+
         }
 
 
 
     })
-    // function createLists(){
-    //     for ( i=0; i< games.length; i++){
-    //        var li= document.createElement("li");
-    //        if ( games[i].gamePlayers[1] != null) {
-    //           var p1= games[i].gamePlayers[0].player.email;
-    //            var p2= games[i].gamePlayers[1].player.email;
-    //        }
-    //        else {
-    //            var p2 = "waiting for player to join"
-    //        }
-    //        var date = new Date(games[i].CreationDate);
-    //         var formattedDate = date.toLocaleString();
-    //         li.innerHTML = formattedDate + ": " + p1 + " , " + p2;
-    //            listGame.append(li);
-    //
-    //     }
-    // }
+    function createLists(){
+
+        for ( i=0; i< games.games.length; i++){
+           var li= document.createElement("li");
+           if ( games.games[i].gamePlayers[1] != null) {
+              var p1= games.games[i].gamePlayers[0].player.email;
+               var p2= games.games[i].gamePlayers[1].player.email;
+           }
+           else {
+               var p2 = "waiting for player to join"
+           }
+           var date = new Date(games.games[i].CreationDate);
+            var formattedDate = date.toLocaleString();
+            li.innerHTML = formattedDate + ": " + p1 + " , " + p2;
+               listGame.append(li);
+
+        }
+    }
 
     function createLeaderBoard(){
 
@@ -84,4 +86,24 @@ $(document).ready(function () {
 
 
     };
+   $("#logInBtn").click(function login(evt) {
+        evt.preventDefault();
+        var form = evt.target.form;
+        $.post("/api/login",
+            { userName: form["username"].value,
+                password: form["password"].value })
+            .done(function(e) { window.location.reload() })
+            .fail(function(e) { console.log("failed to log in", e)})
+        // $.post("/api/login", { userName: "t.almeida@ctu.gov", password: "mole" })
+        //     .done(function(e) { console.log("logged in!", e); })
+        //     .fail(function(e) { console.log("failed to log in", e)})
+    });
+    //
+    $("#logOutBtn").click(function logout(evt) {
+        evt.preventDefault();
+        $.post("/api/logout")
+            .done(function(e) { window.location.reload() })
+            .fail(function(e){console.log("failed to log out", e)})
+    });
+
 });

@@ -6,9 +6,7 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import java.util.stream.Collectors;
 
@@ -23,11 +21,11 @@ import static java.util.stream.Collectors.toList;
         private Date CreationDate;
 
         @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
-        Set<GamePlayer> gamePlayers;
+        private Set<GamePlayer> gamePlayers = new LinkedHashSet<>();
 
         @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
-        @Fetch(value= FetchMode.SUBSELECT)
-        Set<Score> scores;
+        //@Fetch(value= FetchMode.SUBSELECT)
+         private Set<Score> scores = new LinkedHashSet<>();
 
 
 
@@ -75,7 +73,4 @@ import static java.util.stream.Collectors.toList;
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 }

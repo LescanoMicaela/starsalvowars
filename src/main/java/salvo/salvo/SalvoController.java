@@ -1,12 +1,13 @@
 package salvo.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -59,7 +60,7 @@ public class SalvoController {
     private Map<String, Object> makeplayerDTO(Player player) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", player.getId());
-        dto.put("email", player.getUserNameName());
+        dto.put("email", player.getUserName());
 //        dto.put("scores", player.getScores(game).getScore());
 //        dto.put("score", player.getScore(game).getScore());
 
@@ -79,30 +80,31 @@ public class SalvoController {
         return dto;
     }
 
-//    private Set<Score> makeScoreDTO(Player player){
-//      Player p = repositoryPlayer.findOne(player);
-//    }
-
-    private List<Object> makeSalvoDTO(GamePlayer gamePlayer) {
-        List<Object> salvoList = new ArrayList<>();
-        Set<Salvo> salvos = gamePlayer.getSalvoes();
-        for (Salvo salvo : salvos) {
-           Map<String, Object> salvoMap = new LinkedHashMap<>();
-           salvoMap.put("turn", salvo.getTurn());
-            salvoMap.put("player_id", salvo.getGamePlayer().getId());
-            salvoMap.put("location", salvo.getSalvoLocations());
-            salvoList.add( salvoMap);
+    private Map<String, Object> makeSalvoDTO(Salvo salvo){
+        Map<String, Object> dto = new LinkedHashMap<>();
+       dto.put("turn", salvo.getTurn());
+        dto.put("player_id", salvo.getGamePlayer().getId());
+        dto.put("location", salvo.getSalvoLocations());
+        return dto;
         }
 
-
-        return salvoList;
+    private List<Object> makeSalvosDTO(GamePlayer gamePlayer) {
+        List<Object> salvoList = new ArrayList<>();
+        Set<Salvo> salvos = gamePlayer.getSalvoes();
+        salvoList = salvos.stream()
+                .map( salvo -> makeSalvoDTO(salvo))
+                .collect(toList());
+        return  salvoList;
     }
+
+
+
 
 
     private Map<String, Object> makeplayerScoreDTO(Player player) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", player.getId());
-        dto.put("email", player.getUserNameName());
+        dto.put("email", player.getUserName());
 
 
 
@@ -129,23 +131,35 @@ public class SalvoController {
         Set<GamePlayer> gameplayers = player.getGamePlayers();
 
         dto.put("id", player.getId());
-        dto.put("email", player.getUserNameName());
+        dto.put("email", player.getUserName());
         dto.put("scores", gameplayers.stream().map(x -> playerforLeader(x)).collect(toList()));
         return dto;
 
     }
 
-
+////make salvo dto///
 //
     @RequestMapping("/games")
-    public Map<String,Object> getGamesId() {
+    public Map<String,Object> getGamesId(Authentication authentication) {
         Map<String, Object> gameNewdto = new LinkedHashMap<String, Object>();
 
         gameNewdto.put("games", repositorygame.findAll().stream().map(game -> makeGameDTO(game)).collect(toList()));
         gameNewdto.put("leaderboard", repositoryPlayer.findAll().stream().map(x -> makeLeaderBoardDTO(x)).collect(toList()));
+        if(authentication != null) {
+            gameNewdto.put("player", currentDTO(authentication));
+        } else {
+            gameNewdto.put("player","null");
+        }
+
         return gameNewdto;
     }
 
+    public Map<String, Object> currentDTO(Authentication authentication){
+        Map<String,Object> dto = new LinkedHashMap<>();
+            dto.put("id",  authUser(authentication).getId());
+            dto.put("name", authUser(authentication).getUserName());
+        return dto;
+    }
 //    @RequestMapping("/games")
 //    public List<Map> getGamesId() {
 //
@@ -162,7 +176,7 @@ public class SalvoController {
     private Map<String, Object> makeGameDTO2(Game game, GamePlayer gm) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         Set<GamePlayer> gamePlayers = game.getGamePlayers();
-        List<Ship> ships = gm.getShips();
+        Set<Ship> ships = gm.getShips();
 
 
         dto.put("id", game.getId());
@@ -177,10 +191,13 @@ public class SalvoController {
                 .collect(toList()));
 
         dto.put("salvoes", gamePlayers.stream()
-                .map(gp -> makeSalvoDTO(gp))
+                .map(gp -> makeSalvosDTO(gp))
                 .collect(toList()));
         return dto;
     }
+
+
+
 
     @RequestMapping("/game_view/{nn}")
     public Map<String, Object> viewGamePlayer(@PathVariable Long nn) {
@@ -199,5 +216,10 @@ public class SalvoController {
     }
 
 
-
+    private Player authUser(Authentication authentication) {
+        return repositoryPlayer.findByUserName(authentication.getName());
+    }
+    private boolean isGuest(Authentication authentication) {
+        return authentication == null || authentication instanceof AnonymousAuthenticationToken;
+    }
 }

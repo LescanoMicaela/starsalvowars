@@ -3,15 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Salvo!</title>
+    <link href="styles/style.css" type="text/css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
 </head>
 <body>
 
-<!--<ol data-id="listGames"> Games-->
+<form id="login-form" onsubmit="return false">
+    <label>Name: <input type="text" name="username"></label>
+    <label>Password: <input type="password" name="password"></label>
+    <button id="logInBtn">Log in</button>
+</form>
 
-<!--</ol>-->
+<form id="logout-form" onsubmit="return false">
+    <button id="logOutBtn">Log out</button>
+</form>
+
+
+<ol data-id="listGames"> Games
+
+</ol>
+
 <table data-id="leaderBoard">
     <thead>
     <tr>
