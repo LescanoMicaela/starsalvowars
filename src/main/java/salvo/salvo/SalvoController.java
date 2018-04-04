@@ -1,11 +1,12 @@
 package salvo.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -139,6 +140,26 @@ public class SalvoController {
 
 ////make salvo dto///
 //
+
+    @RequestMapping(path = "/players", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> createUser(@RequestParam String username, @RequestParam String password){
+         if (username.isEmpty() || password.isEmpty()) {
+        return new ResponseEntity<>(makeMap("error", "Empty field"), HttpStatus.FORBIDDEN);
+    }
+    Player user = repositoryPlayer.findByUserName(username);
+  if (user != null) {
+        return new ResponseEntity<>(makeMap("error", "Name in use"), HttpStatus.FORBIDDEN);
+    }
+    Player newUser = repositoryPlayer.save(new Player(username, password));
+  return new ResponseEntity<>(makeMap("Username", newUser.getUserName()),  HttpStatus.CREATED);
+}
+
+    private Map<String, Object> makeMap(String key, Object value) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(key, value);
+        return map;
+    }
+
     @RequestMapping("/games")
     public Map<String,Object> getGamesId(Authentication authentication) {
         Map<String, Object> gameNewdto = new LinkedHashMap<String, Object>();
