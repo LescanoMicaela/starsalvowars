@@ -1,7 +1,8 @@
 var games;
 $(document).ready(function () {
     var listGame = $("ol[data-id=listGames]");
-    var tblbody = $("tbody[data-id=leaderBoardBody]");
+    var tblbody = $("tbody[data-id=leaderBoardBody]")
+    $("#alert").html(" ");
 
     $.ajax({
         url: "http://localhost:8080/api/games",
@@ -12,6 +13,7 @@ $(document).ready(function () {
             games = data;
             createLists();
             createLeaderBoard();
+            welcomeMessage();
 
         }
 
@@ -89,21 +91,86 @@ $(document).ready(function () {
    $("#logInBtn").click(function login(evt) {
         evt.preventDefault();
         var form = evt.target.form;
-        $.post("/api/login",
-            { userName: form["username"].value,
-                password: form["password"].value })
-            .done(function(e) { window.location.reload() })
-            .fail(function(e) { console.log("failed to log in", e)})
+        if ( validate() == true){
+
+            $.post("/api/login",
+                { userName: form["username"].value,
+                    password: form["password"].value })
+                .done(function(e) { window.location.reload()})
+                .fail(function(e) { $("#alert").html("Wrong username or password")})
+        }
         // $.post("/api/login", { userName: "t.almeida@ctu.gov", password: "mole" })
         //     .done(function(e) { console.log("logged in!", e); })
-        //     .fail(function(e) { console.log("failed to log in", e)})
+        //     .fail(function(e) { console.loveng("failed to log in", e)})
     });
     //
+
+    $("#signUpBtn").click(function signin(evt){
+        evt.preventDefault();
+        var form = evt.target.form;
+        if (validate() == true){
+
+            $.post("/api/players", { username: form["username"].value,  password: form["password"].value  })
+                .done(login(evt))
+                .fail( function(e){ $("#alert").text(e.responseJSON.error)})
+
+        }
+    });
+
     $("#logOutBtn").click(function logout(evt) {
         evt.preventDefault();
         $.post("/api/logout")
             .done(function(e) { window.location.reload() })
-            .fail(function(e){console.log("failed to log out", e)})
+            .fail(function(e){ $("#alert").html("failed to log out")})
     });
+
+    function welcomeMessage(){
+     if ( games.player !=="null"){
+         $("#login-form").toggle();
+         $("#welcome").html("Welcome " + games.player.name)
+     }else{
+         $("#logout-form").toggle();
+     }
+    }
+
+    function validate() {
+        var email = document.getElementById('email').value;
+
+
+
+        var emailFilter = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/;
+
+
+        if (!emailFilter.test(email)) {
+            $("#alert").html('Please enter a valid e-mail address');
+            return false;
+        }
+        if (($("#password").val().trim().length === 0)){
+            $("#alert").html('Password can not be blank');
+            return false;
+
+        } else{
+
+            return true;
+
+        }
+    }
+
+    function login(evt) {
+        evt.preventDefault();
+        var form = evt.target.form;
+        if (validate() == true) {
+
+            $.post("/api/login",
+                {
+                    userName: form["username"].value,
+                    password: form["password"].value
+                })
+                .done(function (e) {
+                    window.location.reload()
+                })
+
+        }
+    };
 
 });

@@ -18,6 +18,16 @@ $(document).ready(function () {
 //
     })
 });
+
+$("#logOutBtn").click(function logout(evt) {
+    evt.preventDefault();
+    $.post("/api/logout")
+        .done(function(e) { window.location.href = "games.html" })
+        // .fail(function(e){ $("#alert").html("failed to log out")})
+});
+
+
+
     function createGrids() {
         var Alpha = ["A","B","C", "D", "E", "F", "G", "H", "I", "J"];
         var Beta = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];

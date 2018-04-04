@@ -31,3 +31,14 @@ table {
     display: flex;
     justify-content: space-around;
 }
+#alert{
+    background-color: yellow;
+    text-align: center;
+    width: fit-content;
+    /* display: flex; */
+    /* justify-content: center; */
+    /* align-self: center; */
+    font-size: 120%;
+    /*margin: 0 auto;*/
+    /*padding: 1%;*/
+}

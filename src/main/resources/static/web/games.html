@@ -9,11 +9,13 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
-
+<h1 id="welcome"></h1>
+<div id="alert"></div>
 <form id="login-form" onsubmit="return false">
-    <label>Name: <input type="text" name="username"></label>
-    <label>Password: <input type="password" name="password"></label>
+    <label >Email: <input id="email" type="email" name="username"></label>
+    <label >Password: <input id="password" type="password" name="password" required/></label>
     <button id="logInBtn">Log in</button>
+    <button id="signUpBtn">Sign up</button>
 </form>
 
 <form id="logout-form" onsubmit="return false">
