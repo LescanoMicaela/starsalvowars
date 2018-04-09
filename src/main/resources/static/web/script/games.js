@@ -14,29 +14,77 @@ $(document).ready(function () {
             createLists();
             createLeaderBoard();
             welcomeMessage();
+            $(".renter").click(function()
+            { var url = $(this).data("id");
+                window.location.href = "game.html?gp=" +""+url;
+            });
+            $(".join").click(function()
+            { var id = $(this).data("id");
+                $.post("/api/game/"+""+id+"/players")
+                    .done(function(e){ window.location.href = "game.html?gp=" +""+e.GamePlayer})
+                    .fail( function(e){ console.log("nope")})
+            });
 
         }
 
 
 
-    })
-    function createLists(){
+    });
+    function createLists() {
+        var p1;
+        var p2;
+        var btn = document.createElement("button");
 
-        for ( i=0; i< games.games.length; i++){
-           var li= document.createElement("li");
-           if ( games.games[i].gamePlayers[1] != null) {
-              var p1= games.games[i].gamePlayers[0].player.email;
-               var p2= games.games[i].gamePlayers[1].player.email;
-           }
-           else {
-               var p2 = "waiting for player to join"
-           }
-           var date = new Date(games.games[i].CreationDate);
+        for (i = 0; i < games.games.length; i++) {
+
+
+            var li = document.createElement("li");
+            if (games.games[i].gamePlayers[1] != null) {
+                var p1 = games.games[i].gamePlayers[0].player.email;
+                var p2 = games.games[i].gamePlayers[1].player.email;
+            }
+            else {
+                var p1 = games.games[i].gamePlayers[0].player.email;
+                var p2 = "waiting for player to join"
+
+            }
+            var date = new Date(games.games[i].CreationDate);
             var formattedDate = date.toLocaleString();
-            li.innerHTML = formattedDate + ": " + p1 + " , " + p2;
-               listGame.append(li);
 
+            li.innerHTML = formattedDate + ": " + p1 + " , " + p2;
+            listGame.append(li);
+            if (games.player !== "null") {
+                var btn = document.createElement("button");
+                var btnjoin = document.createElement("button");
+                btn.setAttribute("class", "renter");
+                btnjoin.setAttribute("class", "join");
+
+                for (var k = 0; k < games.games[i].gamePlayers.length; k++) {
+                    if (games.player.name === games.games[i].gamePlayers[k].player.email) {
+                        btn.setAttribute("data-id", games.games[i].gamePlayers[k].id)
+                    } else {
+                        if (games.games[i].gamePlayers.length < 2) {
+                            btnjoin.setAttribute("data-id", games.games[i].id);
+
+                        }
+                    }
+                }
+                if (games.player.name === p1 || games.player.name === p2) {
+                    btn.innerHTML = "enter game" + "";
+                    if ($("li:contains(p1)") || $("li:contains(p2)")) {
+                        li.append(btn);
+                    }
+                }
+                if (games.player.name !== p1 && p2 == "waiting for player to join") {
+                    btnjoin.innerHTML = "join game" + "";
+                    if ($("li:contains(p2)")) {
+                        li.append(btnjoin);
+                    }
+                }
+
+            }
         }
+
     }
 
     function createLeaderBoard(){
@@ -88,6 +136,14 @@ $(document).ready(function () {
 
 
     };
+
+    // $(".join").click(function()
+    // { var id = $(this).data("id");
+    //     $.post("/api/game/"+""+id+"/players")
+    //         .done(function(e){ window.location.href = "game.html?gp=" +""+e.GamePlayer})
+    //         .fail( function(e){ $("#alert").text(e.responseJSON.error)})
+    // });
+
    $("#logInBtn").click(function login(evt) {
         evt.preventDefault();
         var form = evt.target.form;
@@ -115,6 +171,15 @@ $(document).ready(function () {
                 .fail( function(e){ $("#alert").text(e.responseJSON.error)})
 
         }
+    });
+
+    $("#create").click(function createGame(){
+        var url = $(this).data("id");
+        $.post("/api/games")
+            // .done(function(e){ console.log(e.GamePlayer)})
+            .done(function(e){  window.location.href = "game.html?gp=" +""+e.GamePlayer})
+            .fail( function(e){ $("#alert").text(e.responseJSON.error)})
+
     });
 
     $("#logOutBtn").click(function logout(evt) {
@@ -172,5 +237,8 @@ $(document).ready(function () {
 
         }
     };
+
+
+
 
 });

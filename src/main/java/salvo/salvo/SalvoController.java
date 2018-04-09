@@ -16,7 +16,8 @@ import static java.util.stream.Collectors.toList;
 @RequestMapping("/api")
 
 public class SalvoController {
-
+    @Autowired
+    private ShipRepository repositoryship;
     @Autowired
     private GameRepository repositorygame;
     @Autowired
@@ -68,8 +69,6 @@ public class SalvoController {
 
         return dto;
     }
-
-
 
 
 
@@ -160,7 +159,7 @@ public class SalvoController {
         return map;
     }
 
-    @RequestMapping("/games")
+    @RequestMapping(path = "/games", method = RequestMethod.GET)
     public Map<String,Object> getGamesId(Authentication authentication) {
         Map<String, Object> gameNewdto = new LinkedHashMap<String, Object>();
 
@@ -175,22 +174,49 @@ public class SalvoController {
         return gameNewdto;
     }
 
+
+    @RequestMapping(path = "/games", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> createUser(Authentication authentication){
+
+        if (authentication == null) {
+            return new ResponseEntity<>(makeMap("error", "You need to be logged in to create a game"), HttpStatus.UNAUTHORIZED);
+        }else{
+            Game newGame = repositorygame.save(new Game());
+            GamePlayer newGamePlayer = repositorygameplayer.save(new GamePlayer(newGame,authUser(authentication)));
+            return new ResponseEntity<>(makeMap("GamePlayer", newGamePlayer.getId()),  HttpStatus.CREATED);
+        }
+
+    }
+
+    @RequestMapping(path = "/games/players/{nn}/ships", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> ships(@PathVariable Long nn, Authentication authentication, @RequestBody Set<Ship> ships) {
+        GamePlayer gameplayernn = repositorygameplayer.findOne(nn);
+//
+        if ( authentication == null){
+            return new ResponseEntity<>(makeMap("error", "You need to be logged in"), HttpStatus.UNAUTHORIZED);
+        } if( gameplayernn == null){
+            return new ResponseEntity<>(makeMap("error", "No such gameplayer"), HttpStatus.UNAUTHORIZED);
+        } if ( gameplayernn.getPlayer() != authUser(authentication)){
+            return new ResponseEntity<>(makeMap("error", "Not your game"), HttpStatus.UNAUTHORIZED);
+        } if ( gameplayernn.getShips().size() != 0){
+            return new ResponseEntity<>(makeMap("error","Ships have been already placed"), HttpStatus.FORBIDDEN);
+        } else {
+           for(Ship ship: ships){
+//               Ship newship = new Ship()
+               ship.setGamePlayer(gameplayernn);
+               ships.add(ship);
+               repositoryship.save(ship);
+           }
+            return new ResponseEntity<>(makeMap("SUCCESS", "Ships created "),(HttpStatus.CREATED));
+        }
+    }
+
     public Map<String, Object> currentDTO(Authentication authentication){
         Map<String,Object> dto = new LinkedHashMap<>();
             dto.put("id",  authUser(authentication).getId());
             dto.put("name", authUser(authentication).getUserName());
         return dto;
     }
-//    @RequestMapping("/games")
-//    public List<Map> getGamesId() {
-//
-//        return repositorygame.findAll()
-//                .stream()
-//                .map(game -> makeGameDTO(game))
-//                .collect(toList());
-//    }
-//
-//
 
 
 
@@ -217,24 +243,43 @@ public class SalvoController {
         return dto;
     }
 
+    @RequestMapping(path ="game/{nn}/players", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> gameidplayers(@PathVariable Long nn, Authentication authentication) {
+        Game gamenn = repositorygame.findOne(nn);
+        if ( authentication == null){
+            return new ResponseEntity<>(makeMap("error", "You need to be logged in"), HttpStatus.UNAUTHORIZED);
+        } if( gamenn == null){
+            return new ResponseEntity<>(makeMap("error", "No such game"), HttpStatus.FORBIDDEN);
+        } if ( gamenn.getPlayers().size() > 1){
+            return new ResponseEntity<>(makeMap("error", "Game is full"), HttpStatus.FORBIDDEN);
+        } if ( gamenn.getPlayers().contains(authUser(authentication))){
+            return new ResponseEntity<>(makeMap("error", "You are already in this game"), HttpStatus.FORBIDDEN);
+        }else {
+            GamePlayer newGamePlayer = repositorygameplayer.save(new GamePlayer(gamenn ,authUser(authentication)));
+            return new ResponseEntity<>(makeMap("GamePlayer", newGamePlayer.getId()),  HttpStatus.CREATED);
+        }
+    }
 
 
 
     @RequestMapping("/game_view/{nn}")
-    public Map<String, Object> viewGamePlayer(@PathVariable Long nn) {
-        Map <String, Object> dto = new LinkedHashMap<String, Object>();
-       GamePlayer gamePlayernn = repositorygameplayer.findOne(nn);
-       Game game = gamePlayernn.getGame();
-        dto.put("id", nn);
-        dto.put("game", makeGameDTO2(game, gamePlayernn));
+    public ResponseEntity<Map<String, Object>> viewGamePlayer(@PathVariable Long nn, Authentication authentication) {
+        GamePlayer gamePlayernn = repositorygameplayer.findOne(nn);
+        Game game = gamePlayernn.getGame();
+        if ( gamePlayernn.getPlayer().getId() != authUser(authentication).getId() ){
+            return new ResponseEntity<>(makeMap("error", "NOT YOUR GAMEPLAYER"), HttpStatus.UNAUTHORIZED);
 
+        } else {
 
-        return dto;
+            Map<String, Object> dto = new LinkedHashMap<>();
+            dto.put("id", nn);
+            dto.put("game", makeGameDTO2(game, gamePlayernn));
+            dto.put("player", currentDTO(authentication));
 
-
-
-
+            return new ResponseEntity<>(dto, HttpStatus.OK);
+        }
     }
+
 
 
     private Player authUser(Authentication authentication) {

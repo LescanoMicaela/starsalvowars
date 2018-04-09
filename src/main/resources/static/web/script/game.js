@@ -14,8 +14,14 @@ $(document).ready(function () {
             colorShip ();
             colorSalvo();
             getPlayerNames();
+
+
+        },
+
+        error : function (){
+            notYourGM();
         }
-//
+
     })
 });
 
@@ -25,6 +31,56 @@ $("#logOutBtn").click(function logout(evt) {
         .done(function(e) { window.location.href = "games.html" })
         // .fail(function(e){ $("#alert").html("failed to log out")})
 });
+
+    function notYourGM(){
+       $("body").html(" ");
+       var div = document.createElement("div");
+       div.setAttribute("class", "notgm");
+       var img = document.createElement("img");
+       img.setAttribute("src", "https://www.maxim.com/.image/t_share/MTQyMjgyNzA4ODcyMDc5MTg5/rawgif.gif");
+       div.innerHTML = "NOT YOUR GAME";
+        $("body").append(div);
+        $("body").append(img);
+
+
+    }
+function postShips(){
+    var gamePlayerId = games.id;
+
+    fetch("api/games/players/"+gamePlayerId+"/ships", {
+        method: 'POST',
+        body:JSON.stringify([{ shipType: shipType, locations: shipLocations },{ shipType: shipType, locations: shipLocations }]),
+        headers: new Headers({
+            contentType: 'application/json'
+        })
+    }).then(function (response) {
+        if (response.ok) {
+            window.location.reload();
+        }
+        throw new Error(response.statusText);
+    }).catch(function(error) {
+        alert('Ship not saved: ' + error.message);
+    });
+
+};
+
+    function placeShips2() {
+        gamePlayerId = games.id;
+        $.post({
+            url: "api/games/players/" + gamePlayerId + "/ships",
+            data: JSON.stringify([{shipType: shipType, locations: locations}, {
+                shipType: shipType,
+                locations: locations
+            }, {shipType: shipType, locations: locations}]),
+            dataType: "text",
+            contentType: "application/json"
+        }).done(function () {
+            window.location.reload();
+        }).fail(
+            function(e){ $("#alert").text(e.responseText)
+        });
+
+    }
 
 
 
