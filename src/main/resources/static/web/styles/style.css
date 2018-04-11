@@ -1,12 +1,73 @@
 td {
+    padding: 0;
+    margin: 0;
     border: solid 1px black;
     border-collapse: collapse;
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 49px;
     text-align: center;
     font-weight: bold;
+    display: flex;
+}
+tr {
+    display:flex;
+    flex-direction: row;
+}
+#submarine, #destroyer{
+    border: solid white 0.5px;
 
+    width:149px;
+    height:50px;
+    background-color: deeppink;
+    position:absolute;
 
+}
+.rotate{
+     transform: rotate(90deg);
+     transform-origin: 16% 50%;
+ }
+.rotate2{
+    transform: rotate(90deg);
+    transform-origin: 10% 50%;
+}
+.rotate3{
+    transform: rotate(90deg);
+    transform-origin: 12% 50%;
+}
+.rotate4{
+    transform: rotate(90deg);
+    transform-origin: 24% 50%;
+}
+#patrol{
+    border: solid white 0.5px;
+    width:99px;
+    height:49px;
+    background-color: pink;
+    position:absolute;
+}
+#battleship{
+    border: solid white 0.5px;
+    width:199px;
+    height:49px;
+    background-color: hotpink;
+    position:absolute;
+}
+#carrier{
+    border: solid white 0.5px;
+    width:249px;
+    height:49px;
+    background-color: lightpink;
+    position:absolute;
+}
+.placeShips{
+    display: flex;
+    justify-content: space-between;
+
+}
+.shipsboard{
+    border: solid 1px black;
+    width: 560px;
+    height: 560px;
 }
 table {
     border-collapse: collapse;

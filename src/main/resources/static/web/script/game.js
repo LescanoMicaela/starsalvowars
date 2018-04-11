@@ -1,4 +1,6 @@
 var nn;
+var droppedID;
+var outside = 0;
 $(document).ready(function () {
 
     $.ajax({
@@ -8,7 +10,20 @@ $(document).ready(function () {
         success: function (data) {
 
             games = data;
-//
+            createGridsBoard();
+            // rotateShips("submarine");
+            // rotateShips("patrol");
+            // rotateShips("destroyer");
+            // rotateShips("battleship");
+            // rotateShips("carrier");
+            // document.getElementById("submarine").addEventListener("click", function(){
+            // })
+            rotate("#submarine","rotate");
+            rotate("#destroyer","rotate");
+            rotate("#patrol","rotate4");
+            rotate("#battleship","rotate3");
+            rotate("#carrier","rotate2");
+
             createGrids();
             createGrids2();
             colorShip ();
@@ -82,50 +97,59 @@ function postShips(){
 
     }
 
+function rotate(ship, rot){
+    $(ship).dblclick(function(){
+        $(this).toggleClass(rot);
+        if ($(this).hasClass(rot)){
+            var status = true;
+        }
+    })
+};
+
 
 
     function createGrids() {
-        var Alpha = ["A","B","C", "D", "E", "F", "G", "H", "I", "J"];
-        var Beta = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-        var tbh = document.getElementById("table-headers");
-        var table = document.getElementById("table");
-        var tbb = document.getElementById("table-rows");
-        tr0 = document.createElement("td");
-        th0 = document.createElement("tr");
-        th0.append(tr0);
+    var Alpha = ["A","B","C", "D", "E", "F", "G", "H", "I", "J"];
+    var Beta = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+    var tbh = document.getElementById("table-headers");
+    var table = document.getElementById("table");
+    var tbb = document.getElementById("table-rows");
+    tr0 = document.createElement("td");
+    th0 = document.createElement("tr");
+    th0.append(tr0);
 
 
-        for (var y = 0; y < 10; y++) {
+    for (var y = 0; y < 10; y++) {
 
-            var td = document.createElement("td");
-            td.innerHTML = y + 1;
-            td.setAttribute("id" , y+1);
+        var td = document.createElement("td");
+        td.innerHTML = y + 1;
+        td.setAttribute("id" , y+1);
 
-            th0.appendChild(td);
-        }
-
-        tbh.appendChild(th0);
-
-        for (var J = 0; J < 10; J++) {
-            var tr = document.createElement("tr");
-            var td3 = document.createElement("td");
-            td3.innerHTML = String.fromCharCode(65 + J);
-            td3.setAttribute("id", String.fromCharCode(65 + J));
-            tr.setAttribute("id" , String.fromCharCode(65 + J));
-            tr.append(td3);
-            for (var m = 0; m < 10; m++) {
-
-                var td2 = document.createElement("td");
-                td2.id = "U"+Alpha[J]+Beta[m];
-
-
-                tr.append(td2);
-            }
-            tbb.append(tr);
-        }
-        table.append(tbh);
-        table.append(tbb);
+        th0.appendChild(td);
     }
+
+    tbh.appendChild(th0);
+
+    for (var J = 0; J < 10; J++) {
+        var tr = document.createElement("tr");
+        var td3 = document.createElement("td");
+        td3.innerHTML = String.fromCharCode(65 + J);
+        td3.setAttribute("id", String.fromCharCode(65 + J));
+        tr.setAttribute("id" , String.fromCharCode(65 + J));
+        tr.append(td3);
+        for (var m = 0; m < 10; m++) {
+
+            var td2 = document.createElement("td");
+            td2.id = "U"+Alpha[J]+Beta[m];
+
+
+            tr.append(td2);
+        }
+        tbb.append(tr);
+    }
+    table.append(tbh);
+    table.append(tbb);
+}
 
 
     function getParameterByName(name) {
@@ -225,6 +249,72 @@ function createGrids2() {
 }
 
 
+function createGridsBoard() {
+    var Alpha = ["A","B","C", "D", "E", "F", "G", "H", "I", "J"];
+    var Beta = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+    var tbh = document.getElementById("board-headers");
+    var table = document.getElementById("board");
+    var tbb = document.getElementById("board-rows");
+    tr0 = document.createElement("td");
+    th0 = document.createElement("tr");
+    th0.append(tr0);
+
+
+    for (var y = 0; y < 10; y++) {
+
+        var td = document.createElement("td");
+        td.innerHTML = y + 1;
+        td.setAttribute("id" , y+1);
+
+        th0.appendChild(td);
+    }
+
+    tbh.appendChild(th0);
+
+    for (var J = 0; J < 10; J++) {
+        var tr = document.createElement("tr");
+        var td3 = document.createElement("td");
+        td3.innerHTML = String.fromCharCode(65 + J);
+        td3.setAttribute("id", String.fromCharCode(65 + J));
+        tr.setAttribute("id" , String.fromCharCode(65 + J));
+        tr.append(td3);
+        for (var m = 0; m < 10; m++) {
+
+            var td2 = document.createElement("td");
+
+            td2.id = "B"+Alpha[J]+Beta[m];
+
+            td2.ondragover = function allowDrop(event){
+                event.preventDefault();
+
+            };
+
+            td2.ondrop = function drop(event){
+                event.preventDefault();
+                var content = event.dataTransfer.getData("content");
+
+                event.target.appendChild(document.getElementById(content));
+                droppedID = event.target.id;
+              
+
+
+            };
+
+            tr.append(td2);
+        }
+        tbb.append(tr);
+    }
+    table.append(tbh);
+    table.append(tbb);
+}
+
+function drag(ev){
+        ev.dataTransfer.setData("content", ev.target.id)
+}
+
+
+
+
 function colorSalvo(){
     for ( i=0; i<games.game.salvoes.length; i++) {
         for ( k= 0; k < games.game.salvoes[i].length; k++){
@@ -252,6 +342,32 @@ function colorSalvo(){
             }
         }
     }
+
+    // $(function (){
+    //     $('.draggable').draggable({
+    //         cursor: 'move',
+    //         revert: true
+    //     });
+    // });
+    //
+    // $(function() {
+    //     $('.dropin2').droppable({
+    //         drop: handleDrop,
+    //         out: function() {
+    //             $( this ).droppable( "option", "disabled", false );
+    //         },
+    //     });
+    // });
+    //
+    // function handleDrop( event, ui ) {
+    //
+    //     ui.draggable.position( { of: $(this), my: 'left top', at: 'left top' } );
+    //     ui.draggable.draggable( 'option', 'revert', false );
+    //     $( this ).droppable( "option", "disabled", true );
+    //
+    //
+    // }
+
 
 
 }

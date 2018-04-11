@@ -3,8 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Ship Locations!</title>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--<script src="https://code.jquery.com/jquery-3.3.1.min.js"-->
+            <!--integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="-->
+            <!--crossorigin="anonymous"></script>-->
+    <script
+            src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+            integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
             crossorigin="anonymous"></script>
     <link href="styles/style.css" rel="stylesheet">
 </head>
@@ -16,7 +21,33 @@
 <h1 id="vs">vs</h1>
 <h1 id="player2Name"></h1>
 <div id="alert"></div>
+
+<div class="placeShips">
+    <div class="board">
+        <table id="board">
+            <thead id="board-headers">
+            </thead>
+            <tbody id="board-rows">
+            </tbody>
+        </table>
+    </div>
+    <div class="shipsboard">
+<div id="submarine" draggable="true" ondragstart="drag(event)"></div>
+<div id="destroyer" draggable="true" ondragstart="drag(event)"></div>
+<div id="patrol" draggable="true" ondragstart="drag(event)"></div>
+<div id="battleship" draggable="true" ondragstart="drag(event)"></div>
+<div id="carrier" draggable="true" ondragstart="drag(event)"></div>
+        <!--<div id="submarine"class="draggable"></div>-->
+        <!--<div id="destroyer" class="draggable"></div>-->
+        <!--<div id="patrol" class="draggable"></div>-->
+        <!--<div id="battleship" class="draggable"></div>-->
+        <!--<div id="carrier" class="draggable"></div>-->
+
+    </div>
+</div>
+
 <div class="tables">
+
 
 <div class="ship">
 
@@ -37,7 +68,7 @@
     </div>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 <script src="script/game.js"></script>
 </body>
 </html>
