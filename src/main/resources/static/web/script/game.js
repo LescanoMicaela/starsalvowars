@@ -1,6 +1,8 @@
 var nn;
 var droppedID;
 var outside = 0;
+var ship;
+var status;
 $(document).ready(function () {
 
     $.ajax({
@@ -282,20 +284,90 @@ function createGridsBoard() {
 
             var td2 = document.createElement("td");
 
-            td2.id = "B"+Alpha[J]+Beta[m];
+            td2.id = ""+J+""+Beta[m];
 
             td2.ondragover = function allowDrop(event){
                 event.preventDefault();
 
             };
-
             td2.ondrop = function drop(event){
                 event.preventDefault();
                 var content = event.dataTransfer.getData("content");
 
-                event.target.appendChild(document.getElementById(content));
-                droppedID = event.target.id;
-              
+                if ($(this).children().length == 0){
+                    var div2 = document.createElement("div");
+                    event.target.appendChild(document.getElementById(content));
+                    console.log($(this).attr("id"));
+                    ship = $(this).children().attr("id");
+                    status =  $(this).children().attr("class");
+                    console.log(ship);
+                    console.log(status);
+                    if (ship == "patrol"){
+                        var div = document.createElement("div");
+                        div.setAttribute("class", ship);
+                        droppedID = event.target.id;
+                        var split = droppedID.split("");
+                        var abc = split[0];
+                        var num = Number(split[1])+1;
+                        console.log(""+abc+""+num);
+                        $("#"+""+abc+""+num).append(div);
+                        }
+                        if (ship =="submarine") {
+                            for (i = 1; i < 3; i++) {
+                                var div2 = document.createElement("div")
+                                div2.setAttribute("class", ship);
+                                droppedID = event.target.id;
+                                var split = droppedID.split("");
+                                var abc = split[0];
+                                var num = Number(split[1]) + i;
+                                console.log("" + abc + "" + num);
+                                $("#" + "" + abc + "" + num).append(div2);
+                            }
+                        }
+                            if (ship =="destroyer") {
+                                for (i = 1; i < 3; i++) {
+                                    var div5 = document.createElement("div")
+                                    div5.setAttribute("class", ship);
+                                    droppedID = event.target.id;
+                                    var split = droppedID.split("");
+                                    var abc = split[0];
+                                    var num = Number(split[1]) + i;
+                                    console.log("" + abc + "" + num);
+                                    $("#" + "" + abc + "" + num).append(div5);
+                                }
+                            }
+                                if (ship =="battleship") {
+                                    for (j = 1; j < 4; j++) {
+                                        var div4 = document.createElement("div")
+                                        div4.setAttribute("class", ship);
+                                        droppedID = event.target.id;
+                                        var split = droppedID.split("");
+                                        var abc = split[0];
+                                        var num = Number(split[1]) + j;
+                                        console.log("" + abc + "" + num);
+                                        $("#" + "" + abc + "" + num).append(div4);
+                                    }
+                                }
+                                    if (ship =="carrier") {
+                                        for (k = 1; k < 5; k++) {
+                                            var div3 = document.createElement("div")
+                                            div3.setAttribute("class", ship);
+                                            droppedID = event.target.id;
+                                            var split = droppedID.split("");
+                                            var abc = split[0];
+                                            var num = Number(split[1]) + k;
+                                            console.log("" + abc + "" + num);
+                                            $("#" + "" + abc + "" + num).append(div3);
+                                        }
+
+                                    }
+
+
+
+                }else{
+                }
+
+
 
 
             };
@@ -310,6 +382,7 @@ function createGridsBoard() {
 
 function drag(ev){
         ev.dataTransfer.setData("content", ev.target.id)
+    $('.'+ ev.target.id).remove();
 }
 
 
