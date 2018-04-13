@@ -281,7 +281,7 @@ function createGrids2() {
 
 function createGridsBoard() {
     var Alpha = ["A","B","C", "D", "E", "F", "G", "H", "I", "J"];
-    var Beta = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+    var Beta = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
     var tbh = document.getElementById("board-headers");
     var table = document.getElementById("board");
     var tbb = document.getElementById("board-rows");
@@ -317,15 +317,21 @@ function createGridsBoard() {
                 var content = event.dataTransfer.getData("content");
                 size = document.getElementById(content).getAttribute("data-type");
                 droppedID = event.target.id;
-                console.log("1", (Number(droppedID.split("")[1])));
-                console.log("2", (Number(droppedID.split("")[1])) + Number(size)-2);
-            // && (Number(droppedID.split("")[1]) < ((Number(droppedID.split("")[1])) + Number(size)-2))
+
+
                 if ($(this).children().length == 0 ){
-                    event.target.appendChild(document.getElementById(content));
+
                     console.log($(this).attr("id"));
-                    shiptype = $(this).children().attr("id");
+
                     status =  $(this).children().attr("class");
-                    if ($("#"+content).hasClass("rotate") || $("#"+content).hasClass("rotate2") || $("#"+content).hasClass("rotate3") || $("#"+content).hasClass("rotate4")){
+                    if ( ($("#"+content).hasClass("rotate") || $("#"+content).hasClass("rotate2") || $("#"+content).hasClass("rotate3") || $("#"+content).hasClass("rotate4") ) ){
+                        if( Number(droppedID.split("")[0]) > ((10-(size-1)) ) || Number(droppedID.split("")[0]) == ((10-(size-1)) ) ){
+                            console.log("NOPE");
+                            console.log(((10-size)+2));
+                            console.log(Number(droppedID.split("")[0]) + "is bigger than"+ ((10-size+1)) );
+                        }else{
+                        event.target.appendChild(document.getElementById(content));
+                        shiptype = $(this).children().attr("id");
                         for (i = 1; i < size; i++) {
                             var split = droppedID.split("");
                             var abc = Number(split[0]) + i;
@@ -333,15 +339,23 @@ function createGridsBoard() {
                             var div2 = document.createElement("div");
                             div2.setAttribute("class", shiptype);
                             $("#" + "" + abc + "" + num).append(div2);
-                    }}else{
-
-                        for (i = 1; i < size; i++) {
-                            var split = droppedID.split("");
-                            var abc = split[0];
-                            var num = Number(split[1]) + i;
-                            var div2 = document.createElement("div");
-                            div2.setAttribute("class", shiptype);
-                            $("#" + "" + abc + "" + num).append(div2);
+                        }}}else{
+                        console.log(Number(droppedID.split("")[1]));
+                        if( Number(droppedID.split("")[1]) > ((10-size)+1) || Number(droppedID.split("")[1]) == ((10-size)+1) ){
+                            console.log("NOPE");
+                            console.log(((10-size)+2));
+                            console.log(Number(droppedID.split("")[1]) + "is bigger than"+ ((10-size+1)) );
+                        }else{
+                            event.target.appendChild(document.getElementById(content));
+                            shiptype = $(this).children().attr("id");
+                            for (i = 1; i < size; i++) {
+                                var split = droppedID.split("");
+                                var abc = split[0];
+                                var num = Number(split[1]) + i;
+                                var div2 = document.createElement("div");
+                                div2.setAttribute("class", shiptype);
+                                $("#" + "" + abc + "" + num).append(div2);
+                            }
                         }
                     }
                         }
