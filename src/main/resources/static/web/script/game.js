@@ -4,6 +4,7 @@ var outside = 0;
 var shiptype;
 var status;
 var size;
+var droppable = true;
 $(document).ready(function () {
 
     $.ajax({
@@ -14,13 +15,6 @@ $(document).ready(function () {
 
             games = data;
             createGridsBoard();
-            // rotateShips("submarine");
-            // rotateShips("patrol");
-            // rotateShips("destroyer");
-            // rotateShips("battleship");
-            // rotateShips("carrier");
-            // document.getElementById("submarine").addEventListener("click", function(){
-            // })
             rotate("submarine","rotate");
             rotate("destroyer","rotate");
             rotate("patrol","rotate4");
@@ -103,22 +97,49 @@ function postShips(){
 function rotate(ship, rot){
     $("#"+ship).dblclick(function(){
         console.log("holi"+ship)
-        $(this).toggleClass(rot);
+        droppable = true;
+        console.log(1,droppable);
+        size = $(this).attr("data-type");
         $('.'+ ship).remove();
         var droppedID2 = $(this).parent().attr('id');
-        size = $(this).attr("data-type");
+        if ( droppedID2 !=null) {
+            for (var q = 1; q < (size); q++) {
+                var split0 = droppedID2.split("");
+                var abc0 = Number(split0[0]) + q;
+                var num0 = split0[1];
+                if ($("#" + ship).hasClass(rot) == false && abc0 > 9) {
+                    droppable = false;
+                }
+                if ($("#" + ship).hasClass(rot) == false && $("#" + abc0 + "" + num0).children().length != 0 ) {
+                    droppable = false;
+                }}
+
+            for (var w = 1; w < (size - 1); w++) {
+                console.log("HOLSSS",droppedID2);
+                var split2 = droppedID2.split("");
+                var abc2 = split2[0];
+                var num2 = Number(split2[1]) + w;
+                if ($("#" + ship).hasClass(rot) == true && num0 > (10-size)) {
+                    droppable = false;
+                }
+                if ($("#" + ship).hasClass(rot) == true && $("#" + abc2 + "" + num2).children().length != 0) {
+                    droppable = false;
+                }
+            }
+        }
+        if(droppable){
+
+            $(this).toggleClass(rot);
+        }
         // if ( $("#"+ship).hasClass(rot) == false){
-            console.log($("#"+ship).hasClass(rot));
+
         if ( $("#"+ship).hasClass(rot) == true) {
             for (i = 1; i < size; i++) {
                 var div2 = document.createElement("div");
                 div2.setAttribute("class", ship);
                 var split = droppedID2.split("");
                 var abc = Number(split[0]) + i;
-                console.log("abc" + abc);
                 var num = split[1];
-                console.log("num" + num);
-                console.log("" + abc + "" + num);
                 $("#" + "" + abc + "" + num).append(div2);
             }
         }if ( $("#"+ship).hasClass(rot) == false) {
@@ -131,8 +152,6 @@ function rotate(ship, rot){
                             var num = Number(split[1]) + k;
                             $("#" + "" + abc + "" + num).append(div3);
                 }
-
-
         }})};
 
 
@@ -317,19 +336,28 @@ function createGridsBoard() {
                 var content = event.dataTransfer.getData("content");
                 size = document.getElementById(content).getAttribute("data-type");
                 droppedID = event.target.id;
-
-
                 if ($(this).children().length == 0 ){
-
-                    console.log($(this).attr("id"));
-
+                    $('.'+ content).remove();
+                    // console.log($(this).attr("id"));
                     status =  $(this).children().attr("class");
                     if ( ($("#"+content).hasClass("rotate") || $("#"+content).hasClass("rotate2") || $("#"+content).hasClass("rotate3") || $("#"+content).hasClass("rotate4") ) ){
                         if( Number(droppedID.split("")[0]) > ((10-(size-1)) ) || Number(droppedID.split("")[0]) == ((10-(size-1)) ) ){
                             console.log("NOPE");
-                            console.log(((10-size)+2));
-                            console.log(Number(droppedID.split("")[0]) + "is bigger than"+ ((10-size+1)) );
+                            // console.log(((10-size)+2));
+                            // console.log(Number(droppedID.split("")[0]) + "is bigger than"+ ((10-size+1)) );
                         }else{
+                            for ( var q=0; q < size; q++){
+                                var split0 = droppedID.split("");
+                                var abc0 = Number(split0[0]) + q;
+                                var num0 = split0[1];
+                                // console.log($("#" + abc0+""+num0).children().length == 0)
+                                if($("#" + abc0+""+num0).children().length != 0) {
+                                    droppable =false;
+                                }
+                                console.log(droppable)
+                            }
+                            if (droppable){
+
                         event.target.appendChild(document.getElementById(content));
                         shiptype = $(this).children().attr("id");
                         for (i = 1; i < size; i++) {
@@ -339,22 +367,40 @@ function createGridsBoard() {
                             var div2 = document.createElement("div");
                             div2.setAttribute("class", shiptype);
                             $("#" + "" + abc + "" + num).append(div2);
-                        }}}else{
+                        }}}}else{
                         console.log(Number(droppedID.split("")[1]));
                         if( Number(droppedID.split("")[1]) > ((10-size)+1) || Number(droppedID.split("")[1]) == ((10-size)+1) ){
                             console.log("NOPE");
-                            console.log(((10-size)+2));
-                            console.log(Number(droppedID.split("")[1]) + "is bigger than"+ ((10-size+1)) );
+                            // console.log(((10-size)+2));
+                            // console.log(Number(droppedID.split("")[1]) + "is bigger than"+ ((10-size+1)) );
                         }else{
-                            event.target.appendChild(document.getElementById(content));
-                            shiptype = $(this).children().attr("id");
-                            for (i = 1; i < size; i++) {
-                                var split = droppedID.split("");
-                                var abc = split[0];
-                                var num = Number(split[1]) + i;
-                                var div2 = document.createElement("div");
-                                div2.setAttribute("class", shiptype);
-                                $("#" + "" + abc + "" + num).append(div2);
+                            var split1 = droppedID.split("");
+                            var abc1 = split1[0];
+                            var num1 = Number(split1[1])+ 1;
+                            // if ( ($("#" + abc1+""+num1).children().length == 0) && shiptype !==){
+                            for ( var q=0; q < size; q++){
+                                var split0 = droppedID.split("");
+                                var abc0 = split0[0];
+                                var num0 = Number(split0[1]) + q;
+                                // console.log($("#" + abc0+""+num0).children().length == 0)
+                                        if($("#" + abc0+""+num0).children().length != 0) {
+                                    droppable =false;
+                                        }
+                                        console.log(droppable)
+                            }
+                            if ( droppable ){
+                                event.target.appendChild(document.getElementById(content));
+                                shiptype = $(this).children().attr("id");
+                                for (i = 1; i < size; i++) {
+                                    var split = droppedID.split("");
+                                    var abc = split[0];
+                                    var num = Number(split[1]) + i;
+                                    var div2 = document.createElement("div");
+                                    div2.setAttribute("class", shiptype);
+                                    $("#" + "" + abc + "" + num).append(div2);
+
+                            }}else{
+                                console.log("not here");
                             }
                         }
                     }
@@ -371,11 +417,9 @@ function createGridsBoard() {
 
 function drag(ev){
         ev.dataTransfer.setData("content", ev.target.id);
-    $('.'+ ev.target.id).remove();
+
+    droppable = true;
 }
-
-
-
 
 function colorSalvo(){
     for ( i=0; i<games.game.salvoes.length; i++) {
