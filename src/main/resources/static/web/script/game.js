@@ -182,7 +182,7 @@ function rotate(ship, rot){
                     $("#alert").text("Not enough space to place the ship here");
                 }}
 
-            for (var w = 1; w < (size ); w++) {
+            for (var w = 1; w < (size -1 ); w++) {
                 var split2 = droppedID2.split("");
                 var abc2 = split2[0];
                 var num2 = Number(split2[1]) + w;
@@ -198,7 +198,7 @@ function rotate(ship, rot){
                 }
             }
         }
-        if(droppable){
+        if(droppable == true){
             // showok();
             $(this).toggleClass(rot);
         }
