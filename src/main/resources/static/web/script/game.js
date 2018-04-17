@@ -20,13 +20,19 @@ $(document).ready(function () {
         success: function (data) {
 
             games = data;
+            if ( games.game.ships.length != 0){
+                $(".placeShips").toggle();
+                $(".statusships").toggle();
+                $("#playersInfo").toggle();
+                $(".tablesdiv").toggle();
+            }
             createGridsBoard();
             rotate("submarine","rotate");
             rotate("destroyer","rotate");
             rotate("patrol","rotate4");
             rotate("battleship","rotate3");
-            rotate("carrier","rotate2");
 
+            rotate("carrier","rotate2");
             createGrids();
             createGrids2();
             colorShip ();
@@ -50,8 +56,9 @@ function gametoggle(){
 }
 
 function showok(){
-if ($(".shipsboard").children().length == 0){
+if ($(".shipsboard").children().length < 17){
     console.log("ok");
+    $(".statusships").text("Are you ready?");
     $(".ok").toggle();
 }else{
     console.log("not yet");
@@ -59,9 +66,10 @@ if ($(".shipsboard").children().length == 0){
 }
 
 $(".ok").click(function (){
-    if ($(".shipsboard").children().length != 0){
+    if ($(".shipsboard").children().length > 16){
         $("#alert").text("You must place all your ships");
     }else{
+        $(".statusships").text("Ships placed")
         var Alpha = ["A","B","C", "D", "E", "F", "G", "H", "I", "J"];
          submarine= $(".submarine").parent().map(function() {
              return Alpha[this.id.split("")[0]] + this.id.split("")[1] ;
@@ -141,9 +149,7 @@ function postShips(){
             dataType: "text",
             contentType: "application/json"
         }).done(function () {
-            // window.location.reload();
-            $(".placeships").toggle();
-            $(".tablesdiv").toggle();
+            window.location.reload();
         }).fail(
             function(e){ $("#alert").text(e.responseText)
         });
@@ -176,11 +182,11 @@ function rotate(ship, rot){
                     $("#alert").text("Not enough space to place the ship here");
                 }}
 
-            for (var w = 1; w < (size - 1); w++) {
+            for (var w = 1; w < (size ); w++) {
                 var split2 = droppedID2.split("");
                 var abc2 = split2[0];
                 var num2 = Number(split2[1]) + w;
-                if ($("#" + ship).hasClass(rot) == true && num0 > (10-size)) {
+                if ($("#" + ship).hasClass(rot) == true && num2 > (10-size) ) {
                     droppable = false;
                     console.log(3,"Not enough space to space to rotate the ship")
                     $("#alert").text("Not enough space to space to rotate the ship");
@@ -202,9 +208,9 @@ function rotate(ship, rot){
             for (i = 1; i < size; i++) {
                 var div2 = document.createElement("div");
                 div2.setAttribute("class", ship);
-                var split = droppedID2.split("");
-                var abc = Number(split[0]) + i;
-                var num = split[1];
+                var split3 = droppedID2.split("");
+                var abc = Number(split3[0]) + i;
+                var num = split3[1];
                 $("#" + "" + abc + "" + num).append(div2);
             }
         }if ( $("#"+ship).hasClass(rot) == false) {
