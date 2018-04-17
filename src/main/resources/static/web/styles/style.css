@@ -1,4 +1,4 @@
-td {
+.tables td, .board td {
     padding: 0;
     margin: 0;
     border: solid 1px black;
@@ -9,9 +9,12 @@ td {
     font-weight: bold;
     display: flex;
 }
-tr {
+.tables tr, .board tr {
     display:flex;
     flex-direction: row;
+}
+#playersInfo, .tablesdiv{
+    display: none;
 }
 #submarine, #destroyer{
     border: solid white 0.5px;
@@ -66,8 +69,8 @@ tr {
 }
 .shipsboard{
     border: solid 1px black;
-    width: 560px;
-    height: 560px;
+    width: 400px;
+    height: 400px;
 }
 table {
     border-collapse: collapse;

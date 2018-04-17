@@ -17,9 +17,13 @@
 <form id="logout-form" onsubmit="return false">
     <button id="logOutBtn">Log out</button>
 </form>
-<h1 id="player1Name"></h1>
-<h1 id="vs">vs</h1>
-<h1 id="player2Name"></h1>
+<div class="statusships">Place your ships</div>
+<button class="ok">Ok</button>
+<div id="playersInfo">
+    <h1 id="player1Name"></h1>
+    <h1 id="vs">vs</h1>
+    <h1 id="player2Name"></h1>
+</div>
 <div id="alert"></div>
 
 <div class="placeShips">
@@ -32,11 +36,12 @@
         </table>
     </div>
     <div class="shipsboard">
-<div id="submarine" data-type="3" draggable="true" ondragstart="drag(event)"></div>
-<div id="destroyer" data-type="3" draggable="true" ondragstart="drag(event)"></div>
-<div id="patrol" data-type="2" draggable="true" ondragstart="drag(event)"></div>
-<div id="battleship" data-type="4" draggable="true" ondragstart="drag(event)"></div>
-<div id="carrier" data-type="5" draggable="true" ondragstart="drag(event)"></div>
+
+<div id="submarine" data-type="3" data-style="shipab" draggable="true" ondragstart="drag(event)"></div>
+<div id="destroyer" data-type="3" data-style="shipab" draggable="true" ondragstart="drag(event)"></div>
+<div id="patrol" data-type="2" data-style="shipab" draggable="true" ondragstart="drag(event)"></div>
+<div id="battleship" data-type="4" data-style="shipab" draggable="true" ondragstart="drag(event)"></div>
+<div id="carrier" data-type="5" data-style="shipab" draggable="true" ondragstart="drag(event)"></div>
         <!--<div id="submarine"class="draggable"></div>-->
         <!--<div id="destroyer" class="draggable"></div>-->
         <!--<div id="patrol" class="draggable"></div>-->
@@ -45,12 +50,9 @@
 
     </div>
 </div>
-
+<div class="tablesdiv">
 <div class="tables">
-
-
 <div class="ship">
-
     <table id="table">
         <thead id="table-headers">
         </thead>
@@ -66,6 +68,7 @@
         </tbody>
     </table>
     </div>
+</div>
 </div>
 
 

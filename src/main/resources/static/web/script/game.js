@@ -4,7 +4,13 @@ var outside = 0;
 var shiptype;
 var status;
 var size;
+var submarine= [];
+var destroyer= [];
+var carrier= [];
+var patrol= [];
+var battleship= [];
 var droppable = true;
+$(".ok").toggle();
 $(document).ready(function () {
 
     $.ajax({
@@ -26,7 +32,7 @@ $(document).ready(function () {
             colorShip ();
             colorSalvo();
             getPlayerNames();
-
+            showok();
 
         },
 
@@ -36,6 +42,58 @@ $(document).ready(function () {
 
     })
 });
+
+
+function gametoggle(){
+    $("#playersInfo").toggle();
+    $(".tables").toggle();
+}
+
+function showok(){
+if ($(".shipsboard").children().length == 0){
+    console.log("ok");
+    $(".ok").toggle();
+}else{
+    console.log("not yet");
+}
+}
+
+$(".ok").click(function (){
+    if ($(".shipsboard").children().length != 0){
+        $("#alert").text("You must place all your ships");
+    }else{
+        var Alpha = ["A","B","C", "D", "E", "F", "G", "H", "I", "J"];
+         submarine= $(".submarine").parent().map(function() {
+             return Alpha[this.id.split("")[0]] + this.id.split("")[1] ;
+         })
+             .get()
+        destroyer= $(".destroyer").parent().map(function() {
+            return Alpha[this.id.split("")[0]] + this.id.split("")[1] ;
+        })
+            .get()
+        carrier= $(".carrier").parent().map(function() {
+            return Alpha[this.id.split("")[0]] + this.id.split("")[1] ;
+        })
+            .get()
+        patrol= $(".patrol").parent().map(function() {
+            return Alpha[this.id.split("")[0]] + this.id.split("")[1] ;
+        })
+            .get()
+        battleship= $(".battleship").parent().map(function() {
+            return Alpha[this.id.split("")[0]] + this.id.split("")[1] ;
+        })
+            .get()
+        submarine.push(Alpha[$("#submarine").parent().attr("id").split("")[0]] + $("#submarine").parent().attr("id").split("")[1]);
+        destroyer.push(Alpha[$("#destroyer").parent().attr("id").split("")[0]] + $("#destroyer").parent().attr("id").split("")[1]);
+        carrier.push(Alpha[$("#carrier").parent().attr("id").split("")[0]] + $("#carrier").parent().attr("id").split("")[1]);
+        patrol.push(Alpha[$("#patrol").parent().attr("id").split("")[0]] + $("#patrol").parent().attr("id").split("")[1]);
+        battleship.push(Alpha[$("#battleship").parent().attr("id").split("")[0]] + $("#battleship").parent().attr("id").split("")[1]);
+        console.log(submarine,destroyer,carrier,patrol,battleship);
+        placeShips2();
+
+
+}})
+
 
 $("#logOutBtn").click(function logout(evt) {
     evt.preventDefault();
@@ -58,10 +116,9 @@ $("#logOutBtn").click(function logout(evt) {
     }
 function postShips(){
     var gamePlayerId = games.id;
-
-    fetch("api/games/players/"+gamePlayerId+"/ships", {
+    fetch("/api/games/players/"+gamePlayerId+"/ships", {
         method: 'POST',
-        body:JSON.stringify([{ shipType: shipType, locations: shipLocations },{ shipType: shipType, locations: shipLocations }]),
+        body:JSON.stringify([{ shipType: "submarine", locations: submarine },{ shipType: "destroyer", locations: destroyer },{ shipType: "carrier", locations: carrier },{ shipType: "patrol", locations: patrol },{ shipType: "battleship", locations: battleship }]),
         headers: new Headers({
             contentType: 'application/json'
         })
@@ -79,15 +136,14 @@ function postShips(){
     function placeShips2() {
         gamePlayerId = games.id;
         $.post({
-            url: "api/games/players/" + gamePlayerId + "/ships",
-            data: JSON.stringify([{shipType: shipType, locations: locations}, {
-                shipType: shipType,
-                locations: locations
-            }, {shipType: shipType, locations: locations}]),
+            url: "/api/games/players/" + gamePlayerId + "/ships",
+            data: JSON.stringify([{ shipType: "submarine", locations: submarine },{ shipType: "destroyer", locations: destroyer },{ shipType: "carrier", locations: carrier },{ shipType: "patrol", locations: patrol },{ shipType: "battleship", locations: battleship }]),
             dataType: "text",
             contentType: "application/json"
         }).done(function () {
-            window.location.reload();
+            // window.location.reload();
+            $(".placeships").toggle();
+            $(".tablesdiv").toggle();
         }).fail(
             function(e){ $("#alert").text(e.responseText)
         });
@@ -97,7 +153,9 @@ function postShips(){
 function rotate(ship, rot){
     $("#"+ship).dblclick(function(){
         console.log("holi"+ship)
+        // document.getElementById(ship).setAttribute("class","shipab");
         droppable = true;
+
         console.log(1,droppable);
         size = $(this).attr("data-type");
         $('.'+ ship).remove();
@@ -109,26 +167,33 @@ function rotate(ship, rot){
                 var num0 = split0[1];
                 if ($("#" + ship).hasClass(rot) == false && abc0 > 9) {
                     droppable = false;
+                    console.log(1,"Not enough space to rotate vertical ship here");
+                    $("#alert").text("Not enough space to space to rotate the ship");
                 }
                 if ($("#" + ship).hasClass(rot) == false && $("#" + abc0 + "" + num0).children().length != 0 ) {
                     droppable = false;
+                    console.log(2,"Not enough space to place the ship here")
+                    $("#alert").text("Not enough space to place the ship here");
                 }}
 
             for (var w = 1; w < (size - 1); w++) {
-                console.log("HOLSSS",droppedID2);
                 var split2 = droppedID2.split("");
                 var abc2 = split2[0];
                 var num2 = Number(split2[1]) + w;
                 if ($("#" + ship).hasClass(rot) == true && num0 > (10-size)) {
                     droppable = false;
+                    console.log(3,"Not enough space to space to rotate the ship")
+                    $("#alert").text("Not enough space to space to rotate the ship");
                 }
                 if ($("#" + ship).hasClass(rot) == true && $("#" + abc2 + "" + num2).children().length != 0) {
                     droppable = false;
+                    console.log(4,"Not enough space to place the ship here")
+                    $("#alert").text("Not enough space to place the ship here");
                 }
             }
         }
         if(droppable){
-
+            // showok();
             $(this).toggleClass(rot);
         }
         // if ( $("#"+ship).hasClass(rot) == false){
@@ -342,7 +407,9 @@ function createGridsBoard() {
                     status =  $(this).children().attr("class");
                     if ( ($("#"+content).hasClass("rotate") || $("#"+content).hasClass("rotate2") || $("#"+content).hasClass("rotate3") || $("#"+content).hasClass("rotate4") ) ){
                         if( Number(droppedID.split("")[0]) > ((10-(size-1)) ) || Number(droppedID.split("")[0]) == ((10-(size-1)) ) ){
-                            console.log("NOPE");
+                            droppable = false;
+                            console.log("Not enough space here");
+                            $("#alert").text("Not enough space to place a ship here");
                             // console.log(((10-size)+2));
                             // console.log(Number(droppedID.split("")[0]) + "is bigger than"+ ((10-size+1)) );
                         }else{
@@ -351,15 +418,18 @@ function createGridsBoard() {
                                 var abc0 = Number(split0[0]) + q;
                                 var num0 = split0[1];
                                 // console.log($("#" + abc0+""+num0).children().length == 0)
-                                if($("#" + abc0+""+num0).children().length != 0) {
+                                if($("#" + abc0+""+num0).children().length != 0 && $("#" + abc0+""+num0).children().attr("id") != content ) {
                                     droppable =false;
+                                    console.log("Theres a ship here already");
+                                    $("#alert").text("Theres a ship placed here already");
                                 }
                                 console.log(droppable)
                             }
                             if (droppable){
-
                         event.target.appendChild(document.getElementById(content));
-                        shiptype = $(this).children().attr("id");
+                                showok();
+                                // document.getElementById(content).setAttribute("class","shipab");
+                                shiptype = $(this).children().attr("id");
                         for (i = 1; i < size; i++) {
                             var split = droppedID.split("");
                             var abc = Number(split[0]) + i;
@@ -368,9 +438,11 @@ function createGridsBoard() {
                             div2.setAttribute("class", shiptype);
                             $("#" + "" + abc + "" + num).append(div2);
                         }}}}else{
-                        console.log(Number(droppedID.split("")[1]));
+
                         if( Number(droppedID.split("")[1]) > ((10-size)+1) || Number(droppedID.split("")[1]) == ((10-size)+1) ){
-                            console.log("NOPE");
+                            console.log("Not enough space here");
+                            $("#alert").text("Not enough space here to place this ship");
+                            droppable = false;
                             // console.log(((10-size)+2));
                             // console.log(Number(droppedID.split("")[1]) + "is bigger than"+ ((10-size+1)) );
                         }else{
@@ -383,13 +455,17 @@ function createGridsBoard() {
                                 var abc0 = split0[0];
                                 var num0 = Number(split0[1]) + q;
                                 // console.log($("#" + abc0+""+num0).children().length == 0)
-                                        if($("#" + abc0+""+num0).children().length != 0) {
+                                        if($("#" + abc0+""+num0).children().length != 0 && $("#" + abc0+""+num0).children().attr("id") != content) {
                                     droppable =false;
+                                    console.log("theres a ship here already");
+                                            $("#alert").text("Theres a ship placed here already");
                                         }
                                         console.log(droppable)
                             }
                             if ( droppable ){
                                 event.target.appendChild(document.getElementById(content));
+                                showok();
+                                // document.getElementById(content).setAttribute("class","shipab");
                                 shiptype = $(this).children().attr("id");
                                 for (i = 1; i < size; i++) {
                                     var split = droppedID.split("");
@@ -400,11 +476,16 @@ function createGridsBoard() {
                                     $("#" + "" + abc + "" + num).append(div2);
 
                             }}else{
-                                console.log("not here");
+                                console.log("Not space to place the ship here");
+                                $("#alert").text("Not space to place the ship here");
+
                             }
                         }
                     }
-                        }
+                        }else{
+                    console.log("Theres a ship placed here already");
+                    $("#alert").text("Theres a ship placed here already");
+                }
             };
 
             tr.append(td2);
@@ -417,9 +498,13 @@ function createGridsBoard() {
 
 function drag(ev){
         ev.dataTransfer.setData("content", ev.target.id);
-
+    var img = new Image();
+    ev.dataTransfer.setDragImage(img, 10, 0);
+    $("#alert").text("");
     droppable = true;
 }
+
+
 
 function colorSalvo(){
     for ( i=0; i<games.game.salvoes.length; i++) {
