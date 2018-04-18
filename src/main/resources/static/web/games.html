@@ -8,7 +8,10 @@
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
 </head>
-<body>
+<body data-style="gamesview">
+<form id="logout-form" onsubmit="return false">
+    <button id="logOutBtn">Log out</button>
+</form>
 <h1 id="welcome"></h1>
 <div id="alert"></div>
 <form id="login-form" onsubmit="return false">
@@ -18,9 +21,6 @@
     <button id="signUpBtn">Sign up</button>
 </form>
 
-<form id="logout-form" onsubmit="return false">
-    <button id="logOutBtn">Log out</button>
-</form>
 
 <ol data-id="listGames"> Games
 </ol>

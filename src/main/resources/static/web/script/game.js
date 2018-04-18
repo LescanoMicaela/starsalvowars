@@ -182,11 +182,11 @@ function rotate(ship, rot){
                     $("#alert").text("Not enough space to place the ship here");
                 }}
 
-            for (var w = 1; w < (size -1 ); w++) {
+            for (var w = 1; w < (size ); w++) {
                 var split2 = droppedID2.split("");
                 var abc2 = split2[0];
                 var num2 = Number(split2[1]) + w;
-                if ($("#" + ship).hasClass(rot) == true && num2 > (10-size) ) {
+                if ($("#" + ship).hasClass(rot) == true && num2 > 9 ) {
                     droppable = false;
                     console.log(3,"Not enough space to space to rotate the ship")
                     $("#alert").text("Not enough space to space to rotate the ship");
