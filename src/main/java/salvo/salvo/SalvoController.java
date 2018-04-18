@@ -219,6 +219,31 @@ public class SalvoController {
     }
 
 
+    @RequestMapping(path = "/games/players/{nn}/salvos", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> getSalvos(@PathVariable Long nn,
+                                                         Authentication authentication,
+                                                         @RequestBody List<String> salvoes) {
+        GamePlayer gameplayernn = repositorygameplayer.findOne(nn);
+        if ( authentication == null){
+            return new ResponseEntity<>(makeMap("error", "You need to be logged in"), HttpStatus.UNAUTHORIZED);
+        } if( gameplayernn == null){
+            return new ResponseEntity<>(makeMap("error", "No such gameplayer"), HttpStatus.UNAUTHORIZED);
+        } if ( gameplayernn.getPlayer() != authUser(authentication)) {
+            return new ResponseEntity<>(makeMap("error", "Not your game"), HttpStatus.UNAUTHORIZED);
+        } else {
+            Salvo newsalvo = new Salvo();
+            newsalvo.setSalvoLocations(salvoes);
+            newsalvo.setGamePlayer(gameplayernn);
+            newsalvo.setTurn(gameplayernn.getSalvoes().size()+1);
+            if ( newsalvo.getTurn() == gameplayernn.getSalvoes().size()+1 || newsalvo.getTurn() == null ) {
+                salvoRepository.save(newsalvo);
+                return new ResponseEntity<>(makeMap("SUCCESS", "Salvo shot"),(HttpStatus.CREATED));
+            }else{
+                return new ResponseEntity<>(makeMap("error", "You already shot this turn"), HttpStatus.FORBIDDEN);
+            }
+        }
+        }
+
 
     private Map<String, Object> makeGameDTO2(Game game, GamePlayer gm) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();

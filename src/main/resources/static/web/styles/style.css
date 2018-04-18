@@ -114,7 +114,12 @@ button{
 .ships {
     background-color: pink;
 }
-
+.salvoshot{
+    background-color:red;
+}
+#oksalvo{
+    display:none;
+}
 .salvo0 {
     background-color: orange;
 }

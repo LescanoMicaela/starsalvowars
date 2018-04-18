@@ -9,6 +9,7 @@ var destroyer= [];
 var carrier= [];
 var patrol= [];
 var battleship= [];
+var salvoes = [];
 var droppable = true;
 $(".ok").toggle();
 $(document).ready(function () {
@@ -540,32 +541,78 @@ function colorSalvo(){
         }
     }
 
-    // $(function (){
-    //     $('.draggable').draggable({
-    //         cursor: 'move',
-    //         revert: true
-    //     });
-    // });
-    //
-    // $(function() {
-    //     $('.dropin2').droppable({
-    //         drop: handleDrop,
-    //         out: function() {
-    //             $( this ).droppable( "option", "disabled", false );
-    //         },
-    //     });
-    // });
-    //
-    // function handleDrop( event, ui ) {
-    //
-    //     ui.draggable.position( { of: $(this), my: 'left top', at: 'left top' } );
-    //     ui.draggable.draggable( 'option', 'revert', false );
-    //     $( this ).droppable( "option", "disabled", true );
-    //
-    //
-    // }
 
+        $("#table2 td").click( function(){
+            var tdid = $(this).attr("id");
+            var salvolocation= tdid.split("")[1] + tdid.split("")[2];
+            if (  $("#"+tdid).hasClass("salvoshot") == false) {
+                if (salvoes.length < 5) {
+                    $("#" + tdid).addClass("salvoshot");
+                    if (salvoes.indexOf(salvolocation) == -1 && salvoes.length < 5 && $("#" + tdid).hasClass("salvo2") == false) {
+                        console.log(tdid);
+                        salvoes.push(salvolocation);
 
+                    }
+                } else {
+
+                    console.log("hola k pay")
+                }
+            } else{
+                if ($("#" + tdid).hasClass("salvo2") == false){
+                    console.log("bye salvo");
+                    $("#" + tdid).removeClass("salvoshot");
+                    var index = salvoes.indexOf(salvolocation);
+                    salvoes.splice(index, 1);
+                }}
+            showbuttonfire();
+        });
+
+    function showbuttonfire(){
+        if ( salvoes.length == 0){
+            $("#oksalvo").hide();
+        }if ( salvoes.length > 0){
+            $("#oksalvo").show();
+        }
+    };
+
+    // $("#table2 td").click( function(){
+    //     var tdid = $(this).attr("id");
+    //     // if ( $("#"+tdid).hasClass("salvo2") == false){
+    //     if ( salvoes.indexOf(salvolocation) == -1 && salvoes.length < 6 ){
+    //         $("#"+tdid).toggleClass("salvoshot");
+    //         var salvolocation= tdid.split("")[1] + tdid.split("")[2];
+    //         console.log(tdid);
+    //         salvoes.push(salvolocation);
+    //
+    //     } else{
+    //         console.log("no salvo shot");
+    //         var index =salvoes.indexOf(salvolocation);
+    //         salvoes.splice(index, 1);
+    //     }
+    //     // }
+    //
+    //     if ( salvoes.length > 0){
+    //         $("#oksalvo").show();
+    //     }else{
+    //         $("#oksalvo").hide();
+    //     }
+    // });
+
+    $("#oksalvo").click(function(){
+        if (salvoes.length < 6 && salvoes.length!=0 ){
+            gamePlayerId = games.id;
+            $.post({
+                url: "/api/games/players/" + gamePlayerId + "/salvos",
+                data: JSON.stringify(salvoes),
+                dataType: "text",
+                contentType: "application/json"}).done(function () {
+                window.location.reload();
+            }).fail(
+                function(e){ console.log(e.responseText);
+                });
+        }
+
+    })
 
 }
 
