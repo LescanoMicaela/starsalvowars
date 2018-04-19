@@ -10,13 +10,25 @@
     display: flex;
     /*background-color: rgba(255,255,255,0.16);*/
 }
+@font-face {
+    font-family: myFirstFont;
+    /*src: url(Stjldbl1.ttf);*/
+    src: url(Starjhol.ttf);
+}
+@font-face {
+    font-family: myFirstFont2;
+    src: url(Stjldbl1.ttf);
+    /*src: url(Starjhol.ttf);*/
+}
+
 
 .tables tr, .board tr {
     display:flex;
     flex-direction: row;
 }
-#playersInfo, .tablesdiv{
+#playersInfo1,#playersInfo2, .tablesdiv{
     display: none;
+    text-align: center;
 }
 #submarine, #destroyer{
     border: solid white 0.5px;
@@ -107,7 +119,12 @@ button{
     margin-top: 2%;
     font-size: 60px;
     font-weight: bolder;
-    font-family: monospace;
+    font-family: myFirstFont2;
+    text-align: center;
+    letter-spacing: 1px;
+}
+#welcome{
+    font-family: myFirstFont;
     text-align: center;
 }
 
@@ -117,9 +134,13 @@ button{
 .salvoshot{
     background-color:red;
 }
-#oksalvo{
-    display:none;
-}
+/*ol{*/
+    /*margin: 0 auto;*/
+    /*width: fit-content;*/
+    /*background-color: #0d1944b8;*/
+    /*border-radius: 10px;*/
+/*}*/
+
 .salvo0 {
     background-color: orange;
 }
@@ -130,7 +151,24 @@ button{
 .hit {
     background-color: red;
 }
-
+.fire{
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 35%;
+    background-color: #00000021;
+    border-radius: 20px;
+}
+#oksalvo{
+    padding: 3%;
+    background-color: red;
+    /* border: orange 2px solid; */
+    font-weight: bold;
+    font-size: 70%;
+    position: absolute;
+    left: 65%;
+    bottom: 0;
+}
 .tables{
     display: flex;
     justify-content: space-around;
@@ -165,4 +203,14 @@ button{
     color: white;
     font-family: monospace;
     font-size: 150%;
+}
+[data-style="gameview2"]{
+    /*background-image: url("images/shipfight.jpg");*/
+    background-image: url("images/Mustafar.png");
+    color: white;
+    font-family: monospace;
+    font-size: 150%;
+}
+.ship, .salvo{
+    background-color: #00000080;
 }

@@ -192,7 +192,7 @@ $(document).ready(function () {
     function welcomeMessage(){
      if ( games.player !=="null"){
          $("#login-form").toggle();
-         $("#welcome").html("Welcome " + games.player.name)
+         $("#welcome").html("Welcome " + games.player.name.split("@")[0])
      }else{
          $("#logout-form").toggle();
      }

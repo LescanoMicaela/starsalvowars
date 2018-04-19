@@ -22,9 +22,11 @@ $(document).ready(function () {
 
             games = data;
             if ( games.game.ships.length != 0){
+                $("body").attr("data-style","gameview2");
                 $(".placeShips").toggle();
                 $(".statusships").toggle();
-                $("#playersInfo").toggle();
+                $("#playersInfo1").toggle();
+                $("#playersInfo2").toggle();
                 $(".tablesdiv").toggle();
             }
             createGridsBoard();
@@ -52,17 +54,19 @@ $(document).ready(function () {
 
 
 function gametoggle(){
-    $("#playersInfo").toggle();
+    $("#playersInfo1").toggle();
+    $("#playersInfo2").toggle();
     $(".tables").toggle();
 }
 
 function showok(){
-if ($(".shipsboard").children().length < 17){
+if ($(".shipsboard").children().length == 16){
     console.log("ok");
     $(".statusships").text("Are you ready?");
-    $(".ok").toggle();
+    $(".ok").show();
 }else{
     console.log("not yet");
+    $(".ok").hide();
 }
 }
 
@@ -493,7 +497,7 @@ function createGridsBoard() {
                     console.log("Theres a ship placed here already");
                     $("#alert").text("Theres a ship placed here already");
                 }
-            };
+                showok()};
 
             tr.append(td2);
         }
@@ -544,9 +548,11 @@ function colorSalvo(){
 
         $("#table2 td").click( function(){
             var tdid = $(this).attr("id");
+            $("#alert").text("");
             var salvolocation= tdid.split("")[1] + tdid.split("")[2];
-            if (  $("#"+tdid).hasClass("salvoshot") == false) {
+            if (  $("#"+tdid).hasClass("salvoshot") == false && tdid.split("").length > 1 ) {
                 if (salvoes.length < 5) {
+                    $("#alert").text("You can place up to 5 salovos");
                     $("#" + tdid).addClass("salvoshot");
                     if (salvoes.indexOf(salvolocation) == -1 && salvoes.length < 5 && $("#" + tdid).hasClass("salvo2") == false) {
                         console.log(tdid);
@@ -569,9 +575,9 @@ function colorSalvo(){
 
     function showbuttonfire(){
         if ( salvoes.length == 0){
-            $("#oksalvo").hide();
+            $(".fire").hide();
         }if ( salvoes.length > 0){
-            $("#oksalvo").show();
+            $(".fire").show(500);
         }
     };
 
