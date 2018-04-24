@@ -122,10 +122,12 @@ button{
     font-family: myFirstFont2;
     text-align: center;
     letter-spacing: 1px;
+    color: yellow;
 }
 #welcome{
     font-family: myFirstFont;
     text-align: center;
+    color: yellow;
 }
 
 .ships {
@@ -133,6 +135,14 @@ button{
 }
 .salvoshot{
     background-color:red;
+}
+.hitsinfo{
+    border: white solid 1px;
+
+}
+.hitsinfo td{
+    width: 140px;
+    height: 30px;
 }
 /*ol{*/
     /*margin: 0 auto;*/

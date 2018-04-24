@@ -77,30 +77,30 @@ $(".ok").click(function (){
         $(".statusships").text("Ships placed")
         var Alpha = ["A","B","C", "D", "E", "F", "G", "H", "I", "J"];
          submarine= $(".submarine").parent().map(function() {
-             return Alpha[this.id.split("")[0]] + this.id.split("")[1] ;
+             return Alpha[this.id.split("")[0]] + (Number(this.id.split("")[1])+1) ;
          })
              .get()
         destroyer= $(".destroyer").parent().map(function() {
-            return Alpha[this.id.split("")[0]] + this.id.split("")[1] ;
+            return Alpha[this.id.split("")[0]] + (Number(this.id.split("")[1])+1) ;
         })
             .get()
         carrier= $(".carrier").parent().map(function() {
-            return Alpha[this.id.split("")[0]] + this.id.split("")[1] ;
+            return Alpha[this.id.split("")[0]] + (Number(this.id.split("")[1])+1) ;
         })
             .get()
         patrol= $(".patrol").parent().map(function() {
-            return Alpha[this.id.split("")[0]] + this.id.split("")[1] ;
+            return Alpha[this.id.split("")[0]] + (Number(this.id.split("")[1])+1) ;
         })
             .get()
         battleship= $(".battleship").parent().map(function() {
-            return Alpha[this.id.split("")[0]] + this.id.split("")[1] ;
+            return Alpha[this.id.split("")[0]] + (Number(this.id.split("")[1])+1) ;
         })
             .get()
-        submarine.push(Alpha[$("#submarine").parent().attr("id").split("")[0]] + $("#submarine").parent().attr("id").split("")[1]);
-        destroyer.push(Alpha[$("#destroyer").parent().attr("id").split("")[0]] + $("#destroyer").parent().attr("id").split("")[1]);
-        carrier.push(Alpha[$("#carrier").parent().attr("id").split("")[0]] + $("#carrier").parent().attr("id").split("")[1]);
-        patrol.push(Alpha[$("#patrol").parent().attr("id").split("")[0]] + $("#patrol").parent().attr("id").split("")[1]);
-        battleship.push(Alpha[$("#battleship").parent().attr("id").split("")[0]] + $("#battleship").parent().attr("id").split("")[1]);
+        submarine.push(Alpha[$("#submarine").parent().attr("id").split("")[0]] + (Number($("#submarine").parent().attr("id").split("")[1])+1));
+        destroyer.push(Alpha[$("#destroyer").parent().attr("id").split("")[0]] + (Number($("#destroyer").parent().attr("id").split("")[1])+1));
+        carrier.push(Alpha[$("#carrier").parent().attr("id").split("")[0]] +(Number($("#carrier").parent().attr("id").split("")[1])+1));
+        patrol.push(Alpha[$("#patrol").parent().attr("id").split("")[0]] +(Number($("#patrol").parent().attr("id").split("")[1])+1));
+        battleship.push(Alpha[$("#battleship").parent().attr("id").split("")[0]] +(Number($("#battleship").parent().attr("id").split("")[1])+1));
         console.log(submarine,destroyer,carrier,patrol,battleship);
         placeShips2();
 
@@ -127,24 +127,24 @@ $("#logOutBtn").click(function logout(evt) {
 
 
     }
-function postShips(){
-    var gamePlayerId = games.id;
-    fetch("/api/games/players/"+gamePlayerId+"/ships", {
-        method: 'POST',
-        body:JSON.stringify([{ shipType: "submarine", locations: submarine },{ shipType: "destroyer", locations: destroyer },{ shipType: "carrier", locations: carrier },{ shipType: "patrol", locations: patrol },{ shipType: "battleship", locations: battleship }]),
-        headers: new Headers({
-            contentType: 'application/json'
-        })
-    }).then(function (response) {
-        if (response.ok) {
-            window.location.reload();
-        }
-        throw new Error(response.statusText);
-    }).catch(function(error) {
-        alert('Ship not saved: ' + error.message);
-    });
-
-};
+// function postShips(){
+//     var gamePlayerId = games.id;
+//     fetch("/api/games/players/"+gamePlayerId+"/ships", {
+//         method: 'POST',
+//         body:JSON.stringify([{ shipType: "submarine", locations: submarine },{ shipType: "destroyer", locations: destroyer },{ shipType: "carrier", locations: carrier },{ shipType: "patrol", locations: patrol },{ shipType: "battleship", locations: battleship }]),
+//         headers: new Headers({
+//             contentType: 'application/json'
+//         })
+//     }).then(function (response) {
+//         if (response.ok) {
+//             window.location.reload();
+//         }
+//         throw new Error(response.statusText);
+//     }).catch(function(error) {
+//         alert('Ship not saved: ' + error.message);
+//     });
+//
+// };
 
     function placeShips2() {
         gamePlayerId = games.id;
@@ -549,7 +549,11 @@ function colorSalvo(){
         $("#table2 td").click( function(){
             var tdid = $(this).attr("id");
             $("#alert").text("");
-            var salvolocation= tdid.split("")[1] + tdid.split("")[2];
+            if(  tdid.split("").length == 4 ){
+                var salvolocation= tdid.split("")[1] + "10";
+            }else{
+                var salvolocation= tdid.split("")[1] + tdid.split("")[2];
+            }
             if (  $("#"+tdid).hasClass("salvoshot") == false && tdid.split("").length > 1 ) {
                 if (salvoes.length < 5) {
                     $("#alert").text("You can place up to 5 salovos");

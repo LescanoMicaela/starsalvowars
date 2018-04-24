@@ -28,7 +28,6 @@ public class Salvo {
 
     public Salvo ( Integer turn, GamePlayer gamePlayer, List<String> salvolocations)
     {
-
         this.turn= turn;
         this.gamePlayer = gamePlayer;
         this.SalvoLocations = salvolocations;
