@@ -21,7 +21,9 @@
     /*src: url(Starjhol.ttf);*/
 }
 
-
+.tables, .board{
+    border-collapse: collapse;
+}
 .tables tr, .board tr {
     display:flex;
     flex-direction: row;
@@ -87,9 +89,7 @@
     height: 400px;
     margin: 0 10% 0 10%;
 }
-table {
-    border-collapse: collapse;
-}
+
 button{
     border-radius: 10px;
     padding: 1%;
@@ -158,9 +158,6 @@ button{
     background-color: green;
 }
 
-.hit {
-    background-color: red;
-}
 .fire{
     display: none;
     position: fixed;
@@ -200,7 +197,6 @@ button{
     background-color: yellow;
     text-align: center;
 }
-
 [data-style="gamesview"]{
     background-image: url("images/SbaPLTm.jpg");
     color: white;
@@ -214,6 +210,7 @@ button{
     font-family: monospace;
     font-size: 150%;
 }
+
 [data-style="gameview2"]{
     /*background-image: url("images/shipfight.jpg");*/
     background-image: url("images/Mustafar.png");
@@ -223,4 +220,19 @@ button{
 }
 .ship, .salvo{
     background-color: #00000080;
+}
+.hit {
+    background-color: red;
+}
+#hitonp1, #hitonp2{
+    border: 1px solid white;
+    border-collapse : collapse;
+}
+#hitonp1 td, #hitonp1 th, #hitonp2 td, #hitonp2 th{
+    border: 1px solid white;
+    border-collapse : collapse;
+}
+.log{
+    display: flex;
+    justify-content: space-around;
 }

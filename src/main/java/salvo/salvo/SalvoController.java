@@ -383,8 +383,8 @@ public class SalvoController {
             dto.put("id", nn);
             dto.put("game", makeGameDTO2(game, gamePlayernn));
             dto.put("player", currentDTO(authentication));
-            dto.put("hits on oponent", allShipsHitInSalvoes(player1Salvo,opononetShips));
-            dto.put("hits on me", allShipsHitInSalvoes(oponentSalvo,player1Ships));
+            dto.put("hits_on_oponent", allShipsHitInSalvoes(player1Salvo,opononetShips));
+            dto.put("hits_on_me", allShipsHitInSalvoes(oponentSalvo,player1Ships));
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } else {
                 Map<String, Object> dto = new LinkedHashMap<>();

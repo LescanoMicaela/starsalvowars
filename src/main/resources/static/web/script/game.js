@@ -10,6 +10,12 @@ var carrier= [];
 var patrol= [];
 var battleship= [];
 var salvoes = [];
+var carrierhit = 5;
+var battleshiphit = 4;
+var destroyerhit = 3;
+var submarinehit = 3;
+var patrolhit = 2;
+var totalships = 5;
 var droppable = true;
 $(".ok").toggle();
 $(document).ready(function () {
@@ -21,6 +27,16 @@ $(document).ready(function () {
         success: function (data) {
 
             games = data;
+            games.hits_on_me.sort(function(a, b){
+                var a1= a.turn, b1= b.turn;
+                if(a1== b1) return 0;
+                return a1> b1? 1: -1;
+            });
+            games.hits_on_oponent.sort(function(a, b){
+                var a1= a.turn, b1= b.turn;
+                if(a1== b1) return 0;
+                return a1> b1? 1: -1;
+            });
             if ( games.game.ships.length != 0){
                 $("body").attr("data-style","gameview2");
                 $(".placeShips").toggle();
@@ -40,8 +56,11 @@ $(document).ready(function () {
             createGrids2();
             colorShip ();
             colorSalvo();
+            hitOpponent();
             getPlayerNames();
             showok();
+            logturns(games.hits_on_oponent, "hitonp2");
+            logturns(games.hits_on_me, "hitonp1");
 
         },
 
@@ -51,6 +70,7 @@ $(document).ready(function () {
 
     })
 });
+
 
 
 function gametoggle(){
@@ -127,6 +147,102 @@ $("#logOutBtn").click(function logout(evt) {
 
 
     }
+
+    function logturns(hitson,tableid){
+    var table= document.getElementById(tableid);
+    for( var i = 0; i < hitson.length; i++){
+        var shiphits = [];
+        var shiphits2 = [];
+        var battleshiphit;
+        var submarinerhit;
+        var patrolhit;
+        var desroyerhit;
+
+        var tr = document.createElement("tr");
+        var td = document.createElement("td");
+        var td1 = document.createElement("td");
+        var td2 = document.createElement("td");
+        td.innerHTML = hitson[i].turn;
+        tr.append(td);
+
+        if (hitson[i].hit != null){
+
+            for (var q=0; q < hitson[i].hit.length; q++){
+
+                if ( hitson[i].hit[q].type == "carrier"){
+
+                  carrierhit -=  hitson[i].hit[q].hit.length;
+                    console.log(carrierhit);
+                    if (carrierhit == 0){
+                            shiphits.push(hitson[i].hit[q].type+" " + "sunk" );
+                        totalships= totalships - 1;
+                        }else{
+                            shiphits.push(hitson[i].hit[q].type+" " + hitson[i].hit[q].hit.length );
+                        }}
+                // }else {
+                //     shiphits.push(games.hits_on_me[i].hit[q].type+" " + games.hits_on_me[i].hit[q].hit.length );
+                // }
+                    if ( hitson[i].hit[q].type == "destroyer") {
+
+                        destroyerhit -= hitson[i].hit[q].hit.length;
+
+                        if (destroyerhit == 0) {
+                            shiphits.push(hitson[i].hit[q].type + " " + "sunk");
+                            totalships= totalships - 1;
+                        } else {
+                            shiphits.push(hitson[i].hit[q].type + " " + hitson[i].hit[q].hit.length);
+                        }
+                    }
+                        if ( hitson[i].hit[q].type == "submarine"){
+
+                            submarinehit -= hitson[i].hit[q].hit.length;
+
+                            if (submarinehit == 0){
+                                shiphits.push(hitson[i].hit[q].type+" " + "sunk" );
+                                totalships= totalships - 1;
+                                console.log("hey",totalships)
+                            }else{
+                                shiphits.push(hitson[i].hit[q].type+" " + hitson[i].hit[q].hit.length );
+                            }}
+                    if ( hitson[i].hit[q].type == "patrol"){
+
+                        patrolhit -= hitson[i].hit[q].hit.length;
+
+                        if (patrolhit == 0){
+                            shiphits.push(hitson[i].hit[q].type+" " + "sunk" );
+                            totalships= totalships - 1;
+                        }else{
+                            shiphits.push(hitson[i].hit[q].type+" " + hitson[i].hit[q].hit.length );
+                        }}
+                    if ( hitson[i].hit[q].type == "battleship"){
+
+                        battleshiphit -=  hitson[i].hit[q].hit.length;
+                        if (battleshiphit == 0){
+                            shiphits.push(hitson[i].hit[q].type+" " + "sunk" );
+                            totalships= totalships - 1;
+                        }else{
+                            shiphits.push(hitson[i].hit[q].type+" " + hitson[i].hit[q].hit.length );
+                        }
+
+                    }
+                if( shiphits.length != 0 ){
+                    td1.innerHTML = shiphits.join();
+                }else{
+                    td1.innerHTML = "No hit";
+                }
+
+            }
+            td2.innerHTML = totalships
+            tr.append(td1);
+            tr.append(td2);
+        }
+        table.append(tr);
+
+    }
+};
+
+
+
 // function postShips(){
 //     var gamePlayerId = games.id;
 //     fetch("/api/games/players/"+gamePlayerId+"/ships", {
@@ -330,6 +446,21 @@ function rotate(ship, rot){
 
     }
 
+function hitOpponent(){
+    for (var i =0; i < games.hits_on_oponent.length; i++){
+        if (games.hits_on_oponent[i].hit !=null){
+        for ( var k= 0; k < games.hits_on_oponent[i].hit.length; k++){
+            if (games.hits_on_oponent[i].hit[k].hit !=null){
+            for ( var z=0; z < games.hits_on_oponent[i].hit[k].hit.length; z++){
+                document.getElementById("V" + games.hits_on_oponent[i].hit[k].hit[z]).setAttribute("class", "hit");
+            }
+        }}
+    }}
+};
+
+
+
+
 function createGrids2() {
     var Alpha = ["A","B","C", "D", "E", "F", "G", "H", "I", "J"];
     var Beta = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
@@ -518,14 +649,13 @@ function drag(ev){
 
 
 function colorSalvo(){
+
     for ( i=0; i<games.game.salvoes.length; i++) {
         for ( k= 0; k < games.game.salvoes[i].length; k++){
             for (y=0; y< games.game.salvoes[i][""+k].location.length; y++){
                 if (games.id == games.game.salvoes[i][""+k].player_id){
 
-
                         document.getElementById("V" + games.game.salvoes[i][""+k].location[y]).setAttribute("class", "salvo2");
-
                     document.getElementById("V" + games.game.salvoes[i][""+k].location[y]).innerHTML = games.game.salvoes[i][""+k].turn;
                 }
 
@@ -558,7 +688,7 @@ function colorSalvo(){
                 if (salvoes.length < 5) {
                     $("#alert").text("You can place up to 5 salovos");
                     $("#" + tdid).addClass("salvoshot");
-                    if (salvoes.indexOf(salvolocation) == -1 && salvoes.length < 5 && $("#" + tdid).hasClass("salvo2") == false) {
+                    if (salvoes.indexOf(salvolocation) == -1 && salvoes.length < 5 && $("#" + tdid).hasClass("salvo2") == false  && $("#" + tdid).hasClass("hit") == false ) {
                         console.log(tdid);
                         salvoes.push(salvolocation);
 
@@ -568,7 +698,7 @@ function colorSalvo(){
                     console.log("hola k pay")
                 }
             } else{
-                if ($("#" + tdid).hasClass("salvo2") == false){
+                if ($("#" + tdid).hasClass("salvo2") == false  && $("#" + tdid).hasClass("hit") == false ){
                     console.log("bye salvo");
                     $("#" + tdid).removeClass("salvoshot");
                     var index = salvoes.indexOf(salvolocation);
@@ -585,28 +715,7 @@ function colorSalvo(){
         }
     };
 
-    // $("#table2 td").click( function(){
-    //     var tdid = $(this).attr("id");
-    //     // if ( $("#"+tdid).hasClass("salvo2") == false){
-    //     if ( salvoes.indexOf(salvolocation) == -1 && salvoes.length < 6 ){
-    //         $("#"+tdid).toggleClass("salvoshot");
-    //         var salvolocation= tdid.split("")[1] + tdid.split("")[2];
-    //         console.log(tdid);
-    //         salvoes.push(salvolocation);
-    //
-    //     } else{
-    //         console.log("no salvo shot");
-    //         var index =salvoes.indexOf(salvolocation);
-    //         salvoes.splice(index, 1);
-    //     }
-    //     // }
-    //
-    //     if ( salvoes.length > 0){
-    //         $("#oksalvo").show();
-    //     }else{
-    //         $("#oksalvo").hide();
-    //     }
-    // });
+
 
     $("#oksalvo").click(function(){
         if (salvoes.length < 6 && salvoes.length!=0 ){

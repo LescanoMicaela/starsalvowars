@@ -67,45 +67,16 @@
     </div>
 </div>
 <div class="tablesdiv">
+
 <div class="tables">
 
 <div class="ship">
     <div id="playersInfo1">
         <h1 id="player1Name"></h1>
     </div>
+    <h2 id="turnp1"></h2>
     <div id="hits1">
-        <table class="hitsinfo">
-            <tr>
-                <td>Ship</td>
-                <td>Hits</td>
-                <td>Sunk</td>
-            </tr>
-            <tr>
-                <td>Destroyer</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Patrol</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Battleship</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Submarine</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Carrier</td>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
+
     </div>
     <table id="table">
         <thead id="table-headers">
@@ -116,42 +87,13 @@
 </div>
 
     <div class="salvo">
+
         <div id="playersInfo2">
             <h1 id="player2Name"></h1>
         </div>
-        <div id="hits1">
-            <table class="hitsinfo">
-                <tr>
-                    <td>Ship</td>
-                    <td>Hits</td>
-                    <td>Sunk</td>
-                </tr>
-                <tr>
-                    <td>Destroyer</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Patrol</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Battleship</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Submarine</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Carrier</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </table>
+         <h2 id="turnp2"></h2>
+        <div id="hits2">
+
         </div>
 
     <table id="table2">
@@ -169,7 +111,37 @@
     </div>
 </div>
 
+<div class="log">
+    <table id="hitonp1">
+        <tr>
+            <th rowspan="2">Turn</th>
+            <th colspan="2">Hits on you</th>
 
+        </tr>
+        <tr>
+            <td>Hits</td>
+            <td>Left</td>
+        </tr>
+        <!--<tr>-->
+        <!--<td>Turn 1</td>-->
+        <!--<td>Patrol hit</td>-->
+        <!--<td>2 Ships left</td>-->
+        <!--</tr>-->
+    </table>
+
+    <table id="hitonp2">
+        <tr>
+            <th rowspan="2">Turn</th>
+            <th colspan="2">Hits on oponent</th>
+
+        </tr>
+        <tr>
+            <td>Hits</td>
+            <td>Left</td>
+        </tr>
+
+    </table>
+</div>
 <script src="script/game.js"></script>
 </body>
 </html>
