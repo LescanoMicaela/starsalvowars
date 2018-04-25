@@ -231,8 +231,10 @@ button{
 #hitonp1 td, #hitonp1 th, #hitonp2 td, #hitonp2 th{
     border: 1px solid white;
     border-collapse : collapse;
+    text-align: center;
 }
 .log{
+    margin-top: 6%;
     display: flex;
     justify-content: space-around;
 }
