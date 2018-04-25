@@ -195,8 +195,11 @@ $(document).ready(function () {
          $("#welcome").html("Welcome " + games.player.name.split("@")[0])
      }else{
          $("#logout-form").toggle();
+         $("#welcome").html("Battle of Yavin")
      }
     }
+
+
 
     function validate() {
         var email = document.getElementById('email').value;

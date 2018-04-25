@@ -14,6 +14,23 @@
     <link href="styles/style.css" rel="stylesheet">
 </head>
 <body data-style="gameview">
+<div class="fade"></div>
+<div class="swhid">
+<section class="star-wars">
+    <div class="crawl">
+        <div class="title">
+            <!--<p></p>-->
+            <h1>Battle of Yavin</h1>
+        </div>
+
+        <p>We are under attack! Rebel spies have stolen the Death Star plans and they are attacking us.</p>
+
+        <p>Our radars have been shot and we can't locate their ships. </p>
+        <p>Commander <span id="commanderp1"></span>, get your fleets on position and get ready for the battle.</p>
+    </div>
+</section>
+</div>
+<div class="hidethis">
 <form id="logout-form" onsubmit="return false">
     <button id="logOutBtn">Log out</button>
 </form>
@@ -36,28 +53,32 @@
         </table>
     </div>
     <div class="shipsboard">
+        <br>
+        <br>
+        <br>
+        <br>
 
-<div id="submarine" data-type="3" data-style="shipab" draggable="true" ondragstart="drag(event)"></div>
+<img src="styles/images/destroyer.png" id="submarine" data-type="3" data-style="shipab" draggable="true" ondragstart="drag(event)">
         <br>
         <br>
         <br>
-        <br>
-<div id="destroyer" data-type="3" data-style="shipab" draggable="true" ondragstart="drag(event)"></div>
-        <br>
-        <br>
-        <br>
-        <br>
-<div id="patrol" data-type="2" data-style="shipab" draggable="true" ondragstart="drag(event)"></div>
+
+<img src="styles/images/destroyer.png" id="destroyer" data-type="3" data-style="shipab" draggable="true" ondragstart="drag(event)">
         <br>
         <br>
         <br>
-        <br>
-<div id="battleship" data-type="4" data-style="shipab" draggable="true" ondragstart="drag(event)"></div>
-        <br>
-        <br>
+
+<img src="styles/images/patrol.png" id="patrol" data-type="2" data-style="shipab" draggable="true" ondragstart="drag(event)">
         <br>
         <br>
-<div id="carrier" data-type="5" data-style="shipab" draggable="true" ondragstart="drag(event)"></div>
+        <br>
+
+<img src="styles/images/stardestroyerbattleship.png" id="battleship" data-type="4" data-style="shipab" draggable="true" ondragstart="drag(event)">
+        <br>
+        <br>
+        <br>
+
+<img src="styles/images/stardestroyer.png" id="carrier" data-type="5" data-style="shipab" draggable="true" ondragstart="drag(event)">
         <!--<div id="submarine"class="draggable"></div>-->
         <!--<div id="destroyer" class="draggable"></div>-->
         <!--<div id="patrol" class="draggable"></div>-->
@@ -141,6 +162,7 @@
         </tr>
 
     </table>
+</div>
 </div>
 <script src="script/game.js"></script>
 </body>

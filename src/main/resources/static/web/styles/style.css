@@ -1,10 +1,10 @@
 .tables td, .board td {
     padding: 0;
     margin: 0;
-    border: solid 1px white;
+    border: solid 1px #76767b4f;
     border-collapse: collapse;
-    width: 48px;
-    height: 49px;
+    width: 50px;
+    height: 50px;
     text-align: center;
     font-weight: bold;
     display: flex;
@@ -20,6 +20,13 @@
     src: url(Stjldbl1.ttf);
     /*src: url(Starjhol.ttf);*/
 }
+#table, #table2{
+    /*padding: 5%;*/
+    /*padding-right: 8%;*/
+    border: #676779 solid 1px;
+    border-radius: 20px;
+    background-color: #00b8ff42
+}
 
 .tables, .board{
     border-collapse: collapse;
@@ -31,63 +38,72 @@
 #playersInfo1,#playersInfo2, .tablesdiv{
     display: none;
     text-align: center;
+    font-family: myFirstFont;
+    font-size : 20px;
 }
 #submarine, #destroyer{
-    border: solid white 0.5px;
+    /*border: solid white 0.5px;*/
 
     width:149px;
     height:50px;
-    background-color: black;
+    /*background-color: black;*/
     position:absolute;
 
 }
 .rotate{
-     transform: rotate(90deg);
+     transform: rotate(270deg);
      transform-origin: 16% 50%;
  }
 .rotate2{
-    transform: rotate(90deg);
+    transform: rotate(270deg);
     transform-origin: 10% 50%;
 }
 .rotate3{
-    transform: rotate(90deg);
+    transform: rotate(270deg);
     transform-origin: 12% 50%;
 }
 .rotate4{
-    transform: rotate(90deg);
+    transform: rotate(270deg);
     transform-origin: 24% 50%;
 }
 #patrol{
-    border: solid white 0.5px;
+    /*border: solid white 0.5px;*/
     width:99px;
     height:49px;
-    background-color: pink;
+    /*background-color: pink;*/
     position:absolute;
 }
 #battleship{
-    border: solid white 0.5px;
+    /*border: solid white 0.5px;*/
     width:199px;
     height:49px;
-    background-color: hotpink;
+    /*background-color: hotpink;*/
     position:absolute;
 }
 #carrier{
-    border: solid white 0.5px;
+    /*border: solid white 0.5px;*/
     width:249px;
     height:49px;
-    background-color: lightpink;
+    /*background-color: lightpink;*/
     position:absolute;
 }
 .placeShips{
     display: flex;
+    flex-direction: row-reverse;
     margin: 5% 10%;
 
 }
+
 .shipsboard{
+    padding-top: 10%;
+    padding-left: 15%;
     /*border: solid 1px black;*/
-    width: 400px;
-    height: 400px;
-    margin: 0 10% 0 10%;
+    width: 500px;
+    /*height: 600px;*/
+    /*margin: 0 10% 0 10%;*/
+    background-image: url("images/hangar.jpg");
+    background-repeat: no-repeat;
+    background-color: rgba(0,0,0,0.38);
 }
 
 button{
@@ -209,6 +225,8 @@ button{
     color: white;
     font-family: monospace;
     font-size: 150%;
+    /*background-color: black;*/
+    overflow: auto;
 }
 
 [data-style="gameview2"]{
@@ -238,3 +256,73 @@ button{
     display: flex;
     justify-content: space-around;
 }
+
+
+.fade {
+    position: relative;
+    width: 100%;
+    min-height: 60vh;
+    top: -25px;
+    background-image: linear-gradient(0deg, transparent, black 75%);
+    z-index: 1;
+    display: none;
+}
+.swhid{
+    display: none;
+}
+.star-wars {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    height: 800px;
+    color: #feda4a;
+    font-family: 'Pathway Gothic One', sans-serif;
+    font-size: 500%;
+    font-weight: 600;
+    letter-spacing: 6px;
+    line-height: 150%;
+    perspective: 400px;
+    text-align: justify;
+}
+
+.crawl {
+    position: relative;
+    top: 99999px;
+    transform-origin: 50% 100%;
+    animation: crawl 40s linear;
+}
+
+#board{
+    /*background-image: url(images/symbol.png);*/
+    background-color: #6d646c94;
+    border-radius: 20px;
+}
+#board td{
+
+}
+
+
+.crawl > .titlesw {
+    font-size: 90%;
+    text-align: center;
+}
+
+.crawl > .titlesw h1 {
+    margin: 0 0 100px;
+    text-transform: uppercase;
+}
+
+@keyframes crawl {
+    0% {
+        top: -100px;
+        transform: rotateX(20deg)  translateZ(0);
+    }
+    100% {
+        top: -6000px;
+        transform: rotateX(25deg) translateZ(-2500px);
+    }
+}
+
+/*.hidethis{*/
+    /*display : none;*/
+/*}*/

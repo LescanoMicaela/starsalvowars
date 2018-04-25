@@ -35,8 +35,8 @@ $(document).ready(function () {
 
             games = data;
             if( games.hits_on_me != null){
-
                 games.hits_on_me.sort(function(a, b){
+
                     var a1= a.turn, b1= b.turn;
                     if(a1== b1) return 0;
                     return a1> b1? 1: -1;
@@ -50,13 +50,28 @@ $(document).ready(function () {
                 });
             }
             if ( games.game.ships.length != 0){
+
                 $("body").attr("data-style","gameview2");
+                $("body").css("overflow", "auto");
+                // $(".hidethis").slideToggle();
+                // $(".star-wars").toggle();
+                // $(".fade").toggle();
                 $(".placeShips").toggle();
                 $(".statusships").toggle();
                 $("#playersInfo1").toggle();
                 $("#playersInfo2").toggle();
                 $(".tablesdiv").toggle();
             }
+            if (games.game.ships.length == 0){
+                $("body").css("background-color", "black");
+                $("body").css("background-image", "none");
+                $("body").css("overflow", "hidden");
+                $(".hidethis").slideToggle();
+                $(".swhid").toggle();
+                $(".fade").toggle();
+                myFunctiontitles();
+            }
+            commander();
             createGridsBoard();
             rotate("submarine","rotate");
             rotate("destroyer","rotate");
@@ -172,9 +187,7 @@ function logturns(hitson,tableid){
         var totalships = 5;
     for( var i = 0; i < hitson.length; i++){
         var shiphits = [];
-
         var shiphits2 = [];
-
         var tr = document.createElement("tr");
         var td = document.createElement("td");
         var td1 = document.createElement("td");
@@ -235,7 +248,7 @@ function logturns(hitson,tableid){
                     }else{
                         shiphits.push(hitson[i].hit[q].type+" " + hitson[i].hit[q].hit.length );
                     }}
-                
+
                 if ( hitson[i].hit[q].type == "battleship"){
                     // turnLogDetail(hitson[i].hit[q], battleshiphit, shiphits, totalships);
                     battleshiphit -=  hitson[i].hit[q].hit.length;
@@ -261,6 +274,23 @@ function logturns(hitson,tableid){
 
     }
 };
+function commander(){
+    for ( var i=0; i < games.game.gamePlayers.length; i++){
+        var p1  = games.game.gamePlayers[i].player.email.split("@")[0];
+    }
+    $("#commanderp1").text(p1);
+}
+function myFunctiontitles() {
+    setTimeout(function(){
+
+        $("body").css("background-image", 'url("styles/images/galaxy.jpg")');
+        $("body").css("overflow", "auto");
+        $(".hidethis").slideToggle();
+        $(".star-wars").toggle();
+        $(".fade").toggle();
+
+    }, 20500);
+}
 
 
 function turnLogDetail(hitson, shiplength, shiphits, totalships){
@@ -408,24 +438,24 @@ function createGrids() {
     th0.append(tr0);
 
 
-    for (var y = 0; y < 10; y++) {
-
-        var td = document.createElement("td");
-        td.innerHTML = y + 1;
-        td.setAttribute("id" , y+1);
-
-        th0.appendChild(td);
-    }
-
-    tbh.appendChild(th0);
+    // for (var y = 0; y < 10; y++) {
+    //
+    //     var td = document.createElement("td");
+    //     td.innerHTML = y + 1;
+    //     td.setAttribute("id" , y+1);
+    //
+    //     th0.appendChild(td);
+    // }
+    //
+    // tbh.appendChild(th0);
 
     for (var J = 0; J < 10; J++) {
         var tr = document.createElement("tr");
-        var td3 = document.createElement("td");
-        td3.innerHTML = String.fromCharCode(65 + J);
-        td3.setAttribute("id", String.fromCharCode(65 + J));
-        tr.setAttribute("id" , String.fromCharCode(65 + J));
-        tr.append(td3);
+        // var td3 = document.createElement("td");
+        // td3.innerHTML = String.fromCharCode(65 + J);
+        // td3.setAttribute("id", String.fromCharCode(65 + J));
+        // tr.setAttribute("id" , String.fromCharCode(65 + J));
+        // tr.append(td3);
         for (var m = 0; m < 10; m++) {
 
             var td2 = document.createElement("td");
@@ -436,7 +466,7 @@ function createGrids() {
         }
         tbb.append(tr);
     }
-    table.append(tbh);
+    // table.append(tbh);
     table.append(tbb);
 }
 
@@ -469,13 +499,13 @@ function getPlayerNames(){
 
     for ( i=0; i< games.game.gamePlayers.length; i++){
         if ( games.game.gamePlayers[i].id == games.id) {
-            var p1  = games.game.gamePlayers[i].player.email;
+            var p1  = games.game.gamePlayers[i].player.email.split("@")[0];
 
         }
         if ( games.game.gamePlayers[i].id !== games.id){
 
 
-            var p2 = games.game.gamePlayers[i].player.email;
+            var p2 = games.game.gamePlayers[i].player.email.split("@")[0];
         }
 
     }
@@ -488,13 +518,15 @@ function getPlayerNames(){
         p2 = "Waiting for oponent"
     }
 
-    h1.innerHTML = p1 + "(you)";
+    h1.innerHTML =  p1 + " (you)";
     h12.innerHTML = p2;
 
 
-}
+};
 
 function hitOpponent(){
+    if (games.hits_on_oponent != null){
+
     for (var i =0; i < games.hits_on_oponent.length; i++){
         if (games.hits_on_oponent[i].hit !=null){
             for ( var k= 0; k < games.hits_on_oponent[i].hit.length; k++){
@@ -503,7 +535,7 @@ function hitOpponent(){
                         document.getElementById("V" + games.hits_on_oponent[i].hit[k].hit[z]).setAttribute("class", "hit");
                     }
                 }}
-        }}
+        }}}
 };
 
 
@@ -520,24 +552,24 @@ function createGrids2() {
     th0.append(tr0);
 
 
-    for (var y = 0; y < 10; y++) {
+    // for (var y = 0; y < 10; y++) {
+    //
+    //     var td = document.createElement("td");
+    //     td.innerHTML = y + 1;
+    //     td.setAttribute("id" , y+1);
+    //
+    //     th0.appendChild(td);
+    // }
 
-        var td = document.createElement("td");
-        td.innerHTML = y + 1;
-        td.setAttribute("id" , y+1);
-
-        th0.appendChild(td);
-    }
-
-    tbh.appendChild(th0);
+    // tbh.appendChild(th0);
 
     for (var J = 0; J < 10; J++) {
         var tr = document.createElement("tr");
-        var td3 = document.createElement("td");
-        td3.innerHTML = String.fromCharCode(65 + J);
-        td3.setAttribute("id", String.fromCharCode(65 + J));
-        tr.setAttribute("id" , String.fromCharCode(65 + J));
-        tr.append(td3);
+        // var td3 = document.createElement("td");
+        // td3.innerHTML = String.fromCharCode(65 + J);
+        // td3.setAttribute("id", String.fromCharCode(65 + J));
+        // tr.setAttribute("id" , String.fromCharCode(65 + J));
+        // tr.append(td3);
         for (var m = 0; m < 10; m++) {
 
             var td2 = document.createElement("td");
@@ -548,7 +580,7 @@ function createGrids2() {
         }
         tbb.append(tr);
     }
-    table.append(tbh);
+    // table.append(tbh);
     table.append(tbb);
 }
 
@@ -564,22 +596,22 @@ function createGridsBoard() {
     th0.append(tr0);
 
 
-    for (var y = 0; y < 10; y++) {
-
-        var td = document.createElement("td");
-        td.innerHTML = y + 1;
-        td.setAttribute("id" , y+1);
-
-        th0.appendChild(td);
-    }
-    tbh.appendChild(th0);
+    // for (var y = 0; y < 10; y++) {
+    //
+    //     var td = document.createElement("td");
+    //     td.innerHTML = y + 1;
+    //     td.setAttribute("id" , y+1);
+    //
+    //     th0.appendChild(td);
+    // }
+    // tbh.appendChild(th0);
     for (var J = 0; J < 10; J++) {
         var tr = document.createElement("tr");
-        var td3 = document.createElement("td");
-        td3.innerHTML = String.fromCharCode(65 + J);
-        td3.setAttribute("id", String.fromCharCode(65 + J));
-        tr.setAttribute("id" , String.fromCharCode(65 + J));
-        tr.append(td3);
+        // var td3 = document.createElement("td");
+        // td3.innerHTML = String.fromCharCode(65 + J);
+        // td3.setAttribute("id", String.fromCharCode(65 + J));
+        // tr.setAttribute("id" , String.fromCharCode(65 + J));
+        // tr.append(td3);
         for (var m = 0; m < 10; m++) {
             var td2 = document.createElement("td");
             td2.id = ""+J+""+Beta[m];
