@@ -51,19 +51,19 @@
 
 }
 .rotate{
-     transform: rotate(270deg);
+     transform: rotate(90deg);
      transform-origin: 16% 50%;
  }
 .rotate2{
-    transform: rotate(270deg);
+    transform: rotate(90deg);
     transform-origin: 10% 50%;
 }
 .rotate3{
-    transform: rotate(270deg);
+    transform: rotate(90deg);
     transform-origin: 12% 50%;
 }
 .rotate4{
-    transform: rotate(270deg);
+    transform: rotate(90deg);
     transform-origin: 24% 50%;
 }
 #patrol{
@@ -91,19 +91,24 @@
     display: flex;
     flex-direction: row-reverse;
     margin: 5% 10%;
+    justify-content: space-around;
 
 }
 
 .shipsboard{
-    padding-top: 10%;
-    padding-left: 15%;
+    /*padding-top: 10%;*/
+    /*padding-left: 15%;*/
     /*border: solid 1px black;*/
-    width: 500px;
+    width: 300px;
     /*height: 600px;*/
     /*margin: 0 10% 0 10%;*/
-    background-image: url("images/hangar.jpg");
-    background-repeat: no-repeat;
-    background-color: rgba(0,0,0,0.38);
+    /*background-image: url("images/hangar.jpg");*/
+    /*background-repeat: no-repeat;*/
+    /*background-color: rgba(0,0,0,0.38);*/
+}
+.absoluteships{
+    position : absolute;
+    z-index: 1;
 }
 
 button{
@@ -146,9 +151,6 @@ button{
     color: yellow;
 }
 
-.ships {
-    background-color: pink;
-}
 .salvoshot{
     background-color:red;
 }
@@ -167,12 +169,12 @@ button{
     /*border-radius: 10px;*/
 /*}*/
 
-.salvo0 {
-    background-color: orange;
-}
-.salvo2 {
-    background-color: green;
-}
+/*.salvo0 {*/
+    /*background-color: orange;*/
+/*}*/
+/*.salvo2 {*/
+    /*background-color: green;*/
+/*}*/
 
 .fire{
     display: none;
@@ -239,25 +241,29 @@ button{
 .ship, .salvo{
     background-color: #00000080;
 }
-.hit {
-    background-color: red;
-}
+/*.hit {*/
+    /*background-color: red;*/
+/*}*/
 #hitonp1, #hitonp2{
-    border: 1px solid white;
+    /*border: 1px solid white;*/
+    width:35%;
     border-collapse : collapse;
+    background-color: #3de2b261;
+
 }
 #hitonp1 td, #hitonp1 th, #hitonp2 td, #hitonp2 th{
-    border: 1px solid white;
-    border-collapse : collapse;
+    border: 1px solid #c3a2a291;
+    border-collapse: collapse;
     text-align: center;
+    /* color: black; */
+    padding: 1%;
+
 }
 .log{
-    margin-top: 6%;
+    margin: 6%;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
 }
-
-
 .fade {
     position: relative;
     width: 100%;
@@ -267,6 +273,7 @@ button{
     z-index: 1;
     display: none;
 }
+
 .swhid{
     display: none;
 }
@@ -284,7 +291,6 @@ button{
     perspective: 400px;
     text-align: justify;
 }
-
 .crawl {
     position: relative;
     top: 99999px;
@@ -297,20 +303,22 @@ button{
     background-color: #6d646c94;
     border-radius: 20px;
 }
+
 #board td{
 
 }
-
-
 .crawl > .titlesw {
     font-size: 90%;
     text-align: center;
 }
 
+
 .crawl > .titlesw h1 {
     margin: 0 0 100px;
     text-transform: uppercase;
 }
+
+
 
 @keyframes crawl {
     0% {
@@ -323,6 +331,22 @@ button{
     }
 }
 
-/*.hidethis{*/
-    /*display : none;*/
-/*}*/
+.hidethis{
+     display : none;
+ }
+#skip{
+    /*display: none;*/
+    border-radius: 50%;
+    font-weight: bold;
+    background-color: #feda4a;
+    position: fixed;
+    bottom: 3%;
+    right: 10%;
+    color: black;
+    font-size: 20px;
+}
+
+.firesalvo{
+    z-index: 5;
+    position: absolute;
+}

@@ -50,7 +50,8 @@ $(document).ready(function () {
                 });
             }
             if ( games.game.ships.length != 0){
-
+                $("#skip").hide();
+                $(".hidethis").show();
                 $("body").attr("data-style","gameview2");
                 $("body").css("overflow", "auto");
                 // $(".hidethis").slideToggle();
@@ -77,7 +78,10 @@ $(document).ready(function () {
             rotate("destroyer","rotate");
             rotate("patrol","rotate4");
             rotate("battleship","rotate3");
-
+            $("#skip").click( function(){
+                skip();
+                $("#skip").hide();
+            });
             rotate("carrier","rotate2");
             createGrids();
             createGrids2();
@@ -115,6 +119,14 @@ function showok(){
         console.log("not yet");
         $(".ok").hide();
     }
+}
+
+function skip(){
+    $("body").css("background-image", 'url("styles/images/galaxy.jpg")');
+    $("body").css("overflow", "auto");
+    $(".hidethis").show;
+    $(".star-wars").hide();
+    $(".fade").hide();
 }
 
 $(".ok").click(function (){
@@ -285,9 +297,10 @@ function myFunctiontitles() {
 
         $("body").css("background-image", 'url("styles/images/galaxy.jpg")');
         $("body").css("overflow", "auto");
-        $(".hidethis").slideToggle();
-        $(".star-wars").toggle();
-        $(".fade").toggle();
+        $(".hidethis").show;
+        $(".star-wars").hide();
+        $(".fade").hide();
+        $("#skip").hide();
 
     }, 20500);
 }
@@ -482,13 +495,22 @@ function makeUrl() {
 }
 
 function colorShip (){
-
-
     for ( i=0; i<games.game.ships.length; i++) {
         for ( k= 0; k < games.game.ships[i].location.length; k++){
             document.getElementById("U" + games.game.ships[i].location[k]).setAttribute("class", "ships");
-
+            if ( games.game.ships[i].location[0].split("")[1] != games.game.ships[i].location[1].split("")[1]){
+                var td =document.getElementById("U" + games.game.ships[i].location[games.game.ships[i].location.length -1]);
+                var img = document.createElement("img");
+                img.setAttribute("src", "styles/images/" +""+games.game.ships[i].style+".png");
+                img.setAttribute("class", "absoluteships");
+            }else{
+                var td =document.getElementById("U" + games.game.ships[i].location[games.game.ships[i].location.length -1]);
+                var img = document.createElement("img");
+                img.setAttribute("src", "styles/images/" +""+games.game.ships[i].style+"2.png");
+                img.setAttribute("class", "absoluteships");
+            }
         }
+        td.append(img);
     }
 }
 
@@ -533,6 +555,11 @@ function hitOpponent(){
                 if (games.hits_on_oponent[i].hit[k].hit !=null){
                     for ( var z=0; z < games.hits_on_oponent[i].hit[k].hit.length; z++){
                         document.getElementById("V" + games.hits_on_oponent[i].hit[k].hit[z]).setAttribute("class", "hit");
+                        var td5 = document.getElementById("V" + games.hits_on_oponent[i].hit[k].hit[z]);
+                        var img = document.createElement("img");
+                        img.setAttribute("class","firesalvo");
+                        img.setAttribute("src","styles/images/fire.png");
+                        td5.append(img);
                     }
                 }}
         }}}
@@ -736,19 +763,35 @@ function colorSalvo(){
                 if (games.id == games.game.salvoes[i][""+k].player_id){
 
                     document.getElementById("V" + games.game.salvoes[i][""+k].location[y]).setAttribute("class", "salvo2");
-                    document.getElementById("V" + games.game.salvoes[i][""+k].location[y]).innerHTML = games.game.salvoes[i][""+k].turn;
+                    var img1= document.createElement("img");
+                    img1.setAttribute("src","styles/images/miss.png");
+                    var tdsalvo1 =document.getElementById("V" + games.game.salvoes[i][""+k].location[y]);
+                    img1.setAttribute("class", "firesalvo");
+                    tdsalvo1.append(img1);
+                    // document.getElementById("V" + games.game.salvoes[i][""+k].location[y]).innerHTML = games.game.salvoes[i][""+k].turn;
                 }
 
                 else {
                     if (document.getElementById("U" + games.game.salvoes[i][""+k].location[y]).classList.contains("ships")){
-                        document.getElementById("U" + games.game.salvoes[i][""+k].location[y]).setAttribute("class", "hit");
-                        document.getElementById("U" + games.game.salvoes[i][""+k].location[y]).innerHTML = games.game.salvoes[i][""+k].turn;
+                        var img= document.createElement("img");
+                        img.setAttribute("src","styles/images/fire.png");
+                        var tdsalvo =document.getElementById("U" + games.game.salvoes[i][""+k].location[y]);
+                        img.setAttribute("class", "firesalvo");
+                        tdsalvo.append(img);
+                        // document.getElementById("U" + games.game.salvoes[i][""+k].location[y]).setAttribute("class", "hit");
+
+                        // document.getElementById("U" + games.game.salvoes[i][""+k].location[y]).innerHTML = games.game.salvoes[i][""+k].turn;
 
                     }
                     else {
 
                         document.getElementById("U" + games.game.salvoes[i]["" + k].location[y]).setAttribute("class", "salvo0");
-                        document.getElementById("U" + games.game.salvoes[i][""+k].location[y]).innerHTML = games.game.salvoes[i][""+k].turn
+                        // document.getElementById("U" + games.game.salvoes[i][""+k].location[y]).innerHTML = games.game.salvoes[i][""+k].turn
+                        var img3= document.createElement("img");
+                        img3.setAttribute("src","styles/images/miss.png");
+                        var tdsalvo3 =document.getElementById("U" + games.game.salvoes[i][""+k].location[y]);
+                        img3.setAttribute("class", "firesalvo");
+                        tdsalvo3.append(img3);
                     }
                 }
             }
