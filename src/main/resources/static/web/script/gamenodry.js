@@ -10,9 +10,21 @@ var carrier= [];
 var patrol= [];
 var battleship= [];
 var salvoes = [];
+// var carrier= 5;
+// var battleship = 4;
+// var destroyer = 3;
+// var submarine = 3;
+// var patrol = 2;
+// var totalships = 5;
+
+// var carrierhit = 5;
+// var battleshiphit = 4;
+// var destroyerhit = 3;
+// var submarinehit = 3;
+// var patrolhit = 2;
+// var totalships = 5;
 var droppable = true;
 $(".ok").toggle();
-
 $(document).ready(function () {
 
     $.ajax({
@@ -80,8 +92,8 @@ $(document).ready(function () {
             hitOpponent();
             getPlayerNames();
             showok();
-            logturns(games.hits_on_oponent, "hitonp2", "You have");
-            logturns(games.hits_on_me, "hitonp1","Opponent has");
+            logturns(games.hits_on_oponent, "hitonp2");
+            logturns(games.hits_on_me, "hitonp1");
 
         },
 
@@ -119,8 +131,6 @@ function skip(){
     $(".fade").hide();
 }
 
-
-///DRY THIS!!!!!!
 $(".ok").click(function (){
     if ($(".shipsboard").children().length > 16){
         $("#alert").text("You must place all your ships");
@@ -154,7 +164,10 @@ $(".ok").click(function (){
         battleship.push(Alpha[$("#battleship").parent().attr("id").split("")[0]] +(Number($("#battleship").parent().attr("id").split("")[1])+1));
         console.log(submarine,destroyer,carrier,patrol,battleship);
         placeShips2();
-    }});
+
+
+    }})
+
 
 $("#logOutBtn").click(function logout(evt) {
     evt.preventDefault();
@@ -172,21 +185,21 @@ function notYourGM(){
     div.innerHTML = "NOT YOUR GAME";
     $("body").append(div);
     $("body").append(img);
-};
 
-function logturns(hitson,tableid, player){
-    if (hitson != null){
+
+}
+
+function logturns(hitson,tableid){
     var table= document.getElementById(tableid);
-    var shipslength={
-        carrier : 5,
-        battleship : 4,
-        destroyer: 3,
-        submarine: 3,
-        patrol: 2,
-        totalships: 5,
-    };
 
+        var carrierhit= 5;
+        var battleshiphit = 4;
+        var destroyerhit = 3;
+        var submarinehit = 3;
+        var patrolhit = 2;
+        var totalships = 5;
     for( var i = 0; i < hitson.length; i++){
+        var shiphits = [];
         var shiphits2 = [];
         var tr = document.createElement("tr");
         var td = document.createElement("td");
@@ -194,40 +207,88 @@ function logturns(hitson,tableid, player){
         var td2 = document.createElement("td");
         td.innerHTML = hitson[i].turn;
         tr.append(td);
-        var shiphits = [];
-        if (hitson[i].hit != "null") {
-            for (var q = 0; q < hitson[i].hit.length; q++) {
+        if (hitson[i].hit != null){
+            for (var q=0; q < hitson[i].hit.length; q++){
+                // turnLogDetail(hitson[i].hit[q],"carrier", carrierhit, shiphits, totalships);
+                // turnLogDetail(hitson[i].hit[q],"submarine", submarinehit, shiphits, totalships);
+                // turnLogDetail(hitson[i].hit[q],"battleship", battleshiphit, shiphits, totalships);
+                // turnLogDetail(hitson[i].hit[q],"patrol", patrolhit, shiphits, totalships);
+                // turnLogDetail(hitson[i].hit[q],"destroyer", destroyerhit, shiphits, totalships);
 
-                turnLogDetail(hitson[i].hit[q], shipslength, shiphits, player);
-                // LogDetail(hitson[i].hit[q], carrierhit, shiphits, totalships);
+                if ( hitson[i].hit[q].type == "carrier"){
+                    carrierhit -=  hitson[i].hit[q].hit.length;
+                    console.log(carrierhit);
+                    if (carrierhit == 0){
+                        shiphits.push(hitson[i].hit[q].type+" " + "sunk" );
+                        totalships= totalships - 1;
+                    }else{
+                        shiphits.push(hitson[i].hit[q].type+" " + hitson[i].hit[q].hit.length );
+                    }
+                    // turnLogDetail(hitson[i].hit[q], carrierhit, shiphits, totalships);
+                }
 
-            }}
-        if (shiphits.length != 0) {
-            td1.innerHTML = shiphits.join();
-        }else {
-            td1.innerHTML = "No hit";
-        }
-        td2.innerHTML = shipslength.totalships;
-        tr.append(td1);
-        tr.append(td2);
-        table.append(tr);
-    }}
+                if ( hitson[i].hit[q].type == "destroyer") {
 
-    function turnLogDetail(hitson, shiplength,shiphits,player){
-        shiplength[hitson.type] -=  hitson.hit.length;
-        if (shiplength[hitson.type] == 0){
-            $("#alert").text(player +" sunk a "+hitson.type)
-            shiphits.push(hitson.type+" " + "sunk" );
-            shiplength.totalships= shiplength.totalships - 1;
+                    destroyerhit -= hitson[i].hit[q].hit.length;
 
-        }else{
-            shiphits.push(hitson.type+" " + hitson.hit.length );
+                    if (destroyerhit == 0) {
+                        shiphits.push(hitson[i].hit[q].type + " " + "sunk");
+                        totalships= totalships - 1;
+                    } else {
+                        shiphits.push(hitson[i].hit[q].type + " " + hitson[i].hit[q].hit.length);
+                    }
+                    // turnLogDetail(hitson[i].hit[q], destroyerhit, shiphits, totalships);
+                }
+                if ( hitson[i].hit[q].type == "submarine") {
+                    // turnLogDetail(hitson[i].hit[q], submarinehit, shiphits, totalships);
+                    submarinehit -= hitson[i].hit[q].hit.length;
+
+                    if (submarinehit == 0){
+                        shiphits.push(hitson[i].hit[q].type+" " + "sunk" );
+                        totalships= totalships - 1;
+                        console.log("hey",totalships)
+                    }else{
+                        shiphits.push(hitson[i].hit[q].type+" " + hitson[i].hit[q].hit.length );
+                    }}
+
+                if ( hitson[i].hit[q].type == "patrol") {
+                    // turnLogDetail(hitson[i].hit[q], patrolrhit, shiphits, totalships);
+                    patrolhit -= hitson[i].hit[q].hit.length;
+
+                    if (patrolhit == 0){
+                        shiphits.push(hitson[i].hit[q].type+" " + "sunk" );
+                        totalships= totalships - 1;
+                    }else{
+                        shiphits.push(hitson[i].hit[q].type+" " + hitson[i].hit[q].hit.length );
+                    }}
+
+                if ( hitson[i].hit[q].type == "battleship"){
+                    // turnLogDetail(hitson[i].hit[q], battleshiphit, shiphits, totalships);
+                    battleshiphit -=  hitson[i].hit[q].hit.length;
+                    if (battleshiphit == 0){
+                        shiphits.push(hitson[i].hit[q].type+" " + "sunk" );
+                        totalships= totalships - 1;
+                    }else{
+                        shiphits.push(hitson[i].hit[q].type+" " + hitson[i].hit[q].hit.length );
+                    }
+
+                }
+                if( shiphits.length != 0 ){
+                    td1.innerHTML = shiphits.join();
+                }else{
+                    td1.innerHTML = "No hit";
+                }
             }
-    }}
+            td2.innerHTML = totalships;
+            tr.append(td1);
+            tr.append(td2);
+        }
+        table.append(tr);
 
-
-    function commander(){
-        for ( var i=0; i < games.game.gamePlayers.length; i++){
+    }
+};
+function commander(){
+    for ( var i=0; i < games.game.gamePlayers.length; i++){
         var p1  = games.game.gamePlayers[i].player.email.split("@")[0];
     }
     $("#commanderp1").text(p1);
@@ -242,11 +303,21 @@ function myFunctiontitles() {
         $(".fade").hide();
         $("#skip").hide();
 
-    }, 25500);
+    }, 20500);
 }
 
 
+function turnLogDetail(hitson, shiplength, shiphits, totalships){
 
+        if (shiplength == 0){
+            shiphits.push(hitson.type+" " + "sunk" );
+            totalships= totalships - 1;
+            console.log( "cuantas",totalships);
+        }else{
+            shiphits.push(hitson.type+" " + hitson.hit.length );
+        }
+
+};
 
 
 // if ( hitson[i].hit[q].type == "battleship"){
@@ -479,20 +550,20 @@ function getPlayerNames(){
 function hitOpponent(){
     if (games.hits_on_oponent != null){
 
-        for (var i =0; i < games.hits_on_oponent.length; i++){
-            if (games.hits_on_oponent[i].hit !=null){
-                for ( var k= 0; k < games.hits_on_oponent[i].hit.length; k++){
-                    if (games.hits_on_oponent[i].hit[k].hit !=null){
-                        for ( var z=0; z < games.hits_on_oponent[i].hit[k].hit.length; z++){
-                            document.getElementById("V" + games.hits_on_oponent[i].hit[k].hit[z]).setAttribute("class", "hit");
-                            var td5 = document.getElementById("V" + games.hits_on_oponent[i].hit[k].hit[z]);
-                            var img = document.createElement("img");
-                            img.setAttribute("class","firesalvo");
-                            img.setAttribute("src","styles/images/fire.png");
-                            td5.append(img);
-                        }
-                    }}
-            }}}
+    for (var i =0; i < games.hits_on_oponent.length; i++){
+        if (games.hits_on_oponent[i].hit !=null){
+            for ( var k= 0; k < games.hits_on_oponent[i].hit.length; k++){
+                if (games.hits_on_oponent[i].hit[k].hit !=null){
+                    for ( var z=0; z < games.hits_on_oponent[i].hit[k].hit.length; z++){
+                        document.getElementById("V" + games.hits_on_oponent[i].hit[k].hit[z]).setAttribute("class", "hit");
+                        var td5 = document.getElementById("V" + games.hits_on_oponent[i].hit[k].hit[z]);
+                        var img = document.createElement("img");
+                        img.setAttribute("class","firesalvo");
+                        img.setAttribute("src","styles/images/fire.png");
+                        td5.append(img);
+                    }
+                }}
+        }}}
 };
 
 
@@ -580,7 +651,6 @@ function createGridsBoard() {
                 var content = event.dataTransfer.getData("content");
                 size = document.getElementById(content).getAttribute("data-type");
                 droppedID = event.target.id;
-                console.log("ID", droppedID, event);
                 if ($(this).children().length == 0 ){
                     $('.'+ content).remove();
                     // console.log($(this).attr("id"));

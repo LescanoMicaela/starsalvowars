@@ -336,13 +336,15 @@ button{
  }
 #skip{
     /*display: none;*/
-    border-radius: 50%;
+    /*border-radius: 50%;*/
+    font-family: monospace;
     font-weight: bold;
-    background-color: #feda4a;
+    color: #feda4a;
     position: fixed;
     bottom: 3%;
     right: 10%;
-    color: black;
+    text-decoration: underline;
+    /*color: black;*/
     font-size: 20px;
 }
 
