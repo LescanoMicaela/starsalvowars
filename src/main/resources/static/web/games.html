@@ -9,6 +9,8 @@
             crossorigin="anonymous"></script>
 </head>
 <body data-style="gamesview">
+<h1 id="gameTitle">Battle of Yavin</h1>
+<div id="allGamesView">
 <form id="logout-form" onsubmit="return false">
     <button id="logOutBtn">Log out</button>
 </form>
@@ -20,13 +22,18 @@
     <button id="logInBtn">Log in</button>
     <button id="signUpBtn">Sign up</button>
 </form>
+<div class="boards">
+    <div class="gameBoard">
+        <h3 class="games">Games</h3>
+        <ol data-id="listGames">
 
-
-<ol data-id="listGames"> Games
 </ol>
-<button id="create">Create game</button>
+        <button id="create">Create game</button>
+    </div>
 
-<table data-id="leaderBoard">
+    <div class="gameBoards">
+        <h3 class="games">Leader Board</h3>
+        <table data-id="leaderBoard">
     <thead>
     <tr>
         <td>Name</td>
@@ -40,10 +47,10 @@
 
     </tbody>
 </table>
+    </div>
 
-
-
-
+</div>
+</div>
 <script src="script/games.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </body>

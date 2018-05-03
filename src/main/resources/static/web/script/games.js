@@ -4,6 +4,7 @@ $(document).ready(function () {
     var tblbody = $("tbody[data-id=leaderBoardBody]")
     $("#alert").html(" ");
 
+
     $.ajax({
         url: "http://localhost:8080/api/games",
         dataType: 'json',
@@ -11,9 +12,11 @@ $(document).ready(function () {
         success: function (data) {
 
             games = data;
+            showtitle1();
             createLists();
             createLeaderBoard();
             welcomeMessage();
+            showtitle()
             $(".renter").click(function()
             { var url = $(this).data("id");
                 window.location.href = "game.html?gp=" +""+url;
@@ -30,6 +33,10 @@ $(document).ready(function () {
 
 
     });
+    function showtitle(){ setTimeout( function(){
+        $("body").css("background-image", 'url("styles/images/SbaPLTm.jpg")');
+        $("#allGamesView").fadeIn(1000)}, 5000) };
+    function showtitle1(){ setTimeout( function(){$("#gameTitle").fadeIn(3000).fadeOut(1500)}, 100) };
     function createLists() {
         var p1;
         var p2;
@@ -70,13 +77,13 @@ $(document).ready(function () {
                     }
                 }
                 if (games.player.name === p1 || games.player.name === p2) {
-                    btn.innerHTML = "enter game" + "";
+                    btn.innerHTML = "enter " ;
                     if ($("li:contains(p1)") || $("li:contains(p2)")) {
                         li.append(btn);
                     }
                 }
                 if (games.player.name !== p1 && p2 == "waiting for player to join") {
-                    btnjoin.innerHTML = "join game" + "";
+                    btnjoin.innerHTML = "join ";
                     if ($("li:contains(p2)")) {
                         li.append(btnjoin);
                     }

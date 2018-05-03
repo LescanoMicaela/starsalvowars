@@ -102,19 +102,22 @@ public class SalvoController {
         return oponent;
     }
 
-    private List<Object> allShipsHitInSalvoes( Set<Salvo> salvoes, Set<Ship> ships){
-       List<Object> allSalvosInAllShips = salvoes.stream().map( salvo -> shipsHitInSalvo(salvo, ships)).filter( location -> !location.isEmpty())
+    private List<Object> allShipsHitInSalvoes( Set<Salvo> salvoes, Set<Ship> ships, Map<String,Integer> shipsSize){
+       List<Object> allSalvosInAllShips = salvoes.stream()
+               .sorted( (salvo1,salvo2) -> salvo1.getTurn() - salvo2.getTurn())
+               .map( salvo -> shipsHitInSalvo(salvo, ships, shipsSize)).filter( location -> !location.isEmpty())
                .collect(toList());
        return allSalvosInAllShips;
     }
 
 
-    private Map<String,Object> shipsHitInSalvo(Salvo salvo, Set<Ship> ships) {
+    private Map<String,Object> shipsHitInSalvo(Salvo salvo, Set<Ship> ships, Map<String,Integer> shipsSize) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         Integer turn = salvo.getTurn();
+        List<String> hitsInOneShip = new ArrayList<>();
         List<Object> SalvoOnAllShips = new ArrayList<>();
             SalvoOnAllShips = ships.stream()
-                    .map(ship -> locationsHitInShip(salvo, ship)).filter( location -> !location.isEmpty())
+                    .map(ship -> locationsHitInShip(salvo, ship, shipsSize)).filter( location -> !location.isEmpty())
                     .collect(toList());
         dto.put("turn", turn);
         if ( !SalvoOnAllShips.isEmpty()){
@@ -126,9 +129,10 @@ public class SalvoController {
     }
 //
     ///// get hits and sunks
-    private Map<String, Object> locationsHitInShip(Salvo salvo, Ship ship) {
+    private Map<String, Object> locationsHitInShip(Salvo salvo, Ship ship, Map<String,Integer> shipsSize) {
         Map<String, Object> hitInShipdto = new LinkedHashMap<String, Object>();
         List<String> hits = new ArrayList<String>();
+
         Integer turn = salvo.getTurn();
         String shipType = ship.getShipType();
         List<String> locsalvo = salvo.getSalvoLocations();
@@ -136,11 +140,13 @@ public class SalvoController {
        hits = locsalvo.stream()
                 .filter(s -> locship.contains(s)).collect(toList());
        if ( hits.size() != 0) {
-       hitInShipdto.put("hit", hits);
-       hitInShipdto.put("type", shipType);
-//        return scores.stream().filter(p -> p.getGame().equals(game)).findFirst().orElse(null);
-//       } else{
-//           hitInShipdto.put("hits", "no hit");
+           hitInShipdto.put("hit", hits);
+           hitInShipdto.put("type", shipType);
+           shipsSize.put(shipType, shipsSize.get(shipType) - hits.size());
+           hitInShipdto.put("locations_left", shipsSize.get(shipType));
+    //        return scores.stream().filter(p -> p.getGame().equals(game)).findFirst().orElse(null);
+    //       } else{
+    //           hitInShipdto.put("hits", "no hit");
        }
         return hitInShipdto;
     }
@@ -269,11 +275,11 @@ public class SalvoController {
 //
         if ( authentication == null){
             return new ResponseEntity<>(makeMap("error", "You need to be logged in"), HttpStatus.UNAUTHORIZED);
-        } if( gameplayernn == null){
+        } else if( gameplayernn == null){
             return new ResponseEntity<>(makeMap("error", "No such gameplayer"), HttpStatus.UNAUTHORIZED);
-        } if ( gameplayernn.getPlayer() != authUser(authentication)){
+        } else if ( gameplayernn.getPlayer() != authUser(authentication)){
             return new ResponseEntity<>(makeMap("error", "Not your game"), HttpStatus.UNAUTHORIZED);
-        } if ( gameplayernn.getShips().size() != 0){
+        } else if ( gameplayernn.getShips().size() != 0){
             return new ResponseEntity<>(makeMap("error","Ships have been already placed"), HttpStatus.FORBIDDEN);
         } else {
            for(Ship ship: ships){
@@ -369,7 +375,17 @@ public class SalvoController {
         GamePlayer gamePlayernn = repositorygameplayer.findOne(nn);
         Game game = gamePlayernn.getGame();
         GamePlayer opononet = getOponent(gamePlayernn);
-
+        Map<String, Integer> shipsLength = new LinkedHashMap<>();
+        shipsLength.put("destroyer", 3);
+        shipsLength.put("submarine", 3);
+        shipsLength.put("patrol", 2);
+        shipsLength.put("battleship", 4);
+        shipsLength.put("carrier", 5);
+//        private Map<String, Object> makeMap(String key, Object value) {
+//            Map<String, Object> map = new HashMap<>();
+//            map.put(key, value);
+//            return map;
+//        }
         if ( gamePlayernn.getPlayer().getId() != authUser(authentication).getId() ){
             return new ResponseEntity<>(makeMap("error", "NOT YOUR GAMEPLAYER"), HttpStatus.UNAUTHORIZED);
 
@@ -383,8 +399,8 @@ public class SalvoController {
             dto.put("id", nn);
             dto.put("game", makeGameDTO2(game, gamePlayernn));
             dto.put("player", currentDTO(authentication));
-            dto.put("hits_on_oponent", allShipsHitInSalvoes(player1Salvo,opononetShips));
-            dto.put("hits_on_me", allShipsHitInSalvoes(oponentSalvo,player1Ships));
+            dto.put("hits_on_oponent", allShipsHitInSalvoes(player1Salvo,opononetShips,shipsLength));
+            dto.put("hits_on_me", allShipsHitInSalvoes(oponentSalvo,player1Ships, shipsLength));
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } else {
                 Map<String, Object> dto = new LinkedHashMap<>();

@@ -111,12 +111,7 @@
     z-index: 1;
 }
 
-button{
-    border-radius: 10px;
-    padding: 1%;
-    color: white;
-    background-color: black;
-}
+
 #logOutBtn{
     position: absolute;
     right: 50px;
@@ -158,6 +153,7 @@ button{
     border: white solid 1px;
 
 }
+
 .hitsinfo td{
     width: 140px;
     height: 30px;
@@ -216,19 +212,98 @@ button{
     text-align: center;
 }
 [data-style="gamesview"]{
-    background-image: url("images/SbaPLTm.jpg");
+    /*background-image: url("images/SbaPLTm.jpg");*/
+    background-image: url("images/stars.png");
     color: white;
     font-family: monospace;
     font-size: 150%;
 }
+#allGamesView{
+    display: none;
+}
+#allGamesView button{
+    border-radius: 10px;
+    padding: 1%;
+    color: white;
+    background-color: black;
+    border: 1px solid black;
+
+}
+
+#gameTitle{
+    font-family: myFirstFont;
+    display: none;
+    font-size: 300%;
+    text-align: center;
+    margin: 20% 25% 0 25%;
+    color: rgb(220, 221, 5);
+}
+.boards {
+    display: flex;
+    justify-content: space-around;
+}
+#allGamesView button {
+    border-radius: 10px;
+    font-family: myFirstFont2;
+    color: yellow;
+    letter-spacing: 1px;
+    padding-bottom: 3%;
+    background-color: #020200;
+    border: 2px solid #e7e703;
+}
 
 [data-style="gameview"]{
-    background-image: url("images/galaxy.jpg");
+    background-image: url("images/stars.png");
     color: white;
     font-family: monospace;
     font-size: 150%;
     /*background-color: black;*/
     overflow: auto;
+}
+
+
+
+[data-id="leaderBoard"]{
+    font-size: 80%;
+    background: linear-gradient(to left, rgba(255,0,0,0), rgb(220, 221, 5));
+    border-radius: 10px;
+    padding: 4% 7%;
+    margin: 0;
+    font-family: sans-serif;
+}
+#logOutBtn{
+    border-radius: 10px;
+    font-family: myFirstFont2;
+    color: yellow;
+    letter-spacing: 1px;
+    padding: 0;
+    background-color: #020200;
+    border: 2px solid #e7e703;
+}
+[data-id="listGames"]{
+    font-size: 80%;
+    background: linear-gradient(to left, rgba(255,0,0,0), rgb(6, 0, 0));
+    border-radius: 10px;
+    padding: 4% 7%;
+    margin: 0;
+    font-family: sans-serif;
+}
+[data-id="leaderBoard"] tr {
+    border: 2px solid black;
+}
+
+.gameBoard{
+    width: 40%;
+}
+.games{
+    background: linear-gradient(to left, rgba(255,0,0,0), rgb(255, 255, 0));
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    border-radius:10px;
+}
+li button{
+    margin-left:2%;
 }
 
 [data-style="gameview2"]{
