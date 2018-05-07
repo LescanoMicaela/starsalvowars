@@ -61,6 +61,7 @@ import static java.util.stream.Collectors.toList;
     }
 
 
+
     //    @JsonIgnore
     public List<Player> getPlayers() { return gamePlayers.stream().map(sub -> sub.getPlayer()).collect(Collectors.toList());
     }

@@ -127,6 +127,17 @@
     justify-self: center;
     align-self: center;
 }
+.ok{
+    border-radius: 10px;
+    width: 150px;
+    font-size: 60%;
+    font-family: myFirstFont2;
+    color: yellow;
+    letter-spacing: 1px;
+    padding: 1% 2% 2% 2%;
+    background-color: black;
+    border: 2px solid #ffff00
+}
 .statusok{
     display: flex;
     flex-direction:column;
@@ -177,19 +188,11 @@
     position: fixed;
     bottom: 0;
     left: 35%;
-    background-color: #00000021;
+    /*background-color: #00000021;*/
     border-radius: 20px;
+    z-index: 40;
 }
-#oksalvo{
-    padding: 3%;
-    background-color: red;
-    /* border: orange 2px solid; */
-    font-weight: bold;
-    font-size: 70%;
-    position: absolute;
-    left: 65%;
-    bottom: 0;
-}
+
 .tables{
     display: flex;
     justify-content: space-around;
@@ -221,7 +224,7 @@
 #allGamesView{
     display: none;
 }
-#allGamesView button{
+#boards button{
     border-radius: 10px;
     padding: 1%;
     color: white;
@@ -242,7 +245,7 @@
     display: flex;
     justify-content: space-around;
 }
-#allGamesView button {
+.boards button {
     border-radius: 10px;
     font-family: myFirstFont2;
     color: yellow;
@@ -271,14 +274,38 @@
     margin: 0;
     font-family: sans-serif;
 }
-#logOutBtn{
+#logOutBtn, #logInBtn,#signUpBtn{
     border-radius: 10px;
     font-family: myFirstFont2;
     color: yellow;
     letter-spacing: 1px;
-    padding: 0;
+    padding: 0 1% 1% 1%;
     background-color: #020200;
     border: 2px solid #e7e703;
+}
+#login-form{
+    margin-left: 23%;
+    justify-content: center;
+    font-family: myFirstFont;
+    margin-bottom: 5%;
+    width: 100%;
+}
+
+#oksalvo{
+    border-radius: 10px;
+    font-family: myFirstFont2;
+    letter-spacing: 1px;
+    /* padding: 0 1% 1% 1%; */
+    padding: 3%;
+    background-color: red;
+    border: orange 2px solid;
+    font-size: 70%;
+    position: absolute;
+    left: 65%;
+    color: yellow;
+    bottom: 0;
+    padding-top: 0;
+    padding: 1% 4% 4% 4%;
 }
 [data-id="listGames"]{
     font-size: 80%;
@@ -306,9 +333,23 @@ li button{
     margin-left:2%;
 }
 
+.statusMessages{
+    font-family: myFirstFont2;
+    display: none;
+    position: fixed;
+    padding: 25% 0;
+    font-size: 200%;
+    background-color: #0000007a;
+    width: 100%;
+    margin: 0;
+    z-index: 50;
+    height: 100%;
+    text-align: center;
+}
+
 [data-style="gameview2"]{
     /*background-image: url("images/shipfight.jpg");*/
-    background-image: url("images/Mustafar.png");
+    background-image: url("images/stars.png");
     color: white;
     font-family: monospace;
     font-size: 150%;
@@ -424,6 +465,6 @@ li button{
 }
 
 .firesalvo{
-    z-index: 5;
     position: absolute;
+    z-index:30;
 }

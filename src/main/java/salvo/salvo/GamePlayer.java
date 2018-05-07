@@ -88,4 +88,9 @@ public class GamePlayer {
         return player.getScore(game);
 
     }
+
+//    public void setScore(Score score) {
+//        this.score = score;
+//    }
+
 }

@@ -11,6 +11,7 @@ var patrol = [];
 var battleship = [];
 var salvoes = [];
 var droppable = true;
+var timerId;
 $(".ok").toggle();
 
 $(document).ready(function () {
@@ -24,6 +25,7 @@ $(document).ready(function () {
             hideAndShow();
             makePlayerCommander();
             createGridsBoard();
+            hideControlsForState();
             rotateShips("submarine", "rotate");
             rotateShips("destroyer", "rotate");
             rotateShips("patrol", "rotate4");
@@ -32,13 +34,15 @@ $(document).ready(function () {
             createGrids("table-headers", "table", "table-rows", "U");
             createGrids("table-headers2", "table2", "table-rows2", "V");
             printShipsPlaced();
+            refreshPage();
+            gameOver();
             colorSalvo();
             placeSalvos();
             hitOpponent();
             getPlayerNames();
             showok();
-            logturns(games.hits_on_oponent, "hitonp2", "You have");
-            logturns(games.hits_on_me, "hitonp1", "Opponent has");
+            logturns(games.hits.hits_on_oponent, "hitonp2", "You have");
+            logturns(games.hits.hits_on_me, "hitonp1", "Opponent has");
         },
         error: function () {
             notYourGM();
@@ -97,9 +101,12 @@ function showok() {
         console.log("ok");
         $(".statusships").text("Are you ready?");
         $(".ok").show();
+        $(".shipsboard").hide();
+
     } else {
         console.log("not yet");
         $(".ok").hide();
+        $(".shipsboard").show();
     }
 
 }
@@ -107,7 +114,7 @@ function showok() {
 function skip() {
     $("body").css("background-image", 'url("styles/images/stars.png")');
     $("body").css("overflow", "auto");
-    $(".hidethis").show;
+    $(".hidethis").fadeIn(600);
     $(".star-wars").hide();
     $(".fade").hide();
 }
@@ -227,13 +234,29 @@ function awesomeTitles() {
         $("body").css("background-image", 'url("styles/images/stars.png")');
         $("body").css("overflow", "auto");
         $(".swhid").slideToggle(800);
-        $(".hidethis").show();
+        $(".hidethis").fadeIn(300);
         // $(".star-wars").hide();
         $(".fade").hide();
         $("#skip").hide();
 
     }, 25500);
 }
+
+
+
+function refreshPage() {
+    if ( games.Status == "WAITING_FOR_OPPONENT_TO_PLACE_SHIPS" || games.Status == "WAIT_FOR_OPPONENT_TO_PLACE_SALVOS" || (games.Status == "WAIT_FOR_OPPONENT" && games.game.ships.length !=0) ) {
+        timerId = setTimeout(function () {
+            window.location.reload();
+            refreshPage();
+        }, 5500);
+    }
+}
+
+function stopRefreshing() {
+    clearTimeout(timerId);
+}
+
 
 function postShipsToBackEnd() {
     gamePlayerId = games.id;
@@ -385,14 +408,14 @@ function printShipsPlaced() {
 
 
 function hitOpponent() {
-    if (games.hits_on_oponent != null) {
-        for (var n = 0; n < games.hits_on_oponent.length; n++) {
-            if (games.hits_on_oponent[n].hit != null) {
-                for (var k = 0; k < games.hits_on_oponent[n].hit.length; k++) {
-                    if (games.hits_on_oponent[n].hit[k].hit != null) {
-                        for (var z = 0; z < games.hits_on_oponent[n].hit[k].hit.length; z++) {
-                            document.getElementById("V" + games.hits_on_oponent[n].hit[k].hit[z]).setAttribute("class", "hit");
-                            var td5 = document.getElementById("V" + games.hits_on_oponent[n].hit[k].hit[z]);
+    if (games.hits != null) {
+        for (var n = 0; n < games.hits.hits_on_oponent.length; n++) {
+            if (games.hits.hits_on_oponent[n].hit != null) {
+                for (var k = 0; k < games.hits.hits_on_oponent[n].hit.length; k++) {
+                    if( games.hits.hits_on_oponent[n].hit[k].hit != null) {
+                        for (var z = 0; z < games.hits.hits_on_oponent[n].hit[k].hit.length; z++) {
+                            document.getElementById("V" + games.hits.hits_on_oponent[n].hit[k].hit[z]).setAttribute("class", "hit");
+                            var td5 = document.getElementById("V" + games.hits.hits_on_oponent[n].hit[k].hit[z]);
                             var img = document.createElement("img");
                             img.setAttribute("class", "firesalvo");
                             img.setAttribute("src", "styles/images/fire.png");
@@ -419,7 +442,7 @@ function getPlayerNames() {
         p2 = "Waiting for oponent"
     }
     h1.innerHTML = p1 + " (you)";
-    h12.innerHTML = p2;
+    h12.innerHTML = "Rebel scum "+p2;
 }
 
 
@@ -568,6 +591,48 @@ function showResultOfFiredSslvo(letter,imgName ){
     img1.setAttribute("class", "firesalvo");
     tdsalvo1.append(img1);
 }
+
+function hideControlsForState(){
+    if ( games.Status == "WAIT_FOR_OPPONENT_TO_PLACE_SALVOS"){
+        $(".salvo").hide();
+        $(".statusMessages").text("Rebels are attacking us. Get on target, maximum firepower.");
+        // $(".statusMessages").text("Reloading!");
+        $(".statusMessages").show();
+    }
+    else if ( games.Status == "WAIT_FOR_OPPONENT"){
+        $(".salvo").hide();
+        $(".statusMessages").text("Waiting for opponent");
+        // $(".statusMessages").text("Reloading!");
+        $(".statusMessages").show();
+    } else if(games.Status == "WAITING_FOR_OPPONENT_TO_PLACE_SHIPS"){
+        $(".salvo").hide();
+        $(".statusMessages").text("Waiting for opponent to place ships");
+        // $(".statusMessages").text("Reloading!");
+        $(".statusMessages").show();
+    }
+    else {
+            $(".salvo").show();
+             $(".statusMessages").hide();
+    }
+}
+
+function gameOver(){
+    if ( games.Status == "GAMEOVER_LOSE"){
+        for (var i = 0; i < games.game.gamePlayers.length; i++) {
+            var p1 = games.game.gamePlayers[i].player.email.split("@")[0];
+        }
+    $(".statusMessages").text("You have failed me for the last time, Admiral " + p1);
+    // $(".statusMessages").text("Reloading!");
+    $(".statusMessages").show();
+    } else if(games.Status == "GAMEOVER_WIN"){
+        $(".statusMessages").text("I believe I owe you an apology, " +p1+". Your work exceeds all expectations");
+        // $(".statusMessages").text("Reloading!");
+        $(".statusMessages").show();
+    }
+
+}
+
+
 
 function placeSalvos() {
     $("#table2 td").click(function () {

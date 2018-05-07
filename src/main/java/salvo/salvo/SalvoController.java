@@ -12,6 +12,7 @@ import java.util.*;
 
 
 import static java.util.stream.Collectors.toList;
+import static salvo.salvo.GameState.PLACESHIPS;
 
 @RestController
 @RequestMapping("/api")
@@ -31,6 +32,7 @@ public class SalvoController {
     private PlayerRepository repositoryPlayer;
     @Autowired
     private ScoreRepository repositoryscore;
+
 
 
 
@@ -95,11 +97,55 @@ public class SalvoController {
         return  salvoList;
     }
 
-
     private GamePlayer getOponent (GamePlayer gameplayer1){
         Game game = gameplayer1.getGame();
         GamePlayer oponent = game.getGamePlayers().stream().filter( a -> !a.equals(gameplayer1)).findFirst().orElse(null);
         return oponent;
+    }
+
+    private Map<String, Integer> makeFleet() {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("destroyer", 3);
+        map.put("submarine", 3);
+        map.put("patrol", 2);
+        map.put("battleship", 4);
+        map.put("carrier", 5);
+        map.put("total", 5);
+        return map;
+    }
+
+
+    private Integer getShipsLeft (GamePlayer gameplayer){
+       Integer total;
+
+        Map<String, Integer> shipsLength = makeFleet();
+        GamePlayer oponent = getOponent(gameplayer);
+        Set<Ship> opononetShips = oponent.getShips();
+        Set<Salvo> player1Salvo = gameplayer.getSalvoes();
+        Set<Ship> player1Ships = gameplayer.getShips();
+        Set<Salvo> oponentSalvo = oponent.getSalvoes();
+        allShipsHitInSalvoes(player1Salvo,opononetShips,shipsLength);
+        total = shipsLength.get("total");
+//       allShipsHitInSalvoes(oponentSalvo,player1Ships, shipsLengthoponent);
+//       dto.put("Left_me_ships", shipsLengthoponent.get("total"));
+        return total;
+    }
+
+
+
+    private Map<String, Object> makehitsDTO (GamePlayer gameplayer){
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+//        Map<String, Integer> shipsLength = makeMap2("destroyer", 3, "submarine", 3);
+        Map<String, Integer> shipsLength = makeFleet();
+        Map<String, Integer> shipsLengthoponent = makeFleet();
+        GamePlayer oponent = getOponent(gameplayer);
+        Set<Ship> opononetShips = oponent.getShips();
+        Set<Salvo> player1Salvo = gameplayer.getSalvoes();
+        Set<Ship> player1Ships = gameplayer.getShips();
+        Set<Salvo> oponentSalvo = oponent.getSalvoes();
+        dto.put("hits_on_oponent", allShipsHitInSalvoes(player1Salvo,opononetShips,shipsLength));
+        dto.put("hits_on_me", allShipsHitInSalvoes(oponentSalvo,player1Ships, shipsLengthoponent));
+        return dto;
     }
 
     private List<Object> allShipsHitInSalvoes( Set<Salvo> salvoes, Set<Ship> ships, Map<String,Integer> shipsSize){
@@ -143,7 +189,13 @@ public class SalvoController {
            hitInShipdto.put("hit", hits);
            hitInShipdto.put("type", shipType);
            shipsSize.put(shipType, shipsSize.get(shipType) - hits.size());
+           if( shipsSize.get(shipType) == 0){
+               shipsSize.put("total",shipsSize.get("total") -1);
+           }
            hitInShipdto.put("locations_left", shipsSize.get(shipType));
+
+           hitInShipdto.put("shipsLeft", shipsSize.get("total"));
+
     //        return scores.stream().filter(p -> p.getGame().equals(game)).findFirst().orElse(null);
     //       } else{
     //           hitInShipdto.put("hits", "no hit");
@@ -300,6 +352,29 @@ public class SalvoController {
     }
 
 
+    @RequestMapping(path = "/games/players/{nn}/scores", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> scores(@PathVariable Long nn, Authentication authentication) {
+        GamePlayer gameplayernn = repositorygameplayer.findOne(nn);
+        if ( authentication == null){
+            return new ResponseEntity<>(makeMap("error", "You need to be logged in"), HttpStatus.UNAUTHORIZED);
+        } else if( gameplayernn == null){
+            return new ResponseEntity<>(makeMap("error", "No such gameplayer"), HttpStatus.UNAUTHORIZED);
+        } else if ( gameplayernn.getPlayer() != authUser(authentication)){
+            return new ResponseEntity<>(makeMap("error", "Not your game"), HttpStatus.UNAUTHORIZED);
+        }
+        if (getGameState(gameplayernn) != GameState.GAMEOVER_LOSE || getGameState(gameplayernn) != GameState.GAMEOVER_WIN ){
+            return new ResponseEntity<>(makeMap("error", "Game not finished"), HttpStatus.UNAUTHORIZED);
+        }
+        else {
+           getGameState(gameplayernn);
+            }
+            return new ResponseEntity<>(makeMap("SUCCESS", "Scores created"),(HttpStatus.CREATED));
+        }
+
+
+
+
+
     @RequestMapping(path = "/games/players/{nn}/salvos", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> getSalvos(@PathVariable Long nn,
                                                          Authentication authentication,
@@ -309,9 +384,13 @@ public class SalvoController {
             return new ResponseEntity<>(makeMap("error", "You need to be logged in"), HttpStatus.UNAUTHORIZED);
         } if( gameplayernn == null){
             return new ResponseEntity<>(makeMap("error", "No such gameplayer"), HttpStatus.UNAUTHORIZED);
-        } if ( gameplayernn.getPlayer() != authUser(authentication)) {
+        }
+        if ( gameplayernn.getPlayer() != authUser(authentication)) {
             return new ResponseEntity<>(makeMap("error", "Not your game"), HttpStatus.UNAUTHORIZED);
         } else {
+            if ( getGameState(gameplayernn) != GameState.PLACESALVOS){
+                return new ResponseEntity<>(makeMap("error", "not allowed to place salvos yet"), HttpStatus.FORBIDDEN);
+            }
             Salvo newsalvo = new Salvo();
             newsalvo.setSalvoLocations(salvoes);
             newsalvo.setGamePlayer(gameplayernn);
@@ -375,43 +454,90 @@ public class SalvoController {
         GamePlayer gamePlayernn = repositorygameplayer.findOne(nn);
         Game game = gamePlayernn.getGame();
         GamePlayer opononet = getOponent(gamePlayernn);
-        Map<String, Integer> shipsLength = new LinkedHashMap<>();
-        shipsLength.put("destroyer", 3);
-        shipsLength.put("submarine", 3);
-        shipsLength.put("patrol", 2);
-        shipsLength.put("battleship", 4);
-        shipsLength.put("carrier", 5);
-//        private Map<String, Object> makeMap(String key, Object value) {
-//            Map<String, Object> map = new HashMap<>();
-//            map.put(key, value);
-//            return map;
-//        }
         if ( gamePlayernn.getPlayer().getId() != authUser(authentication).getId() ){
             return new ResponseEntity<>(makeMap("error", "NOT YOUR GAMEPLAYER"), HttpStatus.UNAUTHORIZED);
 
         } else {
             if( opononet !=null){
-                Set<Ship> opononetShips = opononet.getShips();
-                Set<Salvo> player1Salvo = gamePlayernn.getSalvoes();
-                Set<Ship> player1Ships = gamePlayernn.getShips();
-                Set<Salvo> oponentSalvo = opononet.getSalvoes();
             Map<String, Object> dto = new LinkedHashMap<>();
             dto.put("id", nn);
             dto.put("game", makeGameDTO2(game, gamePlayernn));
             dto.put("player", currentDTO(authentication));
-            dto.put("hits_on_oponent", allShipsHitInSalvoes(player1Salvo,opononetShips,shipsLength));
-            dto.put("hits_on_me", allShipsHitInSalvoes(oponentSalvo,player1Ships, shipsLength));
+            dto.put("hits", makehitsDTO (gamePlayernn));
+            dto.put("ships_left_me",  getShipsLeft (getOponent(gamePlayernn)));
+            dto.put("ships_left_oponent", getShipsLeft(gamePlayernn));
+
+            dto.put("Status", getGameState (gamePlayernn));
+
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } else {
                 Map<String, Object> dto = new LinkedHashMap<>();
                 dto.put("id", nn);
                 dto.put("game", makeGameDTO2(game, gamePlayernn));
-                dto.put("player", currentDTO(authentication));
+                dto.put("Status", GameState.WAIT_FOR_OPPONENT);
                 return new ResponseEntity<>(dto, HttpStatus.OK);
             }
         }
     }
 
+    private GameState getGameState (GamePlayer gamePlayer ){
+        GamePlayer gamePlayerOpp =  getOponent(gamePlayer);
+        GamePlayer gp1;
+        GamePlayer gp2;
+
+        if ( gamePlayer.getId() < gamePlayerOpp.getId()){
+            gp1 = gamePlayer;
+            gp2 = gamePlayerOpp;
+        } else{
+            gp1 = gamePlayerOpp;
+            gp2 = gamePlayer;
+        }
+//        if (( gp2 == gamePlayer && getShipsLeft(gamePlayer) == 0) || ( gp2 == gamePlayerOpp && getShipsLeft(gamePlayerOpp) == 0) ){
+//            return GameState.GAMEOVER;
+//        }
+        if (( gp2 == gamePlayer && getShipsLeft(gamePlayer) == 0) || ( gp1 == gamePlayer && getShipsLeft(gamePlayer) == 0)){
+
+            Score newscore = new Score(1.0,gamePlayer.getPlayer(),gamePlayer.getGame());
+            repositoryscore.save(newscore);
+            return GameState.GAMEOVER_WIN;
+        }
+        if (( gp2 == gamePlayer && getShipsLeft(gamePlayerOpp) == 0) || ( gp1 == gamePlayer && getShipsLeft(gamePlayerOpp) == 0)){
+
+            Score newscore2 = new Score(0.0,gamePlayer.getPlayer(),gamePlayer.getGame());
+            repositoryscore.save(newscore2);
+            return GameState.GAMEOVER_LOSE;
+        }
+
+        if (gamePlayer.getShips().size() == 0){
+            return GameState.PLACESHIPS;
+        }
+        if ( gamePlayerOpp.getShips().size() == 0) {
+            return GameState.WAITING_FOR_OPPONENT_TO_PLACE_SHIPS;
+        }
+        if ( gp1.getSalvoes().size() == 0 && gp1 == gamePlayer){
+            return GameState.PLACESALVOS;
+        } else if ( gp1.getSalvoes().size() == 0 && gp1 == gamePlayerOpp ){
+            return GameState.WAIT_FOR_OPPONENT_TO_PLACE_SALVOS;
+        }
+        if ( gp1.getSalvoes().size() > gp2.getSalvoes().size()){
+            if (gp1 == gamePlayer) {
+                return GameState.WAIT_FOR_OPPONENT_TO_PLACE_SALVOS;
+            }else{
+                return GameState.PLACESALVOS;
+            }
+        }
+        if (gp1.getSalvoes().size() != 0 && gp2.getSalvoes().size() != 0 && gp1.getSalvoes().size() == gp2.getSalvoes().size() ) {
+            if (gp1 == gamePlayer) {
+               return GameState.PLACESALVOS;
+           }else{
+               return GameState.WAIT_FOR_OPPONENT_TO_PLACE_SALVOS;
+           }
+        }
+
+
+        return null;
+
+    }
 
 
     private Player authUser(Authentication authentication) {
