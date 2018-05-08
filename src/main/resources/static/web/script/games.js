@@ -1,4 +1,5 @@
 var games;
+var audio5 = new Audio('audio/theme.mp3');
 $(document).ready(function () {
     var listGame = $("ol[data-id=listGames]");
     var tblbody = $("tbody[data-id=leaderBoardBody]")
@@ -12,6 +13,7 @@ $(document).ready(function () {
         success: function (data) {
 
             games = data;
+            audio5.play();
             showtitle1()
             firsPage();
             createLists();
@@ -44,6 +46,7 @@ $(document).ready(function () {
 
     function showtitle(){
         if (games.player == "null") {
+            audio5.play();
             setTimeout(function () {
                 $("body").css("background-image", 'url("styles/images/SbaPLTm.jpg")');
                 $("#allGamesView").fadeIn(1000)
@@ -53,6 +56,7 @@ $(document).ready(function () {
 
     function showtitle1(){
         if (games.player == "null") {
+            audio5.play();
             setTimeout(function () {
                 $("#gameTitle").fadeIn(3000).fadeOut(1500)
             }, 100)
@@ -220,8 +224,10 @@ $(document).ready(function () {
      if ( games.player !=="null"){
          $("#login-form").toggle();
          $("#welcome").html("Welcome " + games.player.name.split("@")[0])
+         $("#create").show();
      }else{
          $("#logout-form").toggle();
+         $("#create").hide();
          $("#welcome").html("Battle of Yavin")
      }
     }

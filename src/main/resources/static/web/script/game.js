@@ -12,6 +12,13 @@ var battleship = [];
 var salvoes = [];
 var droppable = true;
 var timerId;
+var audio3 = new Audio('audio/fire.mp3');
+var audio5 = new Audio('audio/tf.mp3');
+
+var audio4 = new Audio('audio/apology.mp3');
+var audio = new Audio('audio/imperial.mp3');
+// var audio = new Audio('audio/swtheme.mp3');
+var audio2 = new Audio('audio/lastime.mp3');
 $(".ok").toggle();
 
 $(document).ready(function () {
@@ -22,6 +29,7 @@ $(document).ready(function () {
             games = data;
             // sortData(games.hits_on_me);
             // sortData(games.hits_on_oponent);
+
             hideAndShow();
             makePlayerCommander();
             createGridsBoard();
@@ -41,8 +49,11 @@ $(document).ready(function () {
             hitOpponent();
             getPlayerNames();
             showok();
-            logturns(games.hits.hits_on_oponent, "hitonp2", "You have");
-            logturns(games.hits.hits_on_me, "hitonp1", "Opponent has");
+            if (games.hits !=null){
+
+                logturns(games.hits.hits_on_oponent, "hitonp2", "You have");
+                logturns(games.hits.hits_on_me, "hitonp1", "Opponent has");
+            }
         },
         error: function () {
             notYourGM();
@@ -57,6 +68,7 @@ $("#skip").click(function () {
 
 function hideAndShow() {
     if (games.game.ships.length != 0) {
+        $("#alert2").hide();
         $("#skip").hide();
         $(".hidethis").show();
         $("body").attr("data-style", "gameview2");
@@ -69,6 +81,8 @@ function hideAndShow() {
         $(".log").show();
     }
     if (games.game.ships.length == 0) {
+
+        audio.play();
         $(".log").hide();
         $("body").css("background-color", "black");
         $("body").css("background-image", "none");
@@ -102,8 +116,10 @@ function showok() {
         $(".statusships").text("Are you ready?");
         $(".ok").show();
         $(".shipsboard").hide();
+        $("#alert2").text("");
 
     } else {
+        $("#alert2").text("You can rotate ships double clicking them")
         console.log("not yet");
         $(".ok").hide();
         $(".shipsboard").show();
@@ -112,6 +128,7 @@ function showok() {
 }
 
 function skip() {
+    audio.pause();
     $("body").css("background-image", 'url("styles/images/stars.png")');
     $("body").css("overflow", "auto");
     $(".hidethis").fadeIn(600);
@@ -232,6 +249,8 @@ function makePlayerCommander() {
 
 function awesomeTitles() {
     setTimeout(function () {
+        audio.pause();
+        audio5.play();
         $("body").css("background-image", 'url("styles/images/stars.png")');
         $("body").css("overflow", "auto");
         $(".swhid").slideToggle(800);
@@ -240,7 +259,7 @@ function awesomeTitles() {
         $(".fade").hide();
         $("#skip").hide();
 
-    }, 25500);
+    }, 35000);
 }
 
 
@@ -622,6 +641,7 @@ function gameOver(){
         for (var i = 0; i < games.game.gamePlayers.length; i++) {
             var p1 = games.game.gamePlayers[i].player.email.split("@")[0];
         }
+        audio2.play();
     $(".statusMessages").text("You have failed me for the last time, Admiral " + p1);
     // $(".statusMessages").text("Reloading!");
     $(".statusMessages").show();
@@ -629,6 +649,7 @@ function gameOver(){
         for (var i = 0; i < games.game.gamePlayers.length; i++) {
             var p1 = games.game.gamePlayers[i].player.email.split("@")[0];
         }
+        audio4.play();
         $(".statusMessages").text("i believe i owe you an apology, " +p1+". Your work exceeds all expectations");
         // $(".statusMessages").text("Reloading!");
         $(".statusMessages").show();
@@ -679,19 +700,25 @@ function showButtonFire() {
 
 $("#oksalvo").click(function postSalvoInfoToBack() {
     if (salvoes.length < 6 && salvoes.length != 0) {
-        gamePlayerId = games.id;
-        $.post({
-            url: "/api/games/players/" + gamePlayerId + "/salvos",
-            data: JSON.stringify(salvoes),
-            dataType: "text",
-            contentType: "application/json"
-        }).done(function () {
-            window.location.reload();
-        }).fail(
-            function (e) {
-                console.log(e.responseText);
-            }
+        audio3.play();
+        $("#oksalvo").toggle();
+        setTimeout(function () {
+            gamePlayerId = games.id;
+            $.post({
+                url: "/api/games/players/" + gamePlayerId + "/salvos",
+                data: JSON.stringify(salvoes),
+                dataType: "text",
+                contentType: "application/json"
+            }).done(function () {
+                window.location.reload();
+            }).fail(
+                function (e) {
+                    console.log(e.responseText);
+                }
             );
+
+        }, 800)
     }
-});
+})
+;
 

@@ -20,6 +20,11 @@
     src: url(Stjldbl1.ttf);
     /*src: url(Starjhol.ttf);*/
 }
+@font-face {
+    font-family: myFirstFont3;
+    src: url(Halo11.ttf)
+    /*src: url(Starjhol.ttf);*/
+}
 #table, #table2{
     /*padding: 5%;*/
     /*padding-right: 8%;*/
@@ -35,8 +40,14 @@
     display:flex;
     flex-direction: row;
 }
+#player1Name, #player2Name{
+    color: yellow;
+    margin-top: 8%;
+}
+
 #playersInfo1,#playersInfo2, .tablesdiv{
     display: none;
+
     text-align: center;
     font-family: myFirstFont;
     font-size : 20px;
@@ -197,17 +208,18 @@
     display: flex;
     justify-content: space-around;
 }
-#alert{
-    background-color: yellow;
+#alert, #alert2{
+    margin: 2% 0;
+    font-family: MyFirstFont3;
     text-align: center;
-    width: fit-content;
-    /* display: flex; */
-    /* justify-content: center; */
-    /* align-self: center; */
+    background-color: #ffff0040;
+    width: 100%;
     font-size: 120%;
-    /*margin: 0 auto;*/
-    /*padding: 1%;*/
 }
+#alert2{
+    background-color: rgba(127, 230, 255, 0.55);
+}
+
 .notgm{
     font-family: MyFirstFont2;
     font-size: 300%;
@@ -342,13 +354,16 @@ li button{
     font-family: myFirstFont2;
     display: none;
     position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     padding: 25% 0;
     font-size: 200%;
-    background-color: #0000007a;
+    background-color: rgba(6, 0, 0, 0.3);
     width: 100%;
     margin: 0;
     z-index: 50;
-    height: 100%;
+    height: 20%;
     text-align: center;
 }
 
@@ -367,14 +382,22 @@ li button{
     /*background-color: red;*/
 /*}*/
 #hitonp1, #hitonp2{
-    /*border: 1px solid white;*/
-    width:35%;
-    border-collapse : collapse;
-    background-color: #3de2b261;
+    font-family: MyFirstFont3;
+    font-size: 100%;
+    width: 40%;
 
+    /*color: black;*/
+    border-radius: 10px;
+    border-collapse: collapse;
+    /* background-color: #3de2b261; */
+    /*background: linear-gradient(to left, rgba(210, 203, 140, 0.42), rgb(220, 221, 5));*/
+    background: linear-gradient(to left, rgba(0, 0, 0, 0.42), rgb(0, 48, 66));
+}
+#hitonp1 th,  #hitonp2 th {
+    text-decoration: underline;
 }
 #hitonp1 td, #hitonp1 th, #hitonp2 td, #hitonp2 th{
-    border: 1px solid #c3a2a291;
+    /*border: 1px solid #c3a2a291;*/
     border-collapse: collapse;
     text-align: center;
     /* color: black; */
@@ -384,7 +407,7 @@ li button{
 .log{
     margin: 6%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
 }
 .fade {
     position: relative;
