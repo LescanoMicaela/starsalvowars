@@ -12,6 +12,7 @@ import java.util.*;
 
 
 import static java.util.stream.Collectors.toList;
+import static salvo.salvo.GameState.GAMEOVER_TIE;
 import static salvo.salvo.GameState.PLACESHIPS;
 
 @RestController
@@ -120,11 +121,11 @@ public class SalvoController {
 
         Map<String, Integer> shipsLength = makeFleet();
         GamePlayer oponent = getOponent(gameplayer);
-        Set<Ship> opononetShips = oponent.getShips();
-        Set<Salvo> player1Salvo = gameplayer.getSalvoes();
+//        Set<Ship> opononetShips = oponent.getShips();
+//        Set<Salvo> player1Salvo = gameplayer.getSalvoes();
         Set<Ship> player1Ships = gameplayer.getShips();
         Set<Salvo> oponentSalvo = oponent.getSalvoes();
-        allShipsHitInSalvoes(player1Salvo,opononetShips,shipsLength);
+        allShipsHitInSalvoes(oponentSalvo,player1Ships,shipsLength);
         total = shipsLength.get("total");
 //       allShipsHitInSalvoes(oponentSalvo,player1Ships, shipsLengthoponent);
 //       dto.put("Left_me_ships", shipsLengthoponent.get("total"));
@@ -238,9 +239,6 @@ public class SalvoController {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", player.getId());
         dto.put("email", player.getUserName());
-
-
-
         return dto;
     }
 
@@ -248,7 +246,6 @@ public class SalvoController {
     private Map<String, Object> playerforLeader(GamePlayer gamePlayer){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         if(gamePlayer.getScore() !=null){
-
             dto.put("score", gamePlayer.getScore().getScore());
         }
         else{
@@ -262,10 +259,9 @@ public class SalvoController {
     private Map<String, Object> makeLeaderBoardDTO(Player player){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         Set<GamePlayer> gameplayers = player.getGamePlayers();
-
         dto.put("id", player.getId());
         dto.put("email", player.getUserName());
-        dto.put("scores", gameplayers.stream().map(x -> playerforLeader(x)).collect(toList()));
+        dto.put("scores", gameplayers.stream().map(x ->playerforLeader(x)).collect(toList()));
         return dto;
 
     }
@@ -337,7 +333,7 @@ public class SalvoController {
            for(Ship ship: ships){
 //               Ship newship = new Ship()
                ship.setGamePlayer(gameplayernn);
-               ships.add(ship);
+//               ships.add(ship);
                repositoryship.save(ship);
            }
             return new ResponseEntity<>(makeMap("SUCCESS", "Ships created "),(HttpStatus.CREATED));
@@ -352,24 +348,6 @@ public class SalvoController {
     }
 
 
-    @RequestMapping(path = "/games/players/{nn}/scores", method = RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> scores(@PathVariable Long nn, Authentication authentication) {
-        GamePlayer gameplayernn = repositorygameplayer.findOne(nn);
-        if ( authentication == null){
-            return new ResponseEntity<>(makeMap("error", "You need to be logged in"), HttpStatus.UNAUTHORIZED);
-        } else if( gameplayernn == null){
-            return new ResponseEntity<>(makeMap("error", "No such gameplayer"), HttpStatus.UNAUTHORIZED);
-        } else if ( gameplayernn.getPlayer() != authUser(authentication)){
-            return new ResponseEntity<>(makeMap("error", "Not your game"), HttpStatus.UNAUTHORIZED);
-        }
-        if (getGameState(gameplayernn) != GameState.GAMEOVER_LOSE || getGameState(gameplayernn) != GameState.GAMEOVER_WIN ){
-            return new ResponseEntity<>(makeMap("error", "Game not finished"), HttpStatus.UNAUTHORIZED);
-        }
-        else {
-           getGameState(gameplayernn);
-            }
-            return new ResponseEntity<>(makeMap("SUCCESS", "Scores created"),(HttpStatus.CREATED));
-        }
 
 
 
@@ -391,14 +369,23 @@ public class SalvoController {
             if ( getGameState(gameplayernn) != GameState.PLACESALVOS){
                 return new ResponseEntity<>(makeMap("error", "not allowed to place salvos yet"), HttpStatus.FORBIDDEN);
             }
+
             Salvo newsalvo = new Salvo();
             newsalvo.setSalvoLocations(salvoes);
             newsalvo.setGamePlayer(gameplayernn);
             newsalvo.setTurn(gameplayernn.getSalvoes().size()+1);
+//            gameplayernn.addSalvo(newsalvo);
 
             /// necesito filtrar los turnos por player id ///
             if ( newsalvo.getTurn() == gameplayernn.getSalvoes().size()+1 || newsalvo.getTurn() == null ) {
                 salvoRepository.save(newsalvo);
+                gameplayernn.addSalvo(newsalvo);
+                if ( getGameState(gameplayernn) == GameState.GAMEOVER_WIN){
+                    Score newscore = new Score(1.0,gameplayernn.getPlayer(),gameplayernn.getGame());
+                    repositoryscore.save(newscore);
+                    Score newscore2 = new Score(0.0, getOponent(gameplayernn).getPlayer(), gameplayernn.getGame());
+                    repositoryscore.save(newscore2);
+                }
                 return new ResponseEntity<>(makeMap("SUCCESS", "Salvo shot"),(HttpStatus.CREATED));
             }else{
                 return new ResponseEntity<>(makeMap("error", "You already shot this turn"), HttpStatus.FORBIDDEN);
@@ -464,8 +451,8 @@ public class SalvoController {
             dto.put("game", makeGameDTO2(game, gamePlayernn));
             dto.put("player", currentDTO(authentication));
             dto.put("hits", makehitsDTO (gamePlayernn));
-            dto.put("ships_left_me",  getShipsLeft (getOponent(gamePlayernn)));
-            dto.put("ships_left_oponent", getShipsLeft(gamePlayernn));
+            dto.put("ships_left_me",  getShipsLeft (gamePlayernn));
+            dto.put("ships_left_oponent", getShipsLeft(getOponent(gamePlayernn)));
 
             dto.put("Status", getGameState (gamePlayernn));
 
@@ -495,16 +482,12 @@ public class SalvoController {
 //        if (( gp2 == gamePlayer && getShipsLeft(gamePlayer) == 0) || ( gp2 == gamePlayerOpp && getShipsLeft(gamePlayerOpp) == 0) ){
 //            return GameState.GAMEOVER;
 //        }
-        if (( gp2 == gamePlayer && getShipsLeft(gamePlayer) == 0) || ( gp1 == gamePlayer && getShipsLeft(gamePlayer) == 0)){
-
-            Score newscore = new Score(1.0,gamePlayer.getPlayer(),gamePlayer.getGame());
-            repositoryscore.save(newscore);
-            return GameState.GAMEOVER_WIN;
-        }
         if (( gp2 == gamePlayer && getShipsLeft(gamePlayerOpp) == 0) || ( gp1 == gamePlayer && getShipsLeft(gamePlayerOpp) == 0)){
 
-            Score newscore2 = new Score(0.0,gamePlayer.getPlayer(),gamePlayer.getGame());
-            repositoryscore.save(newscore2);
+            return GameState.GAMEOVER_WIN;
+        }
+        if (( gp2 == gamePlayer && getShipsLeft(gamePlayer) == 0) || ( gp1 == gamePlayer && getShipsLeft(gamePlayer) == 0)){
+
             return GameState.GAMEOVER_LOSE;
         }
 

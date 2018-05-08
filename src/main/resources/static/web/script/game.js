@@ -163,7 +163,8 @@ function notYourGM() {
     var div = document.createElement("div");
     div.setAttribute("class", "notgm");
     var img = document.createElement("img");
-    img.setAttribute("src", "https://starwarsblog.starwars.com/wp-content/uploads/2017/05/yoda-advice-featured-1.jpg");
+    img.setAttribute("src", "styles/images/yoda-edit.png");
+    img.setAttribute("class", "yoda");
     div.innerHTML = "The dark side clouds everything, impossible to see others games is.";
     $("body").append(div);
     $("body").append(img);
@@ -625,7 +626,10 @@ function gameOver(){
     // $(".statusMessages").text("Reloading!");
     $(".statusMessages").show();
     } else if(games.Status == "GAMEOVER_WIN"){
-        $(".statusMessages").text("I believe I owe you an apology, " +p1+". Your work exceeds all expectations");
+        for (var i = 0; i < games.game.gamePlayers.length; i++) {
+            var p1 = games.game.gamePlayers[i].player.email.split("@")[0];
+        }
+        $(".statusMessages").text("i believe i owe you an apology, " +p1+". Your work exceeds all expectations");
         // $(".statusMessages").text("Reloading!");
         $(".statusMessages").show();
     }

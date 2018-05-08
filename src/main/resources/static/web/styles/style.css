@@ -209,10 +209,14 @@
     /*padding: 1%;*/
 }
 .notgm{
+    font-family: MyFirstFont2;
     font-size: 300%;
     font-weight: bold;
-    background-color: yellow;
+    color: yellow;
     text-align: center;
+}
+.yoda{
+    margin: 5% 0 0 5%;
 }
 [data-style="gamesview"]{
     /*background-image: url("images/SbaPLTm.jpg");*/
@@ -325,9 +329,10 @@
 .games{
     background: linear-gradient(to left, rgba(255,0,0,0), rgb(255, 255, 0));
     width: 100%;
-    text-align: center;
     margin: 0;
     border-radius:10px;
+    text-align: center;
+    padding-top: 2%;
 }
 li button{
     margin-left:2%;
@@ -346,6 +351,7 @@ li button{
     height: 100%;
     text-align: center;
 }
+
 
 [data-style="gameview2"]{
     /*background-image: url("images/shipfight.jpg");*/
@@ -427,7 +433,9 @@ li button{
     font-size: 90%;
     text-align: center;
 }
-
+.title{
+    display: flex;
+}
 
 .crawl > .titlesw h1 {
     margin: 0 0 100px;
