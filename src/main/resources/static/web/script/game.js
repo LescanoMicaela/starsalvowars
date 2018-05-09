@@ -5,6 +5,8 @@ var shiptype;
 var status;
 var size;
 var submarine = [];
+var stylesheets = [  "rgba(0, 0, 0, 0.44)", "rgba(255, 0, 0, 0.49)"];
+var rand = Math.floor(Math.random() * stylesheets.length);
 var destroyer = [];
 var carrier = [];
 var patrol = [];
@@ -29,7 +31,7 @@ $(document).ready(function () {
             games = data;
             // sortData(games.hits_on_me);
             // sortData(games.hits_on_oponent);
-
+            // $(".statusMessages").hide();
             hideAndShow();
             makePlayerCommander();
             createGridsBoard();
@@ -165,6 +167,8 @@ function modifyID(element) {
 function modifyID2(element) {
     return (Alpha[element.parent().attr("id").split("")[0]] + (Number(element.parent().attr("id").split("")[1]) + 1));
 }
+
+
 
 $("#logOutBtn").click(function logout(evt) {
     evt.preventDefault();
@@ -546,8 +550,10 @@ function forDropInTd(event){
                     var split0 = droppedID.split("");
                     var abc0 = split0[0];
                     var num0 = Number(split0[1]) + q;
-                    console.log( $("#" + abc0+""+num0).children().attr("class"),  $("#" + abc0+""+num0).children().attr("id"), content)
-                    if($("#" + abc0+""+num0).children().length != 0 && ($("#" + abc0+""+num0).children().attr("id") != content || $("#" + abc0+""+num0).children().attr("class") != content) ) {
+                    console.log( Number(droppedID)+1)
+                    console.log($("#" + Number(droppedID)+1).children().attr("id"))
+                    // console.log(  abc0+""+ num0, $("#" + abc0+""+num0).children().attr("id"),  $("#" + abc0+""+num0).children().attr("class"), content)
+                    if($("#" + abc0+""+num0).children().length != 0 && ($("#" + (Number(droppedID)+1)).children().attr("id") != content) && $("#" + abc0+""+num0).children().attr("class") != content ) {
                         droppable =false;
                         console.log("theres a ship here already");
                         $("#alert").text("Theres a ship placed here already");
@@ -616,8 +622,9 @@ function hideControlsForState(){
     if ( games.Status == "WAIT_FOR_OPPONENT_TO_PLACE_SALVOS"){
         $(".salvo").hide();
         $(".statusMessages").text("Rebels are attacking us. Get on target, maximum firepower.");
+        $(".statusMessages").css("background-color", stylesheets[rand]);
         // $(".statusMessages").text("Reloading!");
-        $(".statusMessages").show();
+        // $(".statusMessages").show();
     }
     else if ( games.Status == "WAIT_FOR_OPPONENT"){
         $(".salvo").hide();
@@ -628,7 +635,7 @@ function hideControlsForState(){
         $(".salvo").hide();
         $(".statusMessages").text("Waiting for opponent to place ships");
         // $(".statusMessages").text("Reloading!");
-        $(".statusMessages").show();
+        // $(".statusMessages").show();
     }
     else {
             $(".salvo").show();

@@ -1,3 +1,5 @@
+
+
 .tables td, .board td {
     padding: 0;
     margin: 0;
@@ -230,13 +232,7 @@
 .yoda{
     margin: 5% 0 0 5%;
 }
-[data-style="gamesview"]{
-    /*background-image: url("images/SbaPLTm.jpg");*/
-    background-image: url("images/stars.png");
-    color: white;
-    font-family: monospace;
-    font-size: 150%;
-}
+
 #allGamesView{
     display: none;
 }
@@ -274,7 +270,7 @@
 [data-style="gameview"]{
     background-image: url("images/stars.png");
     color: white;
-    font-family: monospace;
+    font-family: MyFirstFont3;
     font-size: 150%;
     /*background-color: black;*/
     overflow: auto;
@@ -283,12 +279,14 @@
 
 
 [data-id="leaderBoard"]{
-    font-size: 80%;
+    font-size: 90%;
+    font-weight: bold;
     background: linear-gradient(to left, rgba(255,0,0,0), rgb(220, 221, 5));
     border-radius: 10px;
     padding: 4% 7%;
     margin: 0;
-    font-family: sans-serif;
+    font-family: MyFirstFont3;
+
 }
 #logOutBtn, #logInBtn,#signUpBtn{
     border-radius: 10px;
@@ -329,7 +327,7 @@
     border-radius: 10px;
     padding: 4% 7%;
     margin: 0;
-    font-family: sans-serif;
+    font-family: MyFirstFont3;
 }
 [data-id="leaderBoard"] tr {
     border: 2px solid black;
@@ -342,6 +340,7 @@
     background: linear-gradient(to left, rgba(255,0,0,0), rgb(255, 255, 0));
     width: 100%;
     margin: 0;
+    font-family: MyFirstFont3;
     border-radius:10px;
     text-align: center;
     padding-top: 2%;
@@ -352,7 +351,7 @@ li button{
 
 .statusMessages{
     font-family: myFirstFont2;
-    display: none;
+    /*display: none;*/
     position: fixed;
     top: 0;
     left: 0;
@@ -372,7 +371,7 @@ li button{
     /*background-image: url("images/shipfight.jpg");*/
     background-image: url("images/stars.png");
     color: white;
-    font-family: monospace;
+    font-family:MyFirstFont3;
     font-size: 150%;
 }
 .ship, .salvo{
@@ -498,4 +497,13 @@ li button{
 .firesalvo{
     position: absolute;
     z-index:30;
+}
+
+[data-style="gamesview"]{
+
+    /*background-image: url("images/SbaPLTm.jpg");*/
+    background-image: url("images/stars.png");
+    color: white;
+    font-family: MyFirstFont3;
+    font-size: 150%;
 }

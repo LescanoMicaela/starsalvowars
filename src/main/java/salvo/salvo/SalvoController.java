@@ -243,28 +243,36 @@ public class SalvoController {
     }
 
 
-    private Map<String, Object> playerforLeader(GamePlayer gamePlayer){
+//    private Map<String, Object> playerforLeader(GamePlayer gamePlayer){
+//        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+//        if(gamePlayer.getScore() !=null){
+//            dto.put("score", gamePlayer.getScore().getScore());
+//        }
+//        else{
+//            dto.put("score", null);
+//        }
+//        return dto;
+//    }
+
+    private Map<String, Object> playerScores(Player player){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        if(gamePlayer.getScore() !=null){
-            dto.put("score", gamePlayer.getScore().getScore());
-        }
-        else{
-            dto.put("score", null);
-        }
-        return dto;
-    }
-
-
-
-    private Map<String, Object> makeLeaderBoardDTO(Player player){
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        Set<GamePlayer> gameplayers = player.getGamePlayers();
+        Set<Score> scores = player.getScores();
         dto.put("id", player.getId());
         dto.put("email", player.getUserName());
-        dto.put("scores", gameplayers.stream().map(x ->playerforLeader(x)).collect(toList()));
+        dto.put("scores", scores.stream().map( score -> score.getScore()).collect(toList()));
         return dto;
-
     }
+
+
+//    private Map<String, Object> makeLeaderBoardDTO(Player player){
+//        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+//        Set<GamePlayer> gameplayers = player.getGamePlayers();
+//        dto.put("id", player.getId());
+//        dto.put("email", player.getUserName());
+//        dto.put("scores", gameplayers.stream().map(x ->playerforLeader(x)).collect(toList()));
+//        return dto;
+//
+//    }
 
 ////make salvo dto///
 //
@@ -293,7 +301,7 @@ public class SalvoController {
         Map<String, Object> gameNewdto = new LinkedHashMap<String, Object>();
 
         gameNewdto.put("games", repositorygame.findAll().stream().map(game -> makeGameDTO(game)).collect(toList()));
-        gameNewdto.put("leaderboard", repositoryPlayer.findAll().stream().map(x -> makeLeaderBoardDTO(x)).collect(toList()));
+        gameNewdto.put("leaderboard", repositoryPlayer.findAll().stream().map(x ->playerScores(x)).collect(toList()));
         if(authentication != null) {
             gameNewdto.put("player", currentDTO(authentication));
         } else {

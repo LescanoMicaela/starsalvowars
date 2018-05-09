@@ -26,7 +26,6 @@ public class Ship {
 
     public Ship ( String shipType, List<String> locations, GamePlayer gamePlayer)
     {
-
         this.ShipType= shipType;
         this.locations = locations;
         this.gamePlayer = gamePlayer;

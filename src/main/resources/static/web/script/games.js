@@ -124,7 +124,7 @@ $(document).ready(function () {
         for (i=0; i < games.leaderboard.length; i++ ){
             var win = [];
             var lost = [];
-            var tied = [];
+
 
             var totalScore= 0;
             var tr = document.createElement("tr");
@@ -132,35 +132,33 @@ $(document).ready(function () {
             var td1= document.createElement("td");
             var td2= document.createElement("td");
             var td3= document.createElement("td");
-            var td4= document.createElement("td");
+
             tr.append(td0);
             tr.append(td1);
             tr.append(td2);
             tr.append(td3);
-            tr.append(td4);
+
             td0.innerHTML = games.leaderboard[i].email;
 
             tblbody.append(tr);
             for ( k=0; k < games.leaderboard[i].scores.length; k++){
-                if (games.leaderboard[i].scores[k].score !=null){
+                if (games.leaderboard[i].scores !=null){
 
-                        totalScore += games.leaderboard[i].scores[k].score;
+                        totalScore += games.leaderboard[i].scores[k]
 
-                if (games.leaderboard[i].scores[k].score == 0.5){
-                        tied.push(games.leaderboard[i].scores[k].score)
+                    if ( games.leaderboard[i].scores[k] == 1){
+                        win.push(games.leaderboard[i].scores[k])
                     }
-                    if ( games.leaderboard[i].scores[k].score == 1){
-                        win.push(games.leaderboard[i].scores[k].score)
-                    }
-                    if ( games.leaderboard[i].scores[k].score == 0.0){
-                        lost.push(games.leaderboard[i].scores[k].score)
+                    if ( games.leaderboard[i].scores[k]== 0.0){
+                        lost.push(games.leaderboard[i].scores[k])
                     }
                 }
             }
             td1.innerHTML = totalScore;
             td2.innerHTML = win.length;
+            console.log(win.length);
             td3.innerHTML = lost.length;
-            td4.innerHTML = tied.length;
+
 
 
         }
