@@ -14,9 +14,12 @@ var battleship = [];
 var salvoes = [];
 var droppable = true;
 var timerId;
+var jump = new Audio("audio/jump.mp3")
+var tie = new Audio("audio/TIE.mp3")
 var audio3 = new Audio('audio/fire.mp3');
 var audio5 = new Audio('audio/tf.mp3');
-
+var alarm = new Audio("audio/alarm.mp3")
+var fire = new Audio("audio/youmayfirewhenready.mp3")
 var audio4 = new Audio('audio/apology.mp3');
 var audio = new Audio('audio/imperial.mp3');
 // var audio = new Audio('audio/swtheme.mp3');
@@ -84,6 +87,7 @@ function hideAndShow() {
     }
     if (games.game.ships.length == 0) {
 
+        audio.pause();
         audio.play();
         $(".log").hide();
         $("body").css("background-color", "black");
@@ -131,6 +135,8 @@ function showok() {
 
 function skip() {
     audio.pause();
+   jump.pause();
+   jump.play();
     $("body").css("background-image", 'url("styles/images/stars.png")');
     $("body").css("overflow", "auto");
     $(".hidethis").fadeIn(600);
@@ -142,6 +148,8 @@ $(".ok").click(function createArrayShipsLocation() {
     if ($(".shipsboard").children().length > 16) {
         $("#alert").text("You must place all your ships");
     } else {
+        audio5.pause();
+        audio5.play();
         $(".statusships").text("Ships placed");
         submarine = modifyID($(".submarine")).get();
         destroyer = modifyID($(".destroyer")).get();
@@ -154,7 +162,7 @@ $(".ok").click(function createArrayShipsLocation() {
         patrol.push(modifyID2($("#patrol")));
         battleship.push(modifyID2($("#battleship")));
         console.log(submarine, destroyer, carrier, patrol, battleship);
-        postShipsToBackEnd();
+        setTimeout(function () {  postShipsToBackEnd()} , 2000 );
     }
 });
 
@@ -254,7 +262,8 @@ function makePlayerCommander() {
 function awesomeTitles() {
     setTimeout(function () {
         audio.pause();
-        audio5.play();
+        jump.pause();
+        jump.play();
         $("body").css("background-image", 'url("styles/images/stars.png")');
         $("body").css("overflow", "auto");
         $(".swhid").slideToggle(800);
@@ -263,7 +272,7 @@ function awesomeTitles() {
         $(".fade").hide();
         $("#skip").hide();
 
-    }, 35000);
+    }, 36500);
 }
 
 
@@ -502,7 +511,7 @@ function forDropInTd(event){
     event.preventDefault();
     var content = event.dataTransfer.getData("content");
     shiptype = $("#"+content).attr("id");
-    console.log("type",shiptype)
+    console.log("type",shiptype);
     size = document.getElementById(content).getAttribute("data-type");
     droppedID = event.target.id;
     console.log("ID", droppedID, event);
@@ -521,8 +530,9 @@ function forDropInTd(event){
                     var split0 = droppedID.split("");
                     var abc0 = Number(split0[0]) + q;
                     var num0 = split0[1];
-                    console.log($("#" + abc0+""+num0).children().attr("id"), content)
-                    if($("#" + abc0+""+num0).children().length != 0 && $("#" + abc0+""+num0).children().attr("id") != content ) {
+                    console.log(Number(split0[0]) +""+split0[1], content)
+                    console.log( $("#"+Number(split0[0])+1+  split0[1]).children() )
+                    if($("#" + abc0+""+num0).children().length != 0  && ($("#" + Number(split0[0])+1 +""+split0[1]).children().attr("class") != content) && $("#" + abc0+""+num0).children().attr("class") != content ) {
                         droppable =false;
                         console.log("Theres a ship here already");
                         $("#alert").text("Theres a ship placed here already");
@@ -578,12 +588,14 @@ function forDropInTd(event){
         console.log("Theres a ship placed here already");
         $("#alert").text("Theres a ship placed here already");
     }
-    showok()}
+    showok();
+}
 
 function drag(ev) {
     ev.dataTransfer.setData("content", ev.target.id);
-    var img = new Image();
-    ev.dataTransfer.setDragImage(img, 10, 0);
+    // var img = new Image();
+    // img.scr = "images/"+ ev.target.id+".png";
+    // ev.dataTransfer.setDragImage(img, 8900000, 0);
     $("#alert").text("");
     droppable = true;
 }
@@ -620,6 +632,7 @@ function showResultOfFiredSslvo(letter,imgName ){
 
 function hideControlsForState(){
     if ( games.Status == "WAIT_FOR_OPPONENT_TO_PLACE_SALVOS"){
+
         $(".salvo").hide();
         $(".statusMessages").text("Rebels are attacking us. Get on target, maximum firepower.");
         $(".statusMessages").css("background-color", stylesheets[rand]);
@@ -648,6 +661,7 @@ function gameOver(){
         for (var i = 0; i < games.game.gamePlayers.length; i++) {
             var p1 = games.game.gamePlayers[i].player.email.split("@")[0];
         }
+        audio2.pause();
         audio2.play();
     $(".statusMessages").text("You have failed me for the last time, Admiral " + p1);
     // $(".statusMessages").text("Reloading!");
@@ -656,6 +670,7 @@ function gameOver(){
         for (var i = 0; i < games.game.gamePlayers.length; i++) {
             var p1 = games.game.gamePlayers[i].player.email.split("@")[0];
         }
+        audio4.pause();
         audio4.play();
         $(".statusMessages").text("i believe i owe you an apology, " +p1+". Your work exceeds all expectations");
         // $(".statusMessages").text("Reloading!");
@@ -701,6 +716,7 @@ function showButtonFire() {
         $(".fire").hide();
     }
     if (salvoes.length > 0) {
+        fire.play();
         $(".fire").show(500);
     }
 }

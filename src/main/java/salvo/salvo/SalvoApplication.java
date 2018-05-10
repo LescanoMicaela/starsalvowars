@@ -42,13 +42,13 @@ public class SalvoApplication {
 	public CommandLineRunner initData(PlayerRepository repositoryplayer, GameRepository repositorygame, GamePlayerRepository repositorygamePlayer, ShipRepository repositoryShip, SalvoRepository repositorySalvo, ScoreRepository repositoryscore) {
 		return (String... args) -> {
 
-		    Player bauer = new Player( "Tarkins@Admiral.com", "24");
+		    Player bauer = new Player( "Tarkins@Admiral.com", "tarkins");
 		    repositoryplayer.save(bauer);
-		    Player obrian = new Player("Bigs@Darklighter.gov", "42");
+		    Player obrian = new Player("Bigs@Darklighter.gov", "bigs");
 			repositoryplayer.save(obrian);
-			Player kim = new Player("JekPorkings@deathstar.com", "kb");
+			Player kim = new Player("JekPorkings@deathstar.com", "porkings");
 			repositoryplayer.save(kim);
-			Player almeida = new Player("AdmiralMottin@ctu.gov", "mole");
+			Player almeida = new Player("AdmiralMottin@ctu.gov", "mottin");
 			repositoryplayer.save(almeida);
 
             Game game1 = new Game();
@@ -355,6 +355,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
 //                .antMatchers("/admin/**").hasAuthority("USER")
                 .antMatchers("/web/games.html").permitAll()
+                .antMatchers("/immense-crag-87192.herokuapp.com").permitAll()
                 .antMatchers("/web/audio/**").permitAll()
                 .antMatchers("/web/script/games.js").permitAll()
                 .antMatchers("/web/styles/**").permitAll()

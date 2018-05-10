@@ -13,6 +13,7 @@ $(document).ready(function () {
         success: function (data) {
 
             games = data;
+            audio5.pause();
             audio5.play();
             showtitle1()
             firsPage();
@@ -46,6 +47,7 @@ $(document).ready(function () {
 
     function showtitle(){
         if (games.player == "null") {
+            audio5.pause();
             audio5.play();
             setTimeout(function () {
                 $("body").css("background-image", 'url("styles/images/SbaPLTm.jpg")');
@@ -56,6 +58,7 @@ $(document).ready(function () {
 
     function showtitle1(){
         if (games.player == "null") {
+            audio5.pause();
             audio5.play();
             setTimeout(function () {
                 $("#gameTitle").fadeIn(3000).fadeOut(1500)
